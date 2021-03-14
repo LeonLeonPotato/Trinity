@@ -1,9 +1,10 @@
-package me.leonleonpotato.ProtonClient.clickguiRewrite.components.sub;
+package me.leon.trinity.clickguiRewrite.components.sub;
 
-import me.leonleonpotato.ProtonClient.clickguiRewrite.Component;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.components.Button;
-import me.leonleonpotato.ProtonClient.hacks.Module;
-import me.leonleonpotato.ProtonClient.util.render.RenderUtils;
+import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.clickguiRewrite.components.Button;
+import me.leon.trinity.hacks.Module;
+import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.*;
 
@@ -21,7 +22,7 @@ public class Visible extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        RenderUtils.drawStringWithShadow("Visible: " + mod.visible, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - fr.FONT_HEIGHT) / 2), 0xa9b7c6);
+        FontUtil.drawString("Visible: " + mod.visible, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
     }
 
     @Override

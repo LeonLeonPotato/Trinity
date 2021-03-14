@@ -1,16 +1,16 @@
 package me.leon.trinity.clickguiRewrite.components.sub;
 
-import me.leon.trinity.setting.Setting;
+import me.leon.trinity.clickguiRewrite.Component;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
 import me.leon.trinity.utils.rendering.RenderUtils;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.Component;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.components.Button;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.clickguiRewrite.components.Button;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class ColorPicker extends Component {
     public me.leon.trinity.setting.settings.Color set;
@@ -42,22 +42,22 @@ public class ColorPicker extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - fr.FONT_HEIGHT) / 2f), 0xa9b7c6);
-        RenderUtils.drawRect(this.parent.parent.x + 95, this.parent.parent.y + this.parent.offset + this.offset + 14 + 12, this.parent.parent.x + 85, this.parent.parent.y + this.parent.offset + this.offset + 14 + 2, this.set.getColor());
+        FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+        RenderUtils.drawRect(this.parent.parent.x + 95, this.parent.parent.y + this.parent.offset + this.offset + 14 + 12, this.parent.parent.x + 85, this.parent.parent.y + this.parent.offset + this.offset + 14 + 2, this.set.getValue());
         if(this.open) {
             RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 100, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
 
             RenderUtils.drawAlphaRect(this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 70, 67, 10, this.set.getValue());
             RenderUtils.drawRect(this.parent.parent.x + 8 + renderAtAlpha + 1, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 81, this.parent.parent.x + 8 + renderAtAlpha - 1, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 69, new Color(0xa9b7c6));
 
-            RenderUtils.drawColorPickerSquare(this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3, 60, 60, (int) (this.renderAtHue * 6f), this.set.getA());
+            RenderUtils.drawColorPickerSquare(this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3, 60, 60, (int) (this.renderAtHue * 6f), this.set.a);
             RenderUtils.drawCircle(this.parent.parent.x + 15 + circlePos[0], this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3 + circlePos[1], 2f, 0.2f, new Color(255, 255, 255, 255));
 
             RenderUtils.drawHueRect(this.parent.parent.x + 80, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3, 10, 60);
             RenderUtils.drawRect(this.parent.parent.x + 92, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3 + renderAtHue + 1, this.parent.parent.x + 78, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3 + renderAtHue - 1, new Color(0xa9b7c6));
 
             RenderUtils.drawRect(this.parent.parent.x + 25, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 95, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85, new Color(0xa9b7c6));
-            FontUtil.drawString("Rainbow", this.parent.parent.x + 30, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85 + ((10 - fr.FONT_HEIGHT) / 2f), 0xa9b7c6);
+            FontUtil.drawString("Rainbow", this.parent.parent.x + 30, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
             if(this.set.rainbow) {
                 RenderUtils.drawRect(this.parent.parent.x + 23, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 93, this.parent.parent.x + 17, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 87, new Color(50, 243, 50));
             }
@@ -85,10 +85,10 @@ public class ColorPicker extends Component {
         if(draggingAlpha || draggingColor || draggingHue || saveRainbow) {
             final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / 100, (circlePos[1] * (10 / 6f)) / 100));
 
-            this.set.setR(color.getRed());
-            this.set.setG(color.getGreen());
-            this.set.setB(color.getBlue());
-            this.set.setA((int) ((renderAtAlpha / 67) * 255));
+            this.set.r = (color.getRed());
+            this.set.g = (color.getGreen());
+            this.set.b = (color.getBlue());
+            this.set.a = ((int) ((renderAtAlpha / 67) * 255));
             this.saveRainbow = false;
         }
     }
@@ -179,9 +179,9 @@ public class ColorPicker extends Component {
     public void onUpdate(TickEvent.ClientTickEvent event) {
         if(this.set.rainbow) {
             rainbow0.updateColor(3);
-            this.set.setR(rainbow0.getColor().getRed());
-            this.set.setG(rainbow0.getColor().getBlue());
-            this.set.setB(rainbow0.getColor().getGreen());
+            this.set.r = (rainbow0.getColor().getRed());
+            this.set.g = (rainbow0.getColor().getBlue());
+            this.set.b = (rainbow0.getColor().getGreen());
         }
     }
 }

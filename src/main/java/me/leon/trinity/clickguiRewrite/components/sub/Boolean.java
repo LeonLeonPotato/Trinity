@@ -1,21 +1,18 @@
-package me.leonleonpotato.ProtonClient.clickguiRewrite.components.sub;
+package me.leon.trinity.clickguiRewrite.components.sub;
 
-import me.leonleonpotato.ProtonClient.ProtonMod;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.Component;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.components.Button;
-import me.leonleonpotato.ProtonClient.events.ProtonEvent;
-import me.leonleonpotato.ProtonClient.events.settingEvents.EventBooleanEnabled;
-import me.leonleonpotato.ProtonClient.settings.Setting;
-import me.leonleonpotato.ProtonClient.util.render.RenderUtils;
+import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.clickguiRewrite.components.Button;
+import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.*;
 
 public class Boolean extends Component {
-    public Setting set;
+    public me.leon.trinity.setting.settings.Boolean set;
     public Button parent;
     public int offset;
 
-    public Boolean(Setting set, Button parent, int offset) {
+    public Boolean(me.leon.trinity.setting.settings.Boolean set, Button parent, int offset) {
         this.set = set;
         this.parent = parent;
         this.offset = offset;
@@ -24,10 +21,10 @@ public class Boolean extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        if(set.getValBoolean()) {
+        if(set.getValue()) {
             RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x787878));
         }
-        RenderUtils.drawStringWithShadow(this.set.getName(), this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - fr.FONT_HEIGHT) / 2), 0xa9b7c6);
+        FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
     }
 
     @Override
@@ -39,8 +36,7 @@ public class Boolean extends Component {
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if(isWithinButton(mouseX, mouseY) && this.parent.open) {
             if(button == 0) {
-                this.set.setValBoolean(!this.set.getValBoolean());
-                ProtonMod.settingsDispatcher.post(new EventBooleanEnabled(ProtonEvent.Era.PRE, this.set, this.set.getValBoolean()));
+                this.set.setEnabled(!this.set.getValue());
             }
         }
     }

@@ -1,9 +1,9 @@
 package me.leon.trinity.clickguiRewrite;
 
 import me.leon.trinity.clickguiRewrite.components.Button;
+import me.leon.trinity.clickguiRewrite.components.Frame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.utils.misc.FontUtil;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.components.Frame;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.opengl.GL11;
 
@@ -15,14 +15,14 @@ import java.util.ArrayList;
  * @author leon
  */
 public class ClickGui extends GuiScreen {
-    public ArrayList<Frame> frames;
+    public static ArrayList<Frame> frames;
     public int offset = 0;
 
     public ClickGui() {
-        this.frames = new ArrayList<>();
+        frames = new ArrayList<>();
         int frameX = 10;
         for(Category c : Category.values()) {
-            this.frames.add(new Frame(c, frameX, 10, offset));
+            frames.add(new Frame(c, frameX, 10, offset));
             frameX += 110; // 110 is the frames width + 10
         }
     }
@@ -78,5 +78,14 @@ public class ClickGui extends GuiScreen {
         for(Frame c : frames) {
             c.mouseReleased(mouseX, mouseY, state);
         }
+    }
+
+    public static Frame getFrameFromCategory(String name) {
+        for(Frame frame : frames) {
+            if(frame.c.name().equalsIgnoreCase(name)) {
+                return frame;
+            }
+        }
+        return null;
     }
 }

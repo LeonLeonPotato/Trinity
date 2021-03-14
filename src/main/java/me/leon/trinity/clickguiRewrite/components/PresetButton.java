@@ -1,11 +1,11 @@
-package me.leonleonpotato.ProtonClient.clickguiRewrite.components;
+package me.leon.trinity.clickguiRewrite.components;
 
-import me.leonleonpotato.ProtonClient.ProtonMod;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.Component;
-import me.leonleonpotato.ProtonClient.config.Preset;
-import me.leonleonpotato.ProtonClient.config.loadConfig;
-import me.leonleonpotato.ProtonClient.config.saveConfig;
-import me.leonleonpotato.ProtonClient.util.render.RenderUtils;
+import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.config.Preset;
+import me.leon.trinity.config.loadConfig;
+import me.leon.trinity.config.saveConfig;
+import me.leon.trinity.main.Trinity;
+import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.Gui;
 
 import java.awt.*;
@@ -28,8 +28,8 @@ public class PresetButton extends Component {
 
     @Override
     public void render() {
-        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + 100, this.parent.y + 14 + this.offset, this.isHovered ? this.preset == ProtonMod.curPreset ? new Color(0xA3D5D5D5, true).brighter().getRGB() : new Color(0x2b2b2b).brighter().getRGB() : this.preset == ProtonMod.curPreset ?  new Color(0xA3D5D5D5, true).getRGB() : new Color(0x2b2b2b).getRGB());
-        RenderUtils.drawStringWithShadow(this.preset.name, this.parent.x + 5, this.parent.y + offset + ((14 - fr.FONT_HEIGHT) / 2) + 1, 0xa9b7c6);
+        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + 100, this.parent.y + 14 + this.offset, this.isHovered ? this.preset == Trinity.curPreset ? new Color(0xA3D5D5D5, true).brighter().getRGB() : new Color(0x2b2b2b).brighter().getRGB() : this.preset == Trinity.curPreset ?  new Color(0xA3D5D5D5, true).getRGB() : new Color(0x2b2b2b).getRGB());
+        FontUtil.drawString(preset.name, this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2f) + 1, 0xa9b7c6);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PresetButton extends Component {
             saveConfig.saveFriends();
             saveConfig.saveGui();
 
-            ProtonMod.curPreset = this.preset;
+            Trinity.curPreset = this.preset;
 
             loadConfig.LoadConfig.loadGUI();
             loadConfig.LoadConfig.loadFriends();

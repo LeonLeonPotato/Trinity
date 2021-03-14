@@ -6,7 +6,7 @@ public class Color extends Setting {
     public int r, g, b, a;
     public boolean rainbow;
 
-    protected Color(String name, int r, int g, int b, int a, boolean rainbow) {
+    public Color(String name, int r, int g, int b, int a, boolean rainbow) {
         super(name);
         this.r = r;
         this.g = g;

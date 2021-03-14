@@ -1,4 +1,4 @@
-package me.leonleonpotato.ProtonClient.clickguiRewrite;
+package me.leon.trinity.clickguiRewrite;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

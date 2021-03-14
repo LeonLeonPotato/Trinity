@@ -1,12 +1,14 @@
 package me.leon.trinity.clickguiRewrite.components;
 
+import me.leon.trinity.clickguiRewrite.ClickGui;
+import me.leon.trinity.clickguiRewrite.Component;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
-import me.leonleonpotato.ProtonClient.clickguiRewrite.Component;
 
-
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Frame extends Component {
@@ -19,7 +21,7 @@ public class Frame extends Component {
     public int modY;
 
     public ArrayList<Button> comps;
-    public ArrayList<me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton> presetButtons;
+    public ArrayList<me.leon.trinity.clickguiRewrite.components.PresetButton> presetButtons;
 
     public Frame(Category c, int x, int y, int offset) {
         this.c = c;
@@ -29,7 +31,8 @@ public class Frame extends Component {
         this.comps = new ArrayList<>();
         this.presetButtons = new ArrayList<>();
 
-        for(Module m : Trinity.moduleManager.getModulesInCategory(c)) {
+        if(!Trinity.moduleManager.getModulesByCategory(c).isEmpty())
+        for(Module m : Trinity.moduleManager.getModulesByCategory(c)) {
             this.comps.add(new Button(m, this, modY));
             this.modY += 14;
         }
@@ -37,8 +40,8 @@ public class Frame extends Component {
         if(this.c == Category.PRESETS)
         {
             this.presetButtons.clear();
-            for(Preset p : ProtonMod.instance.presetManager.presets) {
-                me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton presetButton = new me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton(p, this, modY);
+            for(me.leon.trinity.config.Preset p : Trinity.presetManager.presets) {
+                me.leon.trinity.clickguiRewrite.components.PresetButton presetButton = new me.leon.trinity.clickguiRewrite.components.PresetButton(p, this, modY);
                 this.presetButtons.add(presetButton);
                 this.modY += 14;
             }
@@ -49,12 +52,12 @@ public class Frame extends Component {
     public void render() {
         RenderUtils.drawRect(x + 100, y + 14, x, y, new Color(0x3c3f41));
         RenderUtils.drawRainbowRectHorizontal(x + 98, y + 15, 98, y + 14, 2, 2, 255);
-        RenderUtils.drawStringWithShadow(c.name(), this.x + 5, this.y + ((15 - fr.FONT_HEIGHT) / 2), 0xa9b7c6);
+        FontUtil.drawString(c.name(), this.x + 5, this.y + ((15 - FontUtil.getFontHeight()) / 2) + 1, 0xa9b7c6);
         if(this.open) {
             for(Button b : comps) {
                 b.render();
             }
-            for(me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton b : presetButtons) {
+            for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
                 b.render();
             }
         }
@@ -69,7 +72,7 @@ public class Frame extends Component {
         for(Button b : comps) {
             b.updateComponent(mouseX, mouseY);
         }
-        for(me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton b : presetButtons) {
+        for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
             b.updateComponent(mouseX, mouseY);
         }
     }
@@ -77,7 +80,7 @@ public class Frame extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         boolean alreadyDragging = false;
-        for(Frame c : ProtonMod.instance.clickGui2.frames) {
+        for(Frame c : ClickGui.frames) {
             if(c.drag) {
                 alreadyDragging = true;
             }
@@ -99,7 +102,7 @@ public class Frame extends Component {
             for(Button c : comps) {
                 c.mouseClicked(mouseX, mouseY, button);
             }
-            for(me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton c : presetButtons) {
+            for(me.leon.trinity.clickguiRewrite.components.PresetButton c : presetButtons) {
                 c.mouseClicked(mouseX, mouseY, button);
             }
         }
@@ -113,7 +116,7 @@ public class Frame extends Component {
             for(Button b : comps) {
                 b.mouseReleased(mouseX, mouseY, mouseButton);
             }
-            for(me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton b : presetButtons) {
+            for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
                 b.mouseReleased(mouseX, mouseY, mouseButton);
             }
         }
@@ -130,7 +133,7 @@ public class Frame extends Component {
             for(Button b : comps) {
                 b.keyTyped(typedChar, key);
             }
-            for(me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton b : presetButtons) {
+            for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
                 b.keyTyped(typedChar, key);
             }
         }
@@ -143,7 +146,7 @@ public class Frame extends Component {
 
     public void refresh() {
         int off = 15;
-        for(Component c : comps) {
+        for(Button c : comps) {
             c.setOff(off);
             off += c.getHeight();
         }
@@ -155,8 +158,8 @@ public class Frame extends Component {
 
     private void update(int tY) {
         this.presetButtons.clear();
-        for(Preset p : ProtonMod.instance.presetManager.presets) {
-            me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton presetButton = new me.leonleonpotato.ProtonClient.clickguiRewrite.components.PresetButton(p, this, tY);
+        for(me.leon.trinity.config.Preset p : Trinity.presetManager.presets) {
+            me.leon.trinity.clickguiRewrite.components.PresetButton presetButton = new me.leon.trinity.clickguiRewrite.components.PresetButton(p, this, tY);
             this.presetButtons.add(presetButton);
             tY += 14;
         }

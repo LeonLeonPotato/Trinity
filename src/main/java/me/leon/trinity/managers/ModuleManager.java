@@ -2,6 +2,7 @@ package me.leon.trinity.managers;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.setting.Setting;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +18,7 @@ public class ModuleManager {
 
         // Client
         addMod(new Font());
+        addMod(new ClickGUI());
     }
 
     private void addMod(Module mod) {
