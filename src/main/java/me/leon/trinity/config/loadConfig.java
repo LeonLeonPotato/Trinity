@@ -1,7 +1,7 @@
 package me.leon.trinity.config;
 
-import me.leon.trinity.clickguiRewrite.ClickGui;
-import me.leon.trinity.clickguiRewrite.components.Frame;
+import me.leon.trinity.clickgui.ClickGui;
+import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;

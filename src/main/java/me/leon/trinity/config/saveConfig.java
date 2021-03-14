@@ -1,12 +1,10 @@
 package me.leon.trinity.config;
 
-import me.leon.trinity.clickguiRewrite.ClickGui;
-import me.leon.trinity.clickguiRewrite.components.Frame;
+import me.leon.trinity.clickgui.ClickGui;
+import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.Boolean;
-import net.minecraft.block.Block;
 
 import java.io.File;
 import java.io.FileNotFoundException;
