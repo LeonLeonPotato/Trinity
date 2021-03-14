@@ -13,7 +13,7 @@ public class CapeManager {
     public final static String DARK_CAPE =  "trinity/capes/dark_cape.png";
 
     private HashMap<UUID, ResourceLocation> capes = new HashMap<UUID, ResourceLocation>();
-    private final String capeURL = "https://pastebin.com/raw/W1Ef0Zpw";
+    private final String capeURL = "https://pastebin.com/raw/w4LP0A2X";
 
     public CapeManager() {
         try { capes = CapeUtil.getCapes(capeURL); }
