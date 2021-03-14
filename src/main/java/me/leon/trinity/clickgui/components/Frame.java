@@ -49,8 +49,8 @@ public class Frame extends me.leon.trinity.clickgui.Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(x + 100, y + 14, x, y, new Color(0x3c3f41));
-        RenderUtils.drawRainbowRectHorizontal(x + 98, y + 15, 98, y + 14, 2, 2, 255);
+        RenderUtils.drawRect(x + ClickGui.width, y + 14, x, y, new Color(0x3c3f41));
+        RenderUtils.drawRainbowRectHorizontal(x + (ClickGui.width - 2), y + 15, (ClickGui.width - 2), y + 14, 2, 2, 255);
         FontUtil.drawString(c.name(), this.x + 5, this.y + ((15 - FontUtil.getFontHeight()) / 2) + 1, 0xa9b7c6);
         if(this.open) {
             for(Button b : comps) {

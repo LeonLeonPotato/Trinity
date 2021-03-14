@@ -1,5 +1,6 @@
 package me.leon.trinity.clickgui.components;
 
+import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.loadConfig;
@@ -28,7 +29,7 @@ public class PresetButton extends Component {
 
     @Override
     public void render() {
-        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + 100, this.parent.y + 14 + this.offset, this.isHovered ? this.preset == Trinity.curPreset ? new Color(0xA3D5D5D5, true).brighter().getRGB() : new Color(0x2b2b2b).brighter().getRGB() : this.preset == Trinity.curPreset ?  new Color(0xA3D5D5D5, true).getRGB() : new Color(0x2b2b2b).getRGB());
+        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + ClickGui.width, this.parent.y + 14 + this.offset, this.isHovered ? this.preset == Trinity.curPreset ? new Color(0xA3D5D5D5, true).brighter().getRGB() : new Color(0x2b2b2b).brighter().getRGB() : this.preset == Trinity.curPreset ?  new Color(0xA3D5D5D5, true).getRGB() : new Color(0x2b2b2b).getRGB());
         FontUtil.drawString(preset.name, this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2f) + 1, 0xa9b7c6);
     }
 
@@ -90,6 +91,6 @@ public class PresetButton extends Component {
     }
 
     public boolean isMouseOnButton(int x, int y) {
-        return x > parent.x && x < parent.x + 100 && y > this.parent.y + this.offset && y < this.parent.y + 14 + this.offset;
+        return x > parent.x && x < parent.x + ClickGui.width && y > this.parent.y + this.offset && y < this.parent.y + 14 + this.offset;
     }
 }

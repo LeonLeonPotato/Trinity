@@ -5,7 +5,6 @@ import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.utils.Util;
 import me.leon.trinity.utils.world.Timer;
 import org.lwjgl.opengl.GL11;
-import scala.tools.nsc.backend.opt.Inliners;
 
 import java.awt.*;
 import java.io.InputStream;
@@ -67,6 +66,7 @@ public class FontUtil implements Util {
     public static void drawString(String text, float x, float y, int color) {
         GL11.glPushMatrix();
         if (Trinity.moduleManager.getMod("Font").isEnabled()) {
+            y += 1;
             if (me.leon.trinity.hacks.client.Font.shadow.getValue())
                 Trinity.fontManager.getCustomFont().drawStringWithShadow(text, x, y, color);
             else

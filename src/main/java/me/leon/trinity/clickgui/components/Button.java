@@ -1,5 +1,6 @@
 package me.leon.trinity.clickgui.components;
 
+import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.ColorPicker;
 import me.leon.trinity.hacks.Module;
@@ -61,9 +62,9 @@ public class Button extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.x + 100, this.parent.y + offset + 14, this.parent.x, this.parent.y + offset, this.hovered ? this.mod.isEnabled() ? new java.awt.Color(0xA3D5D5D5, true).brighter() : new java.awt.Color(0x2b2b2b).brighter() : this.mod.isEnabled() ?  new java.awt.Color(0xA3D5D5D5, true) : new java.awt.Color(0x2b2b2b)); // hahaha 2b2b2b
+        RenderUtils.drawRect(this.parent.x + ClickGui.width, this.parent.y + offset + 14, this.parent.x, this.parent.y + offset, this.hovered ? this.mod.isEnabled() ? new java.awt.Color(0xA3D5D5D5, true).brighter() : new java.awt.Color(0x2b2b2b).brighter() : this.mod.isEnabled() ?  new java.awt.Color(0xA3D5D5D5, true) : new java.awt.Color(0x2b2b2b)); // hahaha 2b2b2b
         FontUtil.drawString(mod.getName(), this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2) + 1, 0xa9b7c6);
-        FontUtil.drawString(this.open ? "-" : "...", (this.parent.x + 100) - (FontUtil.getStringWidth(this.open ? "-" : "...") + 3), this.open ? (this.parent.y + offset + 2) : (this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2) - 1), 0xa9b7c6);
+        FontUtil.drawString(this.open ? "-" : "...", (this.parent.x + ClickGui.width) - (FontUtil.getStringWidth(this.open ? "-" : "...") + 3), this.open ? (this.parent.y + offset + 2) : (this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2) - 1), 0xa9b7c6);
         if(this.open) {
             for(Component sub : subs) {
                 sub.render();
@@ -126,7 +127,7 @@ public class Button extends Component {
     }
 
     public boolean isMouseOnButton(int x, int y) {
-        return x > this.parent.x && x < this.parent.x + 100 && y > this.parent.y + offset && y < this.parent.y + offset + 14;
+        return x > this.parent.x && x < this.parent.x + ClickGui.width && y > this.parent.y + offset && y < this.parent.y + offset + 14;
     }
 
     @Override

@@ -1,15 +1,16 @@
-package me.leon.trinity.setting.settings;
+package me.leon.trinity.setting.settings.sub;
 
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventBooleanToggle;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
+import me.leon.trinity.setting.settings.SubSetting;
 
-public class Boolean extends Setting {
+public class SubBoolean extends SubSetting {
     private boolean enabled;
 
-    public Boolean(String name, boolean enabled) {
-        super(name);
+    public SubBoolean(String name, Setting parent, boolean enabled) {
+        super(name, parent);
         this.enabled = enabled;
     }
 

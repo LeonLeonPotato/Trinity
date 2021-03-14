@@ -1,5 +1,6 @@
 package me.leon.trinity.clickgui.components.sub;
 
+import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
@@ -40,11 +41,11 @@ public class ColorPicker extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
         FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
         RenderUtils.drawRect(this.parent.parent.x + 95, this.parent.parent.y + this.parent.offset + this.offset + 14 + 12, this.parent.parent.x + 85, this.parent.parent.y + this.parent.offset + this.offset + 14 + 2, this.set.getValue());
         if(this.open) {
-            RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 100, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
+            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + ClickGui.width, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
 
             RenderUtils.drawAlphaRect(this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 70, 67, 10, this.set.getValue());
             RenderUtils.drawRect(this.parent.parent.x + 8 + renderAtAlpha + 1, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 81, this.parent.parent.x + 8 + renderAtAlpha - 1, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 69, new Color(0xa9b7c6));
@@ -82,7 +83,7 @@ public class ColorPicker extends Component {
         }
 
         if(draggingAlpha || draggingColor || draggingHue || saveRainbow) {
-            final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / 100, (circlePos[1] * (10 / 6f)) / 100));
+            final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / ClickGui.width, (circlePos[1] * (10 / 6f)) / ClickGui.width));
 
             this.set.r = (color.getRed());
             this.set.g = (color.getGreen());
@@ -142,7 +143,7 @@ public class ColorPicker extends Component {
     }
 
     public boolean isMouseOnButtonMain(int x, int y) {
-        return x > this.parent.parent.x && x < this.parent.parent.x + 100 && y > this.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
+        return x > this.parent.parent.x && x < this.parent.parent.x + ClickGui.width && y > this.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
     }
 
     public boolean isMouseOnButtonHue(int x, int y) {
@@ -169,7 +170,7 @@ public class ColorPicker extends Component {
     @Override
     public int getHeight() {
         if(this.open) {
-            return 14 + 100;
+            return 14 + ClickGui.width;
         }
         return 14;
     }

@@ -5,12 +5,24 @@ import me.leon.trinity.events.settings.EventBooleanToggle;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
 
-public class Boolean extends Setting {
+public class SettingParent extends Setting {
     private boolean enabled;
+    private final boolean canEnable;
 
-    public Boolean(String name, boolean enabled) {
+    public SettingParent(String name, boolean enabled) {
         super(name);
         this.enabled = enabled;
+        this.canEnable = true;
+    }
+
+    public SettingParent(String name) {
+        super(name);
+        this.enabled = true;
+        this.canEnable = false;
+    }
+
+    public boolean canEnable() {
+        return canEnable;
     }
 
     public boolean getValue() {

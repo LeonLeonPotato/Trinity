@@ -10,7 +10,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Font extends Module {
-    public static Slider scale = new Slider("Scale", 0.2, 40, 2, false);
+    public static Slider scale = new Slider("Scale", 20, 40, 80, false);
     public static Boolean shadow = new Boolean("Shadow", true);
     public static Mode families = new Mode("Family", "Comfortaa", "Lato", "Comfortaa", "Comic-Sans", "Verdana", "Ubuntu");
 

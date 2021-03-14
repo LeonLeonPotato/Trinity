@@ -3,8 +3,11 @@ package me.leon.trinity.clickgui;
 import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.hacks.Category;
+import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
  * @author leon
  */
 public class ClickGui extends GuiScreen {
+    public static int width = 150;
     public static ArrayList<Frame> frames;
     public int offset = 0;
 
@@ -23,7 +27,7 @@ public class ClickGui extends GuiScreen {
         int frameX = 10;
         for(Category c : Category.values()) {
             frames.add(new Frame(c, frameX, 10, offset));
-            frameX += 110; // 110 is the frames width + 10
+            frameX += (width + 10);
         }
     }
 
@@ -33,7 +37,8 @@ public class ClickGui extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+        if(ClickGUI.background.getValue().equalsIgnoreCase("Darken") || ClickGUI.background.getValue().equalsIgnoreCase("Both")) this.drawDefaultBackground();
+        width = (int) ClickGUI.width.getValue();
         for(Frame c : frames) {
             c.render();
             c.updateComponent(mouseX, mouseY);
@@ -64,6 +69,7 @@ public class ClickGui extends GuiScreen {
                 c.drag = false;
             }
             mc.displayGuiScreen(null);
+            Trinity.moduleManager.getMod(ClickGUI.class).setEnabled(false);
             return;
         }
 

@@ -85,6 +85,17 @@ public class Trinity {
         if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
             moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
         }
+
+        Runtime.getRuntime().addShutdownHook(new saveConfig());
+        loadConfig.LoadConfig.loadBinds();
+        loadConfig.LoadConfig.loadFriends();
+        loadConfig.LoadConfig.loadGUI();
+        loadConfig.LoadConfig.loadHud();
+        loadConfig.LoadConfig.loadModules(false);
+        loadConfig.LoadConfig.loadSearch();
+        loadConfig.LoadConfig.loadSettings();
+
+        moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
     }
 
     @SubscribeEvent

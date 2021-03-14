@@ -1,7 +1,9 @@
 package me.leon.trinity.clickgui.components.sub;
 
+import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -25,7 +27,7 @@ public class Slider extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.x + 100, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
         RenderUtils.drawRect((float) (this.parent.parent.x + renderWidth + 7), this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0xA3959595, true));
         FontUtil.drawString(this.set.name + ": " + this.set.getValue(), this.parent.parent.x + 7, this.parent.parent.y + this.offset + this.parent.offset + 14 + ((14 - FontUtil.getFontHeight())) / 2f, 0xa9b7c6);
     }
@@ -68,26 +70,26 @@ public class Slider extends Component {
     public void updateComponent(int mouseX, int mouseY) {
         this.hovered = isMouseOnButton(mouseX, mouseY);
 
-        double diff = Math.min(93, Math.max(0, (mouseX - 7) - this.parent.parent.x));
+        double diff = Math.min(ClickGui.width - 7, Math.max(0, (mouseX - 7) - this.parent.parent.x));
 
         double min = set.getMin();
         double max = set.getMax();
 
-        renderWidth = (int) ((93) * (set.getValue() - min) / (max - min));
+        renderWidth = (int) ((ClickGui.width - 7) * (set.getValue() - min) / (max - min));
 
         if (dragging) {
             if (diff == 0) {
                 set.setValue(set.getMin());
             }
             else {
-                double newValue = roundToPlace(((diff / 93) * (max - min) + min), 2);
-                set.setValue(newValue);
+                double newValue = roundToPlace(((diff / (ClickGui.width - 7)) * (max - min) + min), set.isOnlyInt() ? 0 : 2);
+                set.setValue(MathUtils.clamp(min, max, newValue));
             }
         }
     }
 
     public boolean isMouseOnButton(int x, int y) {
-        return x > this.parent.parent.x + 7 && x < this.parent.parent.x + 100 && y > this.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
+        return x > this.parent.parent.x + 7 && x < this.parent.parent.x + ClickGui.width && y > this.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
     }
 
     private static double roundToPlace(double value, int places) {
