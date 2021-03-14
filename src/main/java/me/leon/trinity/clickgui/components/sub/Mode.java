@@ -1,11 +1,11 @@
-package me.leon.trinity.clickguiRewrite.components.sub;
+package me.leon.trinity.clickgui.components.sub;
 
-import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.clickgui.components.Button;
+import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
-import me.leon.trinity.clickguiRewrite.components.Button;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class Mode extends Component {
     public me.leon.trinity.setting.settings.Mode set;

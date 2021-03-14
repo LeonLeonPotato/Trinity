@@ -1,6 +1,6 @@
-package me.leon.trinity.clickguiRewrite.components;
+package me.leon.trinity.clickgui.components;
 
-import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
@@ -8,7 +8,7 @@ import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.Gui;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class PresetButton extends Component {
     public Preset preset;

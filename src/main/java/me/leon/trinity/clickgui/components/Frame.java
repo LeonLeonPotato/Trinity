@@ -1,17 +1,16 @@
-package me.leon.trinity.clickguiRewrite.components;
+package me.leon.trinity.clickgui.components;
 
-import me.leon.trinity.clickguiRewrite.ClickGui;
-import me.leon.trinity.clickguiRewrite.Component;
+import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
 
-public class Frame extends Component {
+public class Frame extends me.leon.trinity.clickgui.Component {
     public Category c;
     public int x, y;
 
@@ -21,7 +20,7 @@ public class Frame extends Component {
     public int modY;
 
     public ArrayList<Button> comps;
-    public ArrayList<me.leon.trinity.clickguiRewrite.components.PresetButton> presetButtons;
+    public ArrayList<me.leon.trinity.clickgui.components.PresetButton> presetButtons;
 
     public Frame(Category c, int x, int y, int offset) {
         this.c = c;
@@ -41,7 +40,7 @@ public class Frame extends Component {
         {
             this.presetButtons.clear();
             for(me.leon.trinity.config.Preset p : Trinity.presetManager.presets) {
-                me.leon.trinity.clickguiRewrite.components.PresetButton presetButton = new me.leon.trinity.clickguiRewrite.components.PresetButton(p, this, modY);
+                me.leon.trinity.clickgui.components.PresetButton presetButton = new me.leon.trinity.clickgui.components.PresetButton(p, this, modY);
                 this.presetButtons.add(presetButton);
                 this.modY += 14;
             }
@@ -57,7 +56,7 @@ public class Frame extends Component {
             for(Button b : comps) {
                 b.render();
             }
-            for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
+            for(me.leon.trinity.clickgui.components.PresetButton b : presetButtons) {
                 b.render();
             }
         }
@@ -72,7 +71,7 @@ public class Frame extends Component {
         for(Button b : comps) {
             b.updateComponent(mouseX, mouseY);
         }
-        for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
+        for(me.leon.trinity.clickgui.components.PresetButton b : presetButtons) {
             b.updateComponent(mouseX, mouseY);
         }
     }
@@ -102,7 +101,7 @@ public class Frame extends Component {
             for(Button c : comps) {
                 c.mouseClicked(mouseX, mouseY, button);
             }
-            for(me.leon.trinity.clickguiRewrite.components.PresetButton c : presetButtons) {
+            for(me.leon.trinity.clickgui.components.PresetButton c : presetButtons) {
                 c.mouseClicked(mouseX, mouseY, button);
             }
         }
@@ -116,7 +115,7 @@ public class Frame extends Component {
             for(Button b : comps) {
                 b.mouseReleased(mouseX, mouseY, mouseButton);
             }
-            for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
+            for(me.leon.trinity.clickgui.components.PresetButton b : presetButtons) {
                 b.mouseReleased(mouseX, mouseY, mouseButton);
             }
         }
@@ -133,7 +132,7 @@ public class Frame extends Component {
             for(Button b : comps) {
                 b.keyTyped(typedChar, key);
             }
-            for(me.leon.trinity.clickguiRewrite.components.PresetButton b : presetButtons) {
+            for(me.leon.trinity.clickgui.components.PresetButton b : presetButtons) {
                 b.keyTyped(typedChar, key);
             }
         }
@@ -159,7 +158,7 @@ public class Frame extends Component {
     private void update(int tY) {
         this.presetButtons.clear();
         for(me.leon.trinity.config.Preset p : Trinity.presetManager.presets) {
-            me.leon.trinity.clickguiRewrite.components.PresetButton presetButton = new me.leon.trinity.clickguiRewrite.components.PresetButton(p, this, tY);
+            me.leon.trinity.clickgui.components.PresetButton presetButton = new me.leon.trinity.clickgui.components.PresetButton(p, this, tY);
             this.presetButtons.add(presetButton);
             tY += 14;
         }

@@ -1,8 +1,8 @@
-package me.leon.trinity.clickguiRewrite.components.sub;
+package me.leon.trinity.clickgui.components.sub;
 
-import me.leon.trinity.clickguiRewrite.Component;
-import me.leon.trinity.clickguiRewrite.components.Button;
-import me.leon.trinity.clickguiRewrite.components.Frame;
+import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.clickgui.components.Button;
+import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventInputEnter;
 import me.leon.trinity.main.Trinity;
@@ -10,7 +10,7 @@ import me.leon.trinity.setting.settings.StringInput;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
-import java.awt.*;
+import java.awt.Color;
 
 public class String extends Component {
     public StringInput set;

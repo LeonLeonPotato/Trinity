@@ -1,12 +1,11 @@
 package me.leon.trinity.main;
 
-import me.leon.trinity.clickguiRewrite.ClickGui;
+import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.managers.PresetManager;
 import me.leon.trinity.managers.SettingManager;
@@ -15,7 +14,6 @@ import me.zero.alpine.fork.bus.EventBus;
 import me.zero.alpine.fork.bus.EventManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.launchwrapper.Launch;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -25,7 +23,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;

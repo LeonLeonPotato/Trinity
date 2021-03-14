@@ -1,8 +1,7 @@
-package me.leon.trinity.clickguiRewrite.components;
+package me.leon.trinity.clickgui.components;
 
-import me.leon.trinity.clickguiRewrite.Component;
-import me.leon.trinity.clickguiRewrite.components.sub.ColorPicker;
-import me.leon.trinity.clickguiRewrite.components.sub.String;
+import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.clickgui.components.sub.ColorPicker;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
@@ -10,6 +9,7 @@ import me.leon.trinity.setting.settings.Color;
 import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.Slider;
 import me.leon.trinity.setting.settings.StringInput;
+import me.leon.trinity.clickgui.components.sub.String;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -21,10 +21,10 @@ public class Button extends Component {
     public int offset;
     public boolean open = false;
     public boolean hovered = false;
-    public Frame parent;
+    public me.leon.trinity.clickgui.components.Frame parent;
     public int opY;
 
-    public Button(Module mod, Frame parent, int offset) {
+    public Button(Module mod, me.leon.trinity.clickgui.components.Frame parent, int offset) {
         this.parent = parent;
         this.mod = mod;
         this.offset = offset;
@@ -33,15 +33,15 @@ public class Button extends Component {
 
         for(Setting c : Trinity.settingManager.getSettingsByMod(mod.getName())) {
             if(c instanceof me.leon.trinity.setting.settings.Slider) {
-                this.subs.add(new me.leon.trinity.clickguiRewrite.components.sub.Slider((Slider) c, this, this.opY));
+                this.subs.add(new me.leon.trinity.clickgui.components.sub.Slider((Slider) c, this, this.opY));
                 this.opY += 14;
             }
             if(c instanceof me.leon.trinity.setting.settings.Boolean) {
-                this.subs.add(new me.leon.trinity.clickguiRewrite.components.sub.Boolean((me.leon.trinity.setting.settings.Boolean) c, this, this.opY));
+                this.subs.add(new me.leon.trinity.clickgui.components.sub.Boolean((me.leon.trinity.setting.settings.Boolean) c, this, this.opY));
                 this.opY += 14;
             }
             if(c instanceof me.leon.trinity.setting.settings.Mode) {
-                this.subs.add(new me.leon.trinity.clickguiRewrite.components.sub.Mode((Mode) c, this, this.opY));
+                this.subs.add(new me.leon.trinity.clickgui.components.sub.Mode((Mode) c, this, this.opY));
                 this.opY += 14;
             }
             if(c instanceof StringInput) {
@@ -53,9 +53,9 @@ public class Button extends Component {
                 this.opY += 14;
             }
         }
-        this.subs.add(new me.leon.trinity.clickguiRewrite.components.sub.Visible(mod, this, opY));
+        this.subs.add(new me.leon.trinity.clickgui.components.sub.Visible(mod, this, opY));
         this.opY += 14;
-        this.subs.add(new me.leon.trinity.clickguiRewrite.components.sub.Keybind(mod, this, opY));
+        this.subs.add(new me.leon.trinity.clickgui.components.sub.Keybind(mod, this, opY));
         this.opY += 14;
     }
 

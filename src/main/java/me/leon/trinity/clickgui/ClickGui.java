@@ -1,7 +1,7 @@
-package me.leon.trinity.clickguiRewrite;
+package me.leon.trinity.clickgui;
 
-import me.leon.trinity.clickguiRewrite.components.Button;
-import me.leon.trinity.clickguiRewrite.components.Frame;
+import me.leon.trinity.clickgui.components.Button;
+import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * my custom attempt at making a gui lolz
+ * taken right from proton
  * @author leon
  */
 public class ClickGui extends GuiScreen {
