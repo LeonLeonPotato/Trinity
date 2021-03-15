@@ -34,7 +34,7 @@ public class Mode extends Component {
                 FontUtil.drawString(name, this.parent.parent.x + 12, this.parent.parent.y + this.parent.offset + this.offset + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
                 opY += 14;
             }
-            RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 28, this.parent.parent.x + 8, opY + 12, 3, 6, 200);
+            RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 30, this.parent.parent.x + 8, opY + 12, 3, 6, 200);
         }
     }
 

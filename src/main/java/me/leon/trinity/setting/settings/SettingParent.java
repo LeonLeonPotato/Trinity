@@ -9,15 +9,15 @@ public class SettingParent extends Setting {
     private boolean enabled;
     private final boolean canEnable;
 
-    public SettingParent(String name, boolean enabled) {
+    public SettingParent(String name, boolean enabled, boolean canEnable) {
         super(name);
         this.enabled = enabled;
-        this.canEnable = true;
+        this.canEnable = canEnable;
     }
 
     public SettingParent(String name) {
         super(name);
-        this.enabled = true;
+        this.enabled = false;
         this.canEnable = false;
     }
 

@@ -11,7 +11,11 @@ public class PresetManager {
     public ArrayList<Preset> presets = new ArrayList<>();
 
     public PresetManager() {
-        for(File file : Objects.requireNonNull(me.leon.trinity.config.saveConfig.confDir.listFiles())) {
+        if(me.leon.trinity.config.saveConfig.confDir.listFiles() == null) {
+            return;
+        }
+
+        for(File file : me.leon.trinity.config.saveConfig.confDir.listFiles()) {
             if(file.isDirectory()) {
                 presets.add(new Preset(file));
             }

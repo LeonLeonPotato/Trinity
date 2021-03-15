@@ -7,6 +7,10 @@ import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.Boolean;
+import me.leon.trinity.setting.settings.sub.SubBoolean;
+import me.leon.trinity.setting.settings.sub.SubColor;
+import me.leon.trinity.setting.settings.sub.SubMode;
+import me.leon.trinity.setting.settings.sub.SubSlider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,6 +79,24 @@ public class loadConfig {
                                 ((Color) set).b = (Integer.parseInt(setting[4]));
                                 ((Color) set).a = (Integer.parseInt(setting[5]));
                                 ((Color) set).rainbow  = java.lang.Boolean.parseBoolean(setting[6]);
+                            }
+
+                            // SubSettings
+                            if(set instanceof SubMode && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                                ((SubMode) set).setValue(setting[3]);
+                            }
+                            if(set instanceof SubSlider && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                                ((SubSlider) set).setValue(Double.parseDouble(setting[3]));
+                            }
+                            if(set instanceof SubBoolean && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                                ((SubBoolean) set).setEnabled(java.lang.Boolean.parseBoolean(setting[3]));
+                            }
+                            if(set instanceof SubColor && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                                ((SubColor) set).r = (Integer.parseInt(setting[3]));
+                                ((SubColor) set).g = (Integer.parseInt(setting[4]));
+                                ((SubColor) set).b = (Integer.parseInt(setting[5]));
+                                ((SubColor) set).a = (Integer.parseInt(setting[6]));
+                                ((SubColor) set).rainbow  = java.lang.Boolean.parseBoolean(setting[7]);
                             }
                         }
                     });

@@ -1,5 +1,8 @@
 package me.leon.trinity.main;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.loadConfig;
@@ -21,11 +24,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * my second mod, please work!
@@ -74,7 +76,6 @@ public class Trinity {
         // init managers
         settingManager = new SettingManager();
         moduleManager = new ModuleManager();
-        presetManager = new PresetManager();
         doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
@@ -96,6 +97,11 @@ public class Trinity {
         loadConfig.LoadConfig.loadSettings();
 
         moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter(new File(System.getProperty("user.home") + "/Documents/Trinity/trolling")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @SubscribeEvent
@@ -128,6 +134,9 @@ public class Trinity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+        if(!saveConfig.confDir.exists()) {
+            saveConfig.confDir.mkdirs();
         }
 
         presetManager = new PresetManager();

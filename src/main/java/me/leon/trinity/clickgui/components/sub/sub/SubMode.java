@@ -22,16 +22,16 @@ public class SubMode extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        FontUtil.drawString(this.set.name + ": " + this.set.getValue(), this.parent.parent.parent.x + 7, (int) (this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), 0xa9b7c6);
+        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
+        FontUtil.drawString(this.set.name + ": " + this.set.getValue(), this.parent.parent.parent.x + 13, (int) (this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), 0xa9b7c6);
         int opY = 0;
         if(this.open) {
             for(java.lang.String name : this.set.getValues()) {
-                RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.offset + 42 + opY, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.offset + 28 + opY, new Color(0x2b2b2b));
-                FontUtil.drawString(name, this.parent.parent.parent.x + 15, this.parent.parent.parent.y + this.parent.offset + this.offset + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+                RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 42 + opY, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 28 + opY + 14, new Color(0x2b2b2b));
+                FontUtil.drawString(name, this.parent.parent.parent.x + 15, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
                 opY += 14;
             }
-            RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.offset + this.offset + 28, this.parent.parent.parent.x + 11, opY + 12, 3, 6, 200);
+            RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 31, this.parent.parent.parent.x + 11, opY + 12, 3, 6, 200);
         }
     }
 
@@ -49,6 +49,7 @@ public class SubMode extends Component {
             }
             if(button == 1) {
                 this.open = !open;
+                this.parent.refresh();
                 this.parent.parent.refresh();
                 this.parent.parent.parent.refresh();
             }
@@ -88,11 +89,11 @@ public class SubMode extends Component {
     }
 
     public boolean isMouseOnButtonMain(int x, int y) {
-        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
+        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14;
     }
 
     public boolean isMouseOnButtonOff(int x, int y, int place) {
-        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.offset + this.offset + (14 * place) && y < this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + (14 * place);
+        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + (14 * place) && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + (14 * place);
     }
 
     @Override
