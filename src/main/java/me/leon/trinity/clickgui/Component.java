@@ -1,4 +1,4 @@
-package me.leon.trinity.clickguiRewrite;
+package me.leon.trinity.clickgui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
