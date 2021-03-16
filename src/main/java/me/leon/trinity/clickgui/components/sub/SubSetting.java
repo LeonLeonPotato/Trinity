@@ -3,6 +3,7 @@ package me.leon.trinity.clickgui.components.sub;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.Button;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
@@ -55,15 +56,19 @@ public class SubSetting extends Component {
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
         if(set.getValue()) {
-            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x + 5, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x787878));
+            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x + 5, this.parent.parent.y + this.parent.offset + this.offset + 14, this.set.getValue() ? ClickGUI.enabledBooleanColor.getValue() : ClickGUI.disabledBooleanColor.getValue());
         }
-        FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+        FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
         FontUtil.drawString(Font.enabled() ? this.open ? "--" : "+" : this.open ? "-" : "+", this.parent.parent.x + (ClickGui.width - 10), this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
         if(open) {
             for(Component c : this.comps) {
                 c.render();
             }
-            RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 31, this.parent.parent.x + 8, getHeight() - 2, 3, 6, 200);
+            if(ClickGUI.barMode.getValue().equals("Rainbow")) {
+                RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 31, this.parent.parent.x + 8, getHeight() - 2, 3, 6, 200);
+            } else if(ClickGUI.barMode.getValue().equals("Static")) {
+                RenderUtils.drawRect(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + getHeight() + 14, this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 28, ClickGUI.barColor.getValue());
+            }
         }
     }
 

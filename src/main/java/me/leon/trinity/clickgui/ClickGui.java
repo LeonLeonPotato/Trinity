@@ -98,4 +98,9 @@ public class ClickGui extends GuiScreen {
         }
         return null;
     }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return ClickGUI.pause.getValue();
+    }
 }

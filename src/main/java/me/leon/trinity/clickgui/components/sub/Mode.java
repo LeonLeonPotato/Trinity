@@ -1,5 +1,6 @@
 package me.leon.trinity.clickgui.components.sub;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.Component;
@@ -28,12 +29,12 @@ public class Mode extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        FontUtil.drawString(this.set.name + ": " + this.set.getValue(), this.parent.parent.x + 7, (int) (this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), 0xa9b7c6);
+        FontUtil.drawString(this.set.name + ": §f" + this.set.getValue(), this.parent.parent.x + 7, (int) (this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), ClickGUI.nameColorSetting.getValue().getRGB());
         int opY = 0;
         if(this.open) {
             for(java.lang.String name : this.set.getValues()) {
                 RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 42 + opY, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 28 + opY, new Color(0x2b2b2b));
-                FontUtil.drawString(name, this.parent.parent.x + 12, this.parent.parent.y + this.parent.offset + this.offset + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+                FontUtil.drawString(name, this.parent.parent.x + 12, this.parent.parent.y + this.parent.offset + this.offset + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
                 opY += 14;
             }
             if(ClickGUI.barMode.getValue().equals("Rainbow")) {

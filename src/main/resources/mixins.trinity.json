@@ -2,8 +2,9 @@
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "package": "me.leon.trinity.mixins.mixins",
-  "refmap": "mixins.proton.refmap.json",
+  "refmap": "mixins.trinity.refmap.json",
   "mixins": [
-    "MixinEntityPlayerSP"
+    "MixinEntityPlayerSP",
+    "MixinGuiMainMenu"
   ]
 }

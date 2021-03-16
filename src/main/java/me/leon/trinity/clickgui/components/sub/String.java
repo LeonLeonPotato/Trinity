@@ -6,6 +6,7 @@ import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventInputEnter;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.StringInput;
 import me.leon.trinity.utils.misc.FontUtil;
@@ -30,7 +31,7 @@ public class String extends Component {
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
         FontUtil.drawString(this.set.val, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
-        FontUtil.drawString(this.set.name, this.parent.parent.x + (ClickGui.width - FontUtil.getStringWidth(this.set.name)), this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+        FontUtil.drawString(this.set.name, this.parent.parent.x + (ClickGui.width - FontUtil.getStringWidth(this.set.name)), this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
         if(this.typing) {
             this.timer++;
             if(timer > 20 && timer <= 40) {
