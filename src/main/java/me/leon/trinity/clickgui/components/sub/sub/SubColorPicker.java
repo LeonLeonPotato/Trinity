@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.SubSetting;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
 import me.leon.trinity.utils.rendering.RenderUtils;
@@ -22,6 +23,8 @@ public class SubColorPicker extends Component {
     public boolean draggingColor = false;
     public boolean draggingHue = false;
     public boolean draggingAlpha = false;
+    public boolean draggingSpeed = false;
+    public float renderAtSpeed;
     public float renderAtHue;
     public float renderAtAlpha;
     public boolean saveRainbow = false;
@@ -52,10 +55,14 @@ public class SubColorPicker extends Component {
         FontUtil.drawString(this.set.name, this.parent.parent.parent.x + 13, trueY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
         RenderUtils.drawRect(this.parent.parent.parent.x + (ClickGui.width - 5), trueY + 14 + 12, this.parent.parent.parent.x + (ClickGui.width - 15), trueY + 14 + 2, this.set.getValue());
         if(this.open) {
-            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14 + 100, this.parent.parent.parent.x, trueY + 14 + 14, new Color(0x2b2b2b));
+            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14 + 130, this.parent.parent.parent.x, trueY + 14 + 14, new Color(0x2b2b2b));
 
             RenderUtils.drawAlphaRect(this.parent.parent.parent.x + 8 + 7, trueY + 14 + 14 + 70, 67, 10, this.set.getValue());
             RenderUtils.drawRect(this.parent.parent.parent.x + 8 + renderAtAlpha + 1 + 7, trueY + 14 + 14 + 81, this.parent.parent.parent.x + 8 + renderAtAlpha - 1 + 7, trueY + 14 + 14 + 69, new Color(0xa9b7c6));
+
+            RenderUtils.drawRect(this.parent.parent.parent.x + 75 + 7, trueY + 14 + 14 + 110, this.parent.parent.parent.x + 7 + 15, trueY + 14 + 14 + 100, new Color(0x454545));
+            RenderUtils.drawRect(this.parent.parent.parent.x + 15 + renderAtSpeed + 7, trueY + 14 + 14 + 110, this.parent.parent.parent.x + 7 + 15, trueY + 14 + 14 + 100, ClickGUI.sliderColor.getValue());
+            FontUtil.drawString("Speed: " + this.set.speed, this.parent.parent.parent.x + 17 + 7, trueY + 14 + 14 + 100 + ((10 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
 
             RenderUtils.drawColorPickerSquare(this.parent.parent.parent.x + 15 + 7, trueY + 14 + 14 + 3, 60, 60, (int) (this.renderAtHue * 6f), this.set.a);
             RenderUtils.drawCircle(this.parent.parent.parent.x + 15 + circlePos[0] + 7, trueY + 14 + 14 + 3 + circlePos[1], 2f, 0.2f, new Color(255, 255, 255, 255));
@@ -69,7 +76,17 @@ public class SubColorPicker extends Component {
                 RenderUtils.drawRect(this.parent.parent.parent.x + 23 + 7, trueY + 14 + 14 + 93, this.parent.parent.parent.x + 17 + 7, trueY + 14 + 14 + 87, new Color(50, 255, 50));
             }
 
-            RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 15, trueY + 28, this.parent.parent.parent.x + 13, 98, 3, 6, 200);
+            RenderUtils.drawRect(this.parent.parent.parent.x + 25 + 7, trueY + 14 + 14 + 125, this.parent.parent.parent.x + 15 + 7, trueY + 14 + 14 + 115, new Color(0xa9b7c6));
+            FontUtil.drawString("Sync", this.parent.parent.parent.x + 30 + 7, trueY + 14 + 14 + 115 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+            if(this.set.sync) {
+                RenderUtils.drawRect(this.parent.parent.parent.x + 23 + 7, trueY + 14 + 14 + 123, this.parent.parent.parent.x + 17 + 7, trueY + 14 + 14 + 117, new Color(50, 243, 50));
+            }
+
+            if(ClickGUI.barMode.getValue().equals("Rainbow")) {
+                RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 15, trueY + 28, this.parent.parent.parent.x + 13, 128, 3, 6, 200);
+            } else if(ClickGUI.barMode.getValue().equals("Static")) {
+                RenderUtils.drawRect(this.parent.parent.parent.x + 15, trueY + 28, this.parent.parent.parent.x + 13, trueY + 130, ClickGUI.barColor.getValue());
+            }
         }
     }
 
@@ -90,6 +107,11 @@ public class SubColorPicker extends Component {
         }
 
         if(draggingAlpha) this.set.a = ((int) ((renderAtAlpha / 67) * 255));
+
+        if(draggingSpeed) {
+            this.renderAtSpeed = Math.min(60, Math.max(0, mouseX - (this.parent.parent.parent.x + 15 + 7)));
+            this.set.speed = (int) ((renderAtSpeed / 60) * 5);
+        }
 
         if(draggingColor || draggingHue || saveRainbow) {
             final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / ClickGui.width, (circlePos[1] * (10 / 6f)) / ClickGui.width));
@@ -135,11 +157,21 @@ public class SubColorPicker extends Component {
                 }
             }
         }
+        if(isButtonOnSync(mouseX, mouseY) && this.parent.open && this.open) {
+            if(button == 0) {
+                this.set.sync = !this.set.sync;
+            }
+        }
+        if(isMouseOnButtonSpeed(mouseX, mouseY) && this.parent.open && this.open) {
+            if(button == 0) {
+                this.draggingSpeed = true;
+            }
+        }
     }
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        this.draggingAlpha = this.draggingHue = this.draggingColor = false;
+        this.draggingAlpha = this.draggingHue = this.draggingColor = this.draggingSpeed =false;
     }
 
     @Override
@@ -172,6 +204,14 @@ public class SubColorPicker extends Component {
         return x > this.parent.parent.parent.x + 15  + 7&& x < this.parent.parent.parent.x + 25 + 7 && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 85 + 14 && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 95+ 14 ;
     }
 
+    public boolean isMouseOnButtonSpeed(int x, int y) {
+        return x > this.parent.parent.parent.x + 15 + 7 && x < this.parent.parent.parent.x + 75 + 7 && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 100 + 14 && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 110 + 14;
+    }
+
+    public boolean isButtonOnSync(int x, int y) {
+        return x > this.parent.parent.parent.x + 15 + 7 && x < this.parent.parent.parent.x + 25 + 7 && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 115 + 14 && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 125 + 14;
+    }
+
     @Override
     public void setOff(int newOff) {
         this.offset = newOff;
@@ -180,7 +220,7 @@ public class SubColorPicker extends Component {
     @Override
     public int getHeight() {
         if(this.open) {
-            return 14 + 100;
+            return 14 + 130;
         }
         return 14;
     }
@@ -188,7 +228,7 @@ public class SubColorPicker extends Component {
     @SubscribeEvent
     public void onUpdate(TickEvent.ClientTickEvent event) {
         if(this.set.rainbow) {
-            rainbow0.updateColor(3);
+            rainbow0.updateColor(this.set.speed);
             this.set.r = (rainbow0.getColor().getRed());
             this.set.g = (rainbow0.getColor().getBlue());
             this.set.b = (rainbow0.getColor().getGreen());

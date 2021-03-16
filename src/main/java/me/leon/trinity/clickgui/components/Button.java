@@ -64,7 +64,7 @@ public class Button extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.x + ClickGui.width, this.parent.y + offset + 14, this.parent.x, this.parent.y + offset, getColor(hovered, this.mod.isEnabled())); // hahaha 2b2b2b
+        RenderUtils.drawRect(this.parent.x + ClickGui.width, this.parent.y + offset + 14, this.parent.x, this.parent.y + offset, getColor(hovered, this.mod.isEnabled()));
         FontUtil.drawString(mod.getName(), this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2) + 1, ClickGUI.nameColorButton.getValue().getRGB());
         FontUtil.drawString(this.open ? "-" : "...", (this.parent.x + ClickGui.width) - (FontUtil.getStringWidth(this.open ? "-" : "...") + 3), this.open ? (this.parent.y + offset + 2) : (this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2) - 1), ClickGUI.nameColorButton.getValue().getRGB());
         if(this.open) {
@@ -74,7 +74,7 @@ public class Button extends Component {
             if(ClickGUI.barMode.getValue().equals("Rainbow"))
                 RenderUtils.drawRainbowRectVertical(this.parent.x + 5, this.parent.y + 16 + offset, this.parent.x + 3, this.getHeight() - 16, 2, 6, 200);
             else if(ClickGUI.barMode.getValue().equals("Static")) {
-                RenderUtils.drawRect(this.parent.x + 5, this.parent.y + 14 + offset, this.parent.x + 3, this.getHeight() - 14, ClickGUI.barColor.getValue());
+                RenderUtils.drawRect(this.parent.x + 5, this.parent.y + this.offset + this.getHeight(), this.parent.x + 3, this.parent.y + this.offset + 14, ClickGUI.barColor.getValue());
             }
         }
     }

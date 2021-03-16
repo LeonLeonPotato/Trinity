@@ -5,9 +5,11 @@ import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventModeChange;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.awt.Color;
 
@@ -34,7 +36,11 @@ public class Mode extends Component {
                 FontUtil.drawString(name, this.parent.parent.x + 12, this.parent.parent.y + this.parent.offset + this.offset + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
                 opY += 14;
             }
-            RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 30, this.parent.parent.x + 8, opY + 12, 3, 6, 200);
+            if(ClickGUI.barMode.getValue().equals("Rainbow")) {
+                RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 30, this.parent.parent.x + 8, opY + 12, 3, 6, 200);
+            } else if(ClickGUI.barMode.getValue().equals("Static")) {
+                RenderUtils.drawRect(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 42 + opY, this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 28, ClickGUI.barColor.getValue());
+            }
         }
     }
 

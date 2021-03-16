@@ -82,16 +82,16 @@ public class loadConfig {
                             }
 
                             // SubSettings
-                            if(set instanceof SubMode && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                            if(set instanceof SubMode && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
                                 ((SubMode) set).setValue(setting[3]);
                             }
-                            if(set instanceof SubSlider && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                            if(set instanceof SubSlider && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
                                 ((SubSlider) set).setValue(Double.parseDouble(setting[3]));
                             }
-                            if(set instanceof SubBoolean && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                            if(set instanceof SubBoolean && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
                                 ((SubBoolean) set).setEnabled(java.lang.Boolean.parseBoolean(setting[3]));
                             }
-                            if(set instanceof SubColor && set.name.equals(setting[1]) && set.name.equals(setting[2])) {
+                            if(set instanceof SubColor && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
                                 ((SubColor) set).r = (Integer.parseInt(setting[3]));
                                 ((SubColor) set).g = (Integer.parseInt(setting[4]));
                                 ((SubColor) set).b = (Integer.parseInt(setting[5]));
