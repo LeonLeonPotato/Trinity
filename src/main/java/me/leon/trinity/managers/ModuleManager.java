@@ -49,30 +49,15 @@ public class ModuleManager {
     }
 
     public Module getMod(String name) {
-        for(Module mod0 : modules) {
-            if(mod0.getName().equalsIgnoreCase(name)) {
-                return mod0;
-            }
-        }
-        return null;
+        return modules.stream().filter(mod0 -> mod0.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     public Module getMod(String name, Category cat) {
-        for(Module mod0 : modules) {
-            if(mod0.getName().equalsIgnoreCase(name) && mod0.getCategory() == cat) {
-                return mod0;
-            }
-        }
-        return null;
+        return modules.stream().filter(mod0 -> mod0.getName().equalsIgnoreCase(name) && mod0.getCategory() == cat).findFirst().orElse(null);
     }
 
     public Module getMod(Class<? extends Module> clazz) {
-        for(Module mod0 : modules) {
-            if(mod0.getClass() == clazz) {
-                return mod0;
-            }
-        }
-        return null;
+        return modules.stream().filter(mod0 -> mod0.getClass() == clazz).findFirst().orElse(null);
     }
 
     public ArrayList<Module> getModulesByCategory(Category cat) {
