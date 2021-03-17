@@ -9,6 +9,7 @@ import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.managers.FriendManager;
 import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.managers.PresetManager;
 import me.leon.trinity.managers.SettingManager;
@@ -53,6 +54,7 @@ public class Trinity {
     public static PresetManager presetManager;
     public static SettingManager settingManager;
     public static FontUtil fontManager;
+    public static FriendManager friendManager;
 
     public static Preset curPreset;
 
@@ -79,13 +81,10 @@ public class Trinity {
         doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
+        friendManager = new FriendManager();
 
         // init gui(s)
         clickGui = new ClickGui();
-
-        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
-            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
-        }
 
         Runtime.getRuntime().addShutdownHook(new saveConfig());
         loadConfig.LoadConfig.loadBinds();
@@ -96,12 +95,11 @@ public class Trinity {
         loadConfig.LoadConfig.loadSearch();
         loadConfig.LoadConfig.loadSettings();
 
-        moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
-        try {
-            JsonWriter writer = new JsonWriter(new FileWriter(new File(System.getProperty("user.home") + "/Documents/Trinity/trolling")));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
+            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
         }
+
+        moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
     }
 
     @SubscribeEvent
