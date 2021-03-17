@@ -4,7 +4,6 @@ import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
 import me.leon.trinity.utils.Util;
 import me.zero.alpine.fork.listener.Listenable;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;

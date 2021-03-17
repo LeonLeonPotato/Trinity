@@ -1,10 +1,8 @@
 package me.leon.trinity.main;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
+import me.leon.trinity.config.PresetManager;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
@@ -22,10 +20,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 /**
  * my second mod, please work!
@@ -47,6 +46,7 @@ public class Trinity {
 
     public static ClickGui clickGui;
 
+    public static CapeManager capeManager;
     public static ModuleManager moduleManager;
     public static PresetManager presetManager;
     public static SettingManager settingManager;
@@ -80,6 +80,7 @@ public class Trinity {
         doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
+        capeManager = new CapeManager();
         friendManager = new FriendManager();
         rotationManager = new RotationManager();
         tickrateManager = new TickrateManager();

@@ -1,7 +1,6 @@
 package me.leon.trinity.utils.rendering;
 
 import me.leon.trinity.utils.math.MathUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.awt.*;
 
