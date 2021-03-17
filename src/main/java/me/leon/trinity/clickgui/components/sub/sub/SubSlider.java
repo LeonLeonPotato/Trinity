@@ -7,6 +7,7 @@ import me.leon.trinity.clickgui.components.sub.SubSetting;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.Color;
@@ -31,7 +32,7 @@ public class SubSlider extends Component {
     public void render() {
         RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
         RenderUtils.drawRect((float) (this.parent.parent.parent.x + renderWidth + 7 + 4), this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x + 7 + 4, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, ClickGUI.sliderColor.getValue());
-        FontUtil.drawString(this.set.name + ": " + this.set.getValue(), this.parent.parent.parent.x + 7 + 6, this.parent.parent.parent.y + this.parent.parent.offset + this.offset + this.parent.offset + 14 + 14 + ((14 - FontUtil.getFontHeight())) / 2f, 0xa9b7c6);
+        FontUtil.drawString(this.set.name + ": " + Coloring.WHITE + this.set.getValue(), this.parent.parent.parent.x + 7 + 6, this.parent.parent.parent.y + this.parent.parent.offset + this.offset + this.parent.offset + 14 + 14 + ((14 - FontUtil.getFontHeight())) / 2f, 0xa9b7c6);
     }
 
     @Override

@@ -9,6 +9,7 @@ import me.leon.trinity.events.settings.EventModeChange;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.*;
@@ -28,7 +29,7 @@ public class SubMode extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
-        FontUtil.drawString(this.set.name + ": §f" + this.set.getValue(), this.parent.parent.parent.x + 13, (int) (this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), ClickGUI.nameColorSetting.getValue().getRGB());
+        FontUtil.drawString(this.set.name + ": " + Coloring.WHITE + this.set.getValue(), this.parent.parent.parent.x + 13, (int) (this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), ClickGUI.nameColorSetting.getValue().getRGB());
         int opY = 0;
         if(this.open) {
             for(java.lang.String name : this.set.getValues()) {
