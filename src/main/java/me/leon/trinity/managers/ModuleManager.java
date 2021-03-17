@@ -5,6 +5,7 @@ import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
+import me.leon.trinity.hacks.player.AutoSprint;
 import me.leon.trinity.setting.Setting;
 import net.minecraftforge.fml.common.Mod;
 
@@ -21,6 +22,9 @@ public class ModuleManager {
         addMod(new Font());
         addMod(new ClickGUI());
         addMod(new ClientColor());
+
+        // Player
+        addMod(new AutoSprint());
     }
 
     private void addMod(Module mod) {

@@ -14,6 +14,7 @@ import me.leon.trinity.setting.settings.sub.SubSlider;
 import me.zero.alpine.fork.listener.EventHandler;
 import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Keyboard;
 
 public class ClickGUI extends Module {
     public static SettingParent main = new SettingParent("Main", true, false);
