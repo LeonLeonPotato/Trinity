@@ -5,11 +5,10 @@ import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.Gui;
-
-import java.awt.Color;
 
 public class PresetButton extends Component {
     public Preset preset;
@@ -29,8 +28,8 @@ public class PresetButton extends Component {
 
     @Override
     public void render() {
-        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + ClickGui.width, this.parent.y + 14 + this.offset, this.isHovered ? this.preset == Trinity.curPreset ? new Color(0xA3D5D5D5, true).brighter().getRGB() : new Color(0x2b2b2b).brighter().getRGB() : this.preset == Trinity.curPreset ?  new Color(0xA3D5D5D5, true).getRGB() : new Color(0x2b2b2b).getRGB());
-        FontUtil.drawString(preset.name, this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2f) + 1, 0xa9b7c6);
+        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + ClickGui.width, this.parent.y + 14 + this.offset, getColor(this.isHovered, Trinity.curPreset == this.preset).getRGB());
+        FontUtil.drawString(preset.name, this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2f) + 1, ClickGUI.nameColorButton.getValue().getRGB());
     }
 
     @Override
@@ -43,6 +42,22 @@ public class PresetButton extends Component {
         this.isHovered = isMouseOnButton(mouseX, mouseY);
         this.x = mouseX;
         this.y = mouseY;
+    }
+
+    private java.awt.Color getColor(boolean hovered, boolean toggled) {
+        if(hovered) {
+            if(toggled) {
+                return ClickGUI.enabledColor.getValue().brighter();
+            } else {
+                return ClickGUI.disabledColor.getValue().brighter();
+            }
+        } else {
+            if(toggled) {
+                return ClickGUI.enabledColor.getValue();
+            } else {
+                return ClickGUI.disabledColor.getValue();
+            }
+        }
     }
 
     @Override
