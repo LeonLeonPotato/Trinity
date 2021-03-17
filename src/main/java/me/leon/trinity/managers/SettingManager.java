@@ -1,12 +1,9 @@
 package me.leon.trinity.managers;
 
-import baritone.api.BaritoneAPI;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.SubSetting;
-import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

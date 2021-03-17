@@ -5,7 +5,6 @@ import me.leon.trinity.events.settings.EventModeChange;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubColor;

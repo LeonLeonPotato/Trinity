@@ -2,7 +2,6 @@ package me.leon.trinity.clickgui.components.sub.sub;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
-import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.components.sub.SubSetting;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.math.MathUtils;
@@ -10,7 +9,7 @@ import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
-import java.awt.Color;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 

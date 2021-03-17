@@ -2,17 +2,16 @@ package me.leon.trinity.clickgui.components.sub;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
 import me.leon.trinity.utils.rendering.RenderUtils;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import me.leon.trinity.clickgui.components.Button;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class ColorPicker extends Component {
     public me.leon.trinity.setting.settings.Color set;

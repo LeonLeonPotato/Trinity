@@ -7,7 +7,6 @@ import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.hacks.combat.KillAura;
 import me.leon.trinity.setting.Setting;
-import net.minecraftforge.fml.common.Mod;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

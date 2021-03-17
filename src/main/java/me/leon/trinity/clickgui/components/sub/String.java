@@ -12,7 +12,7 @@ import me.leon.trinity.setting.settings.StringInput;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class String extends Component {
     public StringInput set;
