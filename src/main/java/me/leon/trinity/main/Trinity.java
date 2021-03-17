@@ -9,11 +9,8 @@ import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
-<<<<<<< HEAD
 import me.leon.trinity.managers.CapeManager;
-=======
 import me.leon.trinity.managers.FriendManager;
->>>>>>> 201cdee007f882fb5d8272606d9e5ffcf8fcf340
 import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.managers.PresetManager;
 import me.leon.trinity.managers.SettingManager;
@@ -86,11 +83,8 @@ public class Trinity {
         doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
-<<<<<<< HEAD
         capeManager = new CapeManager();
-=======
         friendManager = new FriendManager();
->>>>>>> 201cdee007f882fb5d8272606d9e5ffcf8fcf340
 
         // init gui(s)
         clickGui = new ClickGui();
