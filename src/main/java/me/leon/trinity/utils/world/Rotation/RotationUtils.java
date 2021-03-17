@@ -1,11 +1,18 @@
 package me.leon.trinity.utils.world.Rotation;
 
 import me.leon.trinity.events.main.RotationEvent;
+import me.leon.trinity.managers.RotationManager;
 import me.leon.trinity.utils.Util;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+
+import java.util.Random;
 
 public class RotationUtils implements Util {
+    private static final Random random = new Random();
+
     // override vanilla packet sending here, we replace them with our own custom values
     public static void updateRotationPackets(RotationEvent event) {
         if (mc.player.isSprinting() != mc.player.serverSprintState) {
@@ -66,5 +73,59 @@ public class RotationUtils implements Util {
 
         mc.player.prevOnGround = mc.player.onGround;
         mc.player.autoJumpEnabled = mc.player.mc.gameSettings.autoJump;
+    }
+
+    /**
+     * rot[0] = yaw, rot[1] = pitch
+     */
+    public static float[] getNeededRotations(Vec3d vec) {
+        Vec3d eyesPos = mc.player.getPositionVector().add(0, mc.player.eyeHeight, 0);
+
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
+
+        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+        float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+        float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
+
+        return new float[] {
+                mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw),
+                mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - mc.player.rotationPitch)
+        };
+    }
+
+    public static void rotateTowards(Vec3d vec) {
+        float[] rots = getNeededRotations(vec);
+        Rotation rot = new Rotation(rots[1], rots[0], true);
+        RotationManager.rotationQueue.add(rot);
+    }
+
+    public static void rotateTowards(Vec3d vec, boolean packet) {
+        float[] rots = getNeededRotations(vec);
+        Rotation rot = new Rotation(rots[1], rots[0], packet, RotationPriority.Highest);
+        RotationManager.rotationQueue.add(rot);
+    }
+
+    public static void rotateTowards(Vec3d vec, boolean packet, RotationPriority prio) {
+        float[] rots = getNeededRotations(vec);
+        Rotation rot = new Rotation(rots[1], rots[0], packet, prio);
+        RotationManager.rotationQueue.add(rot);
+    }
+
+    public static void rotateRandom(boolean packet, RotationPriority prio) {
+        Rotation rot = new Rotation((random.nextFloat() * 360) - 180, (random.nextFloat() * 360) - 180, packet, prio);
+        RotationManager.rotationQueue.add(rot);
+    }
+
+    public static void rotateRandom(boolean packet) {
+        Rotation rot = new Rotation((random.nextFloat() * 360) - 180, (random.nextFloat() * 360) - 180, packet, RotationPriority.Highest);
+        RotationManager.rotationQueue.add(rot);
+    }
+
+    public static void rotateRandom() {
+        Rotation rot = new Rotation((random.nextFloat() * 360) - 180, (random.nextFloat() * 360) - 180, true, RotationPriority.Highest);
+        RotationManager.rotationQueue.add(rot);
     }
 }

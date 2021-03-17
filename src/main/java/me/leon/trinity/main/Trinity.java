@@ -53,6 +53,7 @@ public class Trinity {
     public static FontUtil fontManager;
     public static FriendManager friendManager;
     public static RotationManager rotationManager;
+    public static TickrateManager tickrateManager;
 
     public static Preset curPreset;
 
@@ -81,6 +82,7 @@ public class Trinity {
         fontManager.load();
         friendManager = new FriendManager();
         rotationManager = new RotationManager();
+        tickrateManager = new TickrateManager();
 
         // init gui(s)
         clickGui = new ClickGui();

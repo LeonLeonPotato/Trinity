@@ -118,4 +118,16 @@ public abstract class Module implements Listenable, Util {
     public void addSetting(Setting set) {
         Trinity.settingManager.addSets(set);
     }
+
+    protected boolean pCheck() {
+        return mc.player == null;
+    }
+
+    protected boolean wCheck() {
+        return mc.world == null;
+    }
+
+    protected boolean nullCheck() {
+        return mc.world == null || mc.player == null;
+    }
 }

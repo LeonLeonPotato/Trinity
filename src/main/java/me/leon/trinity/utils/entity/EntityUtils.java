@@ -14,6 +14,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.Comparator;
 
@@ -45,7 +46,7 @@ public class EntityUtils implements Util {
     }
 
     private static boolean isValid(Entity entity, boolean players, boolean friends, boolean hostile, boolean passive, double range) {
-        if(entity instanceof EntityLivingBase)
+        if(entity instanceof EntityLivingBase && entity != mc.player)
         if(entity.getDistance(mc.player) <= range) {
             if(entity instanceof EntityPlayer && players) {
                 if(!friends) {
@@ -92,4 +93,7 @@ public class EntityUtils implements Util {
         } else throw new IllegalArgumentException(mode);
     }
 
+    public static double getRange(Entity entity) {
+        return mc.player.getPositionVector().add(0, mc.player.height / 2d, 0).distanceTo(entity.getPositionVector().add(0, entity.height / 2d, 0));
+    }
 }
