@@ -9,6 +9,7 @@ import me.leon.trinity.setting.settings.SubSetting;
 import net.minecraft.client.Minecraft;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class SettingManager {
     public ArrayList<Setting> sets;
@@ -22,42 +23,18 @@ public class SettingManager {
     }
 
     public ArrayList<Setting> getSettingsByMod(String name) {
-        ArrayList<Setting> sets = new ArrayList<>();
-        for(Setting set : this.sets) {
-            if(set.parent.getName().equalsIgnoreCase(name)) {
-                sets.add(set);
-            }
-        }
-        return sets;
+        return this.sets.stream().filter(set -> set.parent.getName().equalsIgnoreCase(name)).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<Setting> getSettingsByMod(Class<? extends Module> clazz) {
-        ArrayList<Setting> sets = new ArrayList<>();
-        for(Setting set : this.sets) {
-            if(set.parent.getClass() == clazz) {
-                sets.add(set);
-            }
-        }
-        return sets;
+        return this.sets.stream().filter(set -> set.parent.getClass() == clazz).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<SubSetting> getSubSettingsBySetting(String name) {
-        ArrayList<SubSetting> sets = new ArrayList<>();
-        for(Setting set : this.sets) {
-            if(set instanceof SubSetting && ((SubSetting) set).getParent().name.equalsIgnoreCase(name)) {
-                sets.add((SubSetting) set);
-            }
-        }
-        return sets;
+        return this.sets.stream().filter(set -> set instanceof SubSetting && ((SubSetting) set).getParent().name.equalsIgnoreCase(name)).map(set -> (SubSetting) set).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<SubSetting> getSubSettingsBySetting(SettingParent set) {
-        ArrayList<SubSetting> sets = new ArrayList<>();
-        for(Setting set0 : this.sets) {
-            if(set0 instanceof SubSetting && ((SubSetting) set0).getParent() == set) {
-                sets.add((SubSetting) set0);
-            }
-        }
-        return sets;
+        return this.sets.stream().filter(set0 -> set0 instanceof SubSetting && ((SubSetting) set0).getParent() == set).map(set0 -> (SubSetting) set0).collect(Collectors.toCollection(ArrayList::new));
     }
 }
