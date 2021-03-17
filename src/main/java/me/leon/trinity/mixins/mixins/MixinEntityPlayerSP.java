@@ -1,11 +1,10 @@
 package me.leon.trinity.mixins.mixins;
 
 import me.leon.trinity.events.EventStage;
-import me.leon.trinity.events.events.RotationEvent;
+import me.leon.trinity.events.main.RotationEvent;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.world.Rotation.RotationUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
