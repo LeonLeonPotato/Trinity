@@ -7,6 +7,7 @@ import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 import org.lwjgl.input.Keyboard;
 
@@ -34,7 +35,7 @@ public class Keybind extends Component {
             this.keyTimer = 0;
         }
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        FontUtil.drawString(this.binding ? "Listening" + determineDots(keyTimer) : "Key: Coloring.WHITEf" + Keyboard.getKeyName(mod.getKey()), this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
+        FontUtil.drawString(this.binding ? "Listening" + determineDots(keyTimer) : "Key: " + Coloring.WHITE + Keyboard.getKeyName(mod.getKey()), this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
     }
 
     @Override

@@ -1,11 +1,9 @@
 package me.leon.trinity.utils.world.Rotation;
 
-import me.leon.trinity.events.events.RotationEvent;
+import me.leon.trinity.events.main.RotationEvent;
 import me.leon.trinity.utils.Util;
-import me.leon.trinity.utils.misc.ReflectionUtils;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketPlayer;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 public class RotationUtils implements Util {
     // override vanilla packet sending here, we replace them with our own custom values

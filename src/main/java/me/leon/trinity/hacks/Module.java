@@ -21,7 +21,7 @@ public abstract class Module implements Listenable, Util {
         this.name = name;
         this.description = description;
         this.cat = cat;
-        this.enabled = true;
+        this.enabled = false;
         this.visible = true;
     }
 
@@ -29,7 +29,7 @@ public abstract class Module implements Listenable, Util {
         this.name = name;
         this.description = description;
         this.cat = cat;
-        this.enabled = true;
+        this.enabled = false;
         this.visible = visible;
     }
 
@@ -105,6 +105,10 @@ public abstract class Module implements Listenable, Util {
             onDisable0();
             onDisable();
         }
+    }
+
+    public void toggle() {
+        this.setEnabled(!this.isEnabled());
     }
 
     public boolean shouldSave() {

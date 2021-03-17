@@ -9,10 +9,7 @@ import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.managers.FriendManager;
-import me.leon.trinity.managers.ModuleManager;
-import me.leon.trinity.managers.PresetManager;
-import me.leon.trinity.managers.SettingManager;
+import me.leon.trinity.managers.*;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.zero.alpine.fork.bus.EventBus;
 import me.zero.alpine.fork.bus.EventManager;
@@ -55,6 +52,7 @@ public class Trinity {
     public static SettingManager settingManager;
     public static FontUtil fontManager;
     public static FriendManager friendManager;
+    public static RotationManager rotationManager;
 
     public static Preset curPreset;
 
@@ -82,6 +80,7 @@ public class Trinity {
         fontManager = new FontUtil();
         fontManager.load();
         friendManager = new FriendManager();
+        rotationManager = new RotationManager();
 
         // init gui(s)
         clickGui = new ClickGui();
@@ -109,7 +108,7 @@ public class Trinity {
                 if(Keyboard.getEventKeyState()) {
                     for(Module mod : moduleManager.modules) {
                         if(mod.getKey() == Keyboard.getEventKey()) {
-                            mod.setEnabled(true);
+                            mod.toggle();
                         }
                     }
                 }
