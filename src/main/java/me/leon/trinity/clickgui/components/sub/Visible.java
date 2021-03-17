@@ -1,10 +1,13 @@
 package me.leon.trinity.clickgui.components.sub;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.Color;
@@ -23,7 +26,7 @@ public class Visible extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        FontUtil.drawString("Visible: " + mod.visible, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+        FontUtil.drawString("Visible: " + Coloring.WHITE + mod.visible, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
     }
 
     @Override

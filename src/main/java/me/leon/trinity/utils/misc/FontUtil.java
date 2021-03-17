@@ -67,6 +67,7 @@ public class FontUtil implements Util {
         GL11.glPushMatrix();
         if (Trinity.moduleManager.getMod("Font").isEnabled()) {
             y += 1;
+            if(text.startsWith("F") && Trinity.fontManager.getCustomFont().equals(comfortaa)) x += 1; // dont know why it does this but if the font is comfortaa the F is offset by a bit
             if (me.leon.trinity.hacks.client.Font.shadow.getValue())
                 Trinity.fontManager.getCustomFont().drawStringWithShadow(text, x, y, color);
             else

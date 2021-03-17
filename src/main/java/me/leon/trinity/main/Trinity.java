@@ -1,12 +1,19 @@
 package me.leon.trinity.main;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
+<<<<<<< HEAD
 import me.leon.trinity.managers.CapeManager;
+=======
+import me.leon.trinity.managers.FriendManager;
+>>>>>>> 201cdee007f882fb5d8272606d9e5ffcf8fcf340
 import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.managers.PresetManager;
 import me.leon.trinity.managers.SettingManager;
@@ -22,11 +29,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * my second mod, please work!
@@ -53,6 +59,7 @@ public class Trinity {
     public static PresetManager presetManager;
     public static SettingManager settingManager;
     public static FontUtil fontManager;
+    public static FriendManager friendManager;
 
     public static Preset curPreset;
 
@@ -76,18 +83,17 @@ public class Trinity {
         // init managers
         settingManager = new SettingManager();
         moduleManager = new ModuleManager();
-        presetManager = new PresetManager();
         doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
+<<<<<<< HEAD
         capeManager = new CapeManager();
+=======
+        friendManager = new FriendManager();
+>>>>>>> 201cdee007f882fb5d8272606d9e5ffcf8fcf340
 
         // init gui(s)
         clickGui = new ClickGui();
-
-        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
-            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
-        }
 
         Runtime.getRuntime().addShutdownHook(new saveConfig());
         loadConfig.LoadConfig.loadBinds();
@@ -97,6 +103,10 @@ public class Trinity {
         loadConfig.LoadConfig.loadModules(false);
         loadConfig.LoadConfig.loadSearch();
         loadConfig.LoadConfig.loadSettings();
+
+        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
+            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
+        }
 
         moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
     }
@@ -131,6 +141,9 @@ public class Trinity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+        if(!saveConfig.confDir.exists()) {
+            saveConfig.confDir.mkdirs();
         }
 
         presetManager = new PresetManager();

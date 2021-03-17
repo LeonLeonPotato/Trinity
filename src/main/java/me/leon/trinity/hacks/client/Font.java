@@ -2,6 +2,7 @@ package me.leon.trinity.hacks.client;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.Slider;
@@ -16,5 +17,9 @@ public class Font extends Module {
 
     public Font() {
         super("Font", "Customize font settings", Category.CLIENT);
+    }
+
+    public static boolean enabled() {
+        return Trinity.moduleManager.getMod(Font.class).isEnabled();
     }
 }

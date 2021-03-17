@@ -1,8 +1,10 @@
 package me.leon.trinity.clickgui.components;
 
+import com.google.gson.JsonParser;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
@@ -22,7 +24,7 @@ public class Frame extends me.leon.trinity.clickgui.Component {
     public ArrayList<Button> comps;
     public ArrayList<me.leon.trinity.clickgui.components.PresetButton> presetButtons;
 
-    public Frame(Category c, int x, int y, int offset) {
+    public Frame(Category c, int x, int y) {
         this.c = c;
         this.x = x;
         this.y = y;
@@ -49,9 +51,10 @@ public class Frame extends me.leon.trinity.clickgui.Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(x + ClickGui.width, y + 14, x, y, new Color(0x3c3f41));
-        RenderUtils.drawRainbowRectHorizontal(x + (ClickGui.width - 2), y + 15, (ClickGui.width - 2), y + 14, 2, 2, 255);
-        FontUtil.drawString(c.name(), this.x + 5, this.y + ((15 - FontUtil.getFontHeight()) / 2) + 1, 0xa9b7c6);
+        RenderUtils.drawRect(x + ClickGui.width, y + 15, x, y, ClickGUI.frameColor.getValue());
+        if(ClickGUI.rainbow.getValue())
+            RenderUtils.drawRainbowRectHorizontal(x + (ClickGui.width - 1), y + 15, (ClickGui.width - 1), y + 14, 1, 1, 255);
+        FontUtil.drawString(c.name(), this.x + 5, this.y + ((15 - FontUtil.getFontHeight()) / 2) + 1, ClickGUI.nameColorFrame.getValue().getRGB());
         if(this.open) {
             for(Button b : comps) {
                 b.render();
@@ -171,6 +174,6 @@ public class Frame extends me.leon.trinity.clickgui.Component {
     }
 
     public boolean isMouseOnButton(int x, int y) {
-        return x >= this.x && y >= this.y && y <= this.y + 15 && x <= this.x + 100;
+        return x >= this.x && y >= this.y && y <= this.y + 15 && x <= this.x + ClickGui.width;
     }
 }

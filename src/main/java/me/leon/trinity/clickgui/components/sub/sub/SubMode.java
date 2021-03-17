@@ -1,9 +1,15 @@
 package me.leon.trinity.clickgui.components.sub.sub;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.SubSetting;
+import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.settings.EventModeChange;
+import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.*;
@@ -22,16 +28,20 @@ public class SubMode extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
-        FontUtil.drawString(this.set.name + ": " + this.set.getValue(), this.parent.parent.parent.x + 7, (int) (this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), 0xa9b7c6);
+        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
+        FontUtil.drawString(this.set.name + ": " + Coloring.WHITE + this.set.getValue(), this.parent.parent.parent.x + 13, (int) (this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + ((14 - FontUtil.getFontHeight()) / 2f)), ClickGUI.nameColorSetting.getValue().getRGB());
         int opY = 0;
         if(this.open) {
             for(java.lang.String name : this.set.getValues()) {
-                RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.offset + 42 + opY, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.offset + 28 + opY, new Color(0x2b2b2b));
-                FontUtil.drawString(name, this.parent.parent.parent.x + 15, this.parent.parent.parent.y + this.parent.offset + this.offset + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+                RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 42 + opY, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 28 + opY + 14, new Color(0x2b2b2b));
+                FontUtil.drawString(name, this.parent.parent.parent.x + 17, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 28 + opY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
                 opY += 14;
             }
-            RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.offset + this.offset + 28, this.parent.parent.parent.x + 11, opY + 12, 3, 6, 200);
+            if(ClickGUI.barMode.getValue().equals("Rainbow")) {
+                RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 15, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 31, this.parent.parent.parent.x + 13, opY + 12, 3, 6, 200);
+            } else if(ClickGUI.barMode.getValue().equals("Static")) {
+                RenderUtils.drawRect(this.parent.parent.parent.x + 15, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 42 + opY, this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 28, ClickGUI.barColor.getValue());
+            }
         }
     }
 
@@ -43,12 +53,22 @@ public class SubMode extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         int place = this.set.getValues().indexOf(this.set.getValue());
-        if(isMouseOnButtonMain(mouseX, mouseY) && this.parent.open) {
+        if(isMouseOnButtonMain(mouseX, mouseY) && this.parent.open && this.parent.parent.open && this.parent.parent.parent.open) {
             if(button == 0) {
+                EventModeChange event = new EventModeChange(EventStage.PRE, this.set);
+                Trinity.dispatcher.post(event);
+                if(event.isCanceled()) return;
+
+                String val = this.set.getValue();
                 this.set.setValue(this.set.getValues().get(add(this.set.getValues().size(), place)));
+
+                EventModeChange event0 = new EventModeChange(EventStage.POST, this.set);
+                Trinity.dispatcher.post(event0);
+                if(event.isCanceled()) this.set.setValue(val);
             }
             if(button == 1) {
                 this.open = !open;
+                this.parent.refresh();
                 this.parent.parent.refresh();
                 this.parent.parent.parent.refresh();
             }
@@ -88,11 +108,11 @@ public class SubMode extends Component {
     }
 
     public boolean isMouseOnButtonMain(int x, int y) {
-        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
+        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + 14;
     }
 
     public boolean isMouseOnButtonOff(int x, int y, int place) {
-        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.offset + this.offset + (14 * place) && y < this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + (14 * place);
+        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + (14 * place) && y < this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 + (14 * place);
     }
 
     @Override

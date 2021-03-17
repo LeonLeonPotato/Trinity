@@ -8,6 +8,7 @@ import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
@@ -26,8 +27,8 @@ public class ClickGui extends GuiScreen {
         frames = new ArrayList<>();
         int frameX = 10;
         for(Category c : Category.values()) {
-            frames.add(new Frame(c, frameX, 10, offset));
-            frameX += (width + 10);
+            frames.add(new Frame(c, frameX, 10));
+            frameX += (width + 3);
         }
     }
 
@@ -39,9 +40,12 @@ public class ClickGui extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if(ClickGUI.background.getValue().equalsIgnoreCase("Darken") || ClickGUI.background.getValue().equalsIgnoreCase("Both")) this.drawDefaultBackground();
         width = (int) ClickGUI.width.getValue();
+        int DOffset = Mouse.getDWheel();
         for(Frame c : frames) {
             c.render();
             c.updateComponent(mouseX, mouseY);
+            if(ClickGUI.scroll.getValue())
+                c.y = (int) ((DOffset * (ClickGUI.speed.getValue() / 100)) + c.y);
         }
         for(Frame c : frames) {
             for(Button b : c.comps) {
@@ -93,5 +97,10 @@ public class ClickGui extends GuiScreen {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return ClickGUI.pause.getValue();
     }
 }

@@ -21,11 +21,11 @@ public class SubBoolean extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
         if(set.getValue()) {
-            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.parent.x + 7, this.parent.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x787878));
+            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x + 11, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, new Color(0x787878));
         }
-        FontUtil.drawString(this.set.name, this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+        FontUtil.drawString(this.set.name, this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + 14 + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SubBoolean extends Component {
     }
 
     public boolean isWithinButton(int x, int y) {
-        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.offset + this.offset + 14 && y < this.parent.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
+        return x > this.parent.parent.parent.x && x < this.parent.parent.parent.x + ClickGui.width && y > this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14 && y < this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14;
     }
 
     @Override

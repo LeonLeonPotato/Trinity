@@ -5,6 +5,10 @@ import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.Boolean;
+import me.leon.trinity.setting.settings.sub.SubBoolean;
+import me.leon.trinity.setting.settings.sub.SubColor;
+import me.leon.trinity.setting.settings.sub.SubMode;
+import me.leon.trinity.setting.settings.sub.SubSlider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -67,7 +71,6 @@ public class saveConfig extends Thread {
 
     public static void saveSettings() {
         ArrayList<String> settings = new ArrayList<>();
-
         Trinity.moduleManager.modules.forEach(mod -> {
             Trinity.settingManager.sets.forEach(set -> {
                 if(set.parent == mod) {
@@ -86,6 +89,22 @@ public class saveConfig extends Thread {
                     if(set instanceof Color) {
                         settings.add(mod.getName() + ":" + set.name + ":" + ((Color) set).r + ":" + ((Color) set).g + ":" + ((Color) set).b + ":" + ((Color) set).a + ":" + ((Color) set).rainbow);
                     }
+
+                    // SubSettings
+                    if(set instanceof SubMode) {
+                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + ((SubMode) set).getValue());
+                    }
+                    if(set instanceof SubBoolean) {
+                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + ((SubBoolean) set).getValue());
+                    }
+                    if(set instanceof SubSlider) {
+                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + ((SubSlider) set).getValue());
+                    }
+                    if(set instanceof SubColor) {
+                        SubColor set0 = ((SubColor) set);
+                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + set0.r  + ":" + set0.g + ":" + set0.b + ":" + set0.a + ":" + set0.rainbow);
+                    }
+
                 }
             });
         });
