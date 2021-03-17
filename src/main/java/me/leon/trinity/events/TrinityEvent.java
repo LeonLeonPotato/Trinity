@@ -6,7 +6,7 @@ public class TrinityEvent implements ICancellable {
     private final EventStage stage;
     private boolean canceled;
 
-    protected TrinityEvent(EventStage stage) {
+    public TrinityEvent(EventStage stage) {
         this.stage = stage;
     }
 

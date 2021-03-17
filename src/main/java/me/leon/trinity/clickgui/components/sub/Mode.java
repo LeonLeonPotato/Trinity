@@ -1,9 +1,8 @@
 package me.leon.trinity.clickgui.components.sub;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.clickgui.ClickGui;
-import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventModeChange;
 import me.leon.trinity.hacks.client.ClickGUI;
@@ -11,9 +10,8 @@ import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Mode extends Component {
     public me.leon.trinity.setting.settings.Mode set;

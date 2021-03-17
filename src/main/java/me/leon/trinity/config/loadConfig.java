@@ -5,8 +5,8 @@ import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.Boolean;
+import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubColor;
 import me.leon.trinity.setting.settings.sub.SubMode;
@@ -82,16 +82,16 @@ public class loadConfig {
                             }
 
                             // SubSettings
-                            if(set instanceof SubMode && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
+                            if(set instanceof SubMode && set.name.equals(setting[1]) && ((SubMode) set).getParent().name.equals(setting[2])) {
                                 ((SubMode) set).setValue(setting[3]);
                             }
-                            if(set instanceof SubSlider && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
+                            if(set instanceof SubSlider && set.name.equals(setting[1]) && ((SubSlider) set).getParent().name.equals(setting[2])) {
                                 ((SubSlider) set).setValue(Double.parseDouble(setting[3]));
                             }
-                            if(set instanceof SubBoolean && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
+                            if(set instanceof SubBoolean && set.name.equals(setting[1]) && ((SubBoolean) set).getParent().name.equals(setting[2])) {
                                 ((SubBoolean) set).setEnabled(java.lang.Boolean.parseBoolean(setting[3]));
                             }
-                            if(set instanceof SubColor && set.name.equals(setting[1]) && set.parent.getName().equals(setting[2])) {
+                            if(set instanceof SubColor && set.name.equals(setting[1]) && ((SubColor) set).getParent().name.equals(setting[2])) {
                                 ((SubColor) set).r = (Integer.parseInt(setting[3]));
                                 ((SubColor) set).g = (Integer.parseInt(setting[4]));
                                 ((SubColor) set).b = (Integer.parseInt(setting[5]));

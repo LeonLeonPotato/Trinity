@@ -3,8 +3,8 @@ package me.leon.trinity.config;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.Boolean;
+import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubColor;
 import me.leon.trinity.setting.settings.sub.SubMode;
@@ -92,17 +92,17 @@ public class saveConfig extends Thread {
 
                     // SubSettings
                     if(set instanceof SubMode) {
-                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + ((SubMode) set).getValue());
+                        settings.add(mod.getName() + ":" + set.name + ":" + ((SubMode) set).getParent().name + ":" + ((SubMode) set).getValue());
                     }
                     if(set instanceof SubBoolean) {
-                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + ((SubBoolean) set).getValue());
+                        settings.add(mod.getName() + ":" + set.name + ":" + ((SubBoolean) set).getParent().name + ":" + ((SubBoolean) set).getValue());
                     }
                     if(set instanceof SubSlider) {
-                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + ((SubSlider) set).getValue());
+                        settings.add(mod.getName() + ":" + set.name + ":" + ((SubSlider) set).getParent().name + ":" + ((SubSlider) set).getValue());
                     }
                     if(set instanceof SubColor) {
                         SubColor set0 = ((SubColor) set);
-                        settings.add(mod.getName() + ":" + set.name + ":" + set.parent.getName() + ":" + set0.r  + ":" + set0.g + ":" + set0.b + ":" + set0.a + ":" + set0.rainbow);
+                        settings.add(mod.getName() + ":" + set.name + ":" + ((SubColor) set).getParent().name + ":" + set0.r  + ":" + set0.g + ":" + set0.b + ":" + set0.a + ":" + set0.rainbow);
                     }
 
                 }

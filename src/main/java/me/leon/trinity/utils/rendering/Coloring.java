@@ -4,6 +4,7 @@ package me.leon.trinity.utils.rendering;
  * Coloring because minecraft's ChatFormatting doesn't work ):
  */
 public class Coloring {
+    public static final String RESET = "§r";
     public static final String WHITE = "§f";
     public static final String GREY = "§7";
     public static final String DARKGREY = "§8";

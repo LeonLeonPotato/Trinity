@@ -1,6 +1,5 @@
 package me.leon.trinity.clickgui.components.sub.sub;
 
-import com.google.gson.JsonObject;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.SubSetting;
@@ -11,7 +10,6 @@ import me.leon.trinity.utils.rendering.RenderUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import scala.util.parsing.json.JSON;
 
 import java.awt.*;
 

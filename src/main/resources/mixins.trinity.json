@@ -5,6 +5,7 @@
   "refmap": "mixins.trinity.refmap.json",
   "mixins": [
     "MixinEntityPlayerSP",
-    "MixinGuiMainMenu"
+    "MixinGuiMainMenu",
+    "MixinNetworkManager"
   ]
 }

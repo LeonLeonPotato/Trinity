@@ -1,7 +1,6 @@
 package me.leon.trinity.utils.world;
 
 import me.leon.trinity.utils.Util;
-import org.lwjgl.Sys;
 
 public class Timer implements Util {
     private long time;

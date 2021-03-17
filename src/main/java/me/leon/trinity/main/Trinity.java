@@ -1,17 +1,13 @@
 package me.leon.trinity.main;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
+import me.leon.trinity.config.PresetManager;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.managers.ModuleManager;
-import me.leon.trinity.managers.PresetManager;
-import me.leon.trinity.managers.SettingManager;
+import me.leon.trinity.managers.*;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.zero.alpine.fork.bus.EventBus;
 import me.zero.alpine.fork.bus.EventManager;
@@ -24,10 +20,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 /**
  * my second mod, please work!
@@ -49,10 +46,14 @@ public class Trinity {
 
     public static ClickGui clickGui;
 
+    public static CapeManager capeManager;
     public static ModuleManager moduleManager;
     public static PresetManager presetManager;
     public static SettingManager settingManager;
     public static FontUtil fontManager;
+    public static FriendManager friendManager;
+    public static RotationManager rotationManager;
+    public static TickrateManager tickrateManager;
 
     public static Preset curPreset;
 
@@ -79,13 +80,13 @@ public class Trinity {
         doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
+        capeManager = new CapeManager();
+        friendManager = new FriendManager();
+        rotationManager = new RotationManager();
+        tickrateManager = new TickrateManager();
 
         // init gui(s)
         clickGui = new ClickGui();
-
-        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
-            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
-        }
 
         Runtime.getRuntime().addShutdownHook(new saveConfig());
         loadConfig.LoadConfig.loadBinds();
@@ -96,12 +97,11 @@ public class Trinity {
         loadConfig.LoadConfig.loadSearch();
         loadConfig.LoadConfig.loadSettings();
 
-        moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
-        try {
-            JsonWriter writer = new JsonWriter(new FileWriter(new File(System.getProperty("user.home") + "/Documents/Trinity/trolling")));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
+            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
         }
+
+        moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
     }
 
     @SubscribeEvent
@@ -111,7 +111,7 @@ public class Trinity {
                 if(Keyboard.getEventKeyState()) {
                     for(Module mod : moduleManager.modules) {
                         if(mod.getKey() == Keyboard.getEventKey()) {
-                            mod.setEnabled(true);
+                            mod.toggle();
                         }
                     }
                 }

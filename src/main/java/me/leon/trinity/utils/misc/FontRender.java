@@ -1,6 +1,5 @@
 package me.leon.trinity.utils.misc;
 
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;

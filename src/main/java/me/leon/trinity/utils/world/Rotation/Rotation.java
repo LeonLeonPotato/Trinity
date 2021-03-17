@@ -43,8 +43,25 @@ public class Rotation implements Util {
         this.priority = priority;
     }
 
+    // updates player rotations here
+    public void updateRotations() {
+        try {
+            if (this.packet) {
+                mc.player.renderYawOffset = this.yaw;
+                mc.player.rotationYawHead = this.yaw;
+            } else {
+                mc.player.rotationYaw = this.yaw;
+                mc.player.rotationPitch = this.pitch;
+            }
+        } catch (Exception ignored) {
+
+        }
+    }
+
     public void cancel() {
         this.yaw = mc.player.rotationYaw;
         this.pitch = mc.player.rotationPitch;
+
+        this.rotationStay.reset();
     }
 }

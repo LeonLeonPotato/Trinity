@@ -1,7 +1,6 @@
 package me.leon.trinity.utils.misc;
 
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.utils.Util;
 import me.leon.trinity.utils.world.Timer;
 import org.lwjgl.opengl.GL11;
