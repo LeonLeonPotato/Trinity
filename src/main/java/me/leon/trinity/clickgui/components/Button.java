@@ -3,12 +3,12 @@ package me.leon.trinity.clickgui.components;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.ColorPicker;
+import me.leon.trinity.clickgui.components.sub.String;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
 import me.leon.trinity.setting.settings.*;
-import me.leon.trinity.clickgui.components.sub.String;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 

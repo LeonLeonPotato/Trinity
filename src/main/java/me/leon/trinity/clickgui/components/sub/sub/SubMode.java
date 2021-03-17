@@ -1,6 +1,5 @@
 package me.leon.trinity.clickgui.components.sub.sub;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.SubSetting;

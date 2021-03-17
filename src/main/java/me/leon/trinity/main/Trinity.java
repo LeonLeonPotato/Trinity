@@ -1,23 +1,13 @@
 package me.leon.trinity.main;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
+import me.leon.trinity.config.PresetManager;
 import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
-<<<<<<< HEAD
-import me.leon.trinity.managers.CapeManager;
-import me.leon.trinity.managers.FriendManager;
-import me.leon.trinity.managers.ModuleManager;
-import me.leon.trinity.managers.PresetManager;
-import me.leon.trinity.managers.SettingManager;
-=======
 import me.leon.trinity.managers.*;
->>>>>>> b0cc775c2cdfd2c8718ce914b2b95d6b58e6985d
 import me.leon.trinity.utils.misc.FontUtil;
 import me.zero.alpine.fork.bus.EventBus;
 import me.zero.alpine.fork.bus.EventManager;
@@ -30,10 +20,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 /**
  * my second mod, please work!

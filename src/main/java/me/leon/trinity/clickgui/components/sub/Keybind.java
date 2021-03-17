@@ -1,9 +1,8 @@
 package me.leon.trinity.clickgui.components.sub;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.clickgui.ClickGui;
-import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
@@ -11,7 +10,7 @@ import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.RenderUtils;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Keybind extends Component {

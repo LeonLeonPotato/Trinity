@@ -1,7 +1,5 @@
 package me.leon.trinity.utils.rendering;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
 
 public class RenderUtils {
     public static void drawRect(float x, float y, float w, float h, Color color)
