@@ -2,6 +2,7 @@ package me.leon.trinity.hacks.combat;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.RotationManager;
 import me.leon.trinity.managers.TickrateManager;
 import me.leon.trinity.setting.settings.SettingParent;
@@ -25,6 +26,8 @@ import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.ArrayList;
 
 public class KillAura extends Module {
     public static SettingParent main = new SettingParent("Main", true, false);
@@ -56,12 +59,13 @@ public class KillAura extends Module {
     public static SubSlider targetRange = new SubSlider("Range", targeting, 0.5, 5, 10, false);
     public static SubBoolean players = new SubBoolean("Players", targeting, true);
     public static SubBoolean friends = new SubBoolean("Friends", targeting, true);
+    public static SubBoolean neutral = new SubBoolean("Neutral", targeting, true);
     public static SubBoolean passive = new SubBoolean("Passive", targeting, true);
     public static SubBoolean hostile = new SubBoolean("Hostile", targeting, true);
 
     public static EntityLivingBase target = null;
     private MODES mode;
-    private Timer timer;
+    private final Timer timer;
 
     public KillAura() {
         super("KillAura", "Attacks Entities nearby", Category.COMBAT);
@@ -75,9 +79,9 @@ public class KillAura extends Module {
 
     @Override
     public void onUpdate() {
-        if(mc.player == null || mc.world == null) return;
+        if(nullCheck()) return;
         EntityLivingBase target1 = target;
-        target = EntityUtils.getTarget(players.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
+        target = EntityUtils.getTarget(players.getValue(), neutral.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
         if(target == null) {
             clean();
             return;
@@ -92,7 +96,6 @@ public class KillAura extends Module {
         if(EntityUtils.getRange(target) > normalRange.getValue()) return;
         this.mode = MODES.INSIGHT;
 
-        //Trinity.LOGGER.info("a");
         Vec3d vec = null;
         if(rayTraceMode.getValue().equalsIgnoreCase("Leon")) {
             vec = RaytraceUtils.rayTraceLeon(target);
@@ -125,7 +128,6 @@ public class KillAura extends Module {
             }
         }
 
-        //Trinity.LOGGER.info("b");
         int slot = InventoryUtil.find(Items.DIAMOND_SWORD);
         int slot0 = InventoryUtil.find(Items.DIAMOND_AXE);
         if(Switch.getValue().equalsIgnoreCase("Normal")) {
@@ -144,7 +146,6 @@ public class KillAura extends Module {
                 return;
             }
         }
-        //Trinity.LOGGER.info("c");
 
         if(rotate.getValue()) {
             if(rotation.getValue().equalsIgnoreCase("Random")) {
@@ -153,13 +154,16 @@ public class KillAura extends Module {
                 RotationUtils.rotateTowards(vec, rotation.getValue().equalsIgnoreCase("Packet"));
             }
         }
-        //Trinity.LOGGER.info("d");
 
         if(delayMode.getValue().equalsIgnoreCase("Ready")) {
             if(armorMelt.getValue())
                 mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 9, mc.player.inventory.currentItem, ClickType.SWAP, mc.player);
 
-            attackEntity(target, true, sync.getValue(), packet.getValue());
+            if(rayTraceMode.getValue().equalsIgnoreCase("Leon")) {
+                attackEntity(target, true, sync.getValue(), packet.getValue(), vec);
+            } else {
+                attackEntity(target, true, sync.getValue(), packet.getValue());
+            }
 
             if(armorMelt.getValue()) {
                 mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 9, mc.player.inventory.currentItem, ClickType.SWAP, mc.player);
@@ -169,7 +173,10 @@ public class KillAura extends Module {
             if(timer.hasPassed((int) delay.getValue())) {
                 this.timer.reset();
 
-                attackEntity(target, false, sync.getValue(), packet.getValue());
+                if(rayTraceMode.getValue().equalsIgnoreCase("Leon"))
+                    attackEntity(target, false, sync.getValue(), packet.getValue(), vec);
+                else
+                    attackEntity(target, false, sync.getValue(), packet.getValue());
             }
         }
         //Trinity.LOGGER.info("e");
@@ -179,6 +186,18 @@ public class KillAura extends Module {
         if (!cooldown || (mc.player.getCooledAttackStrength(sync ? (20 - TickrateManager.getTPS()) : 0) >= 1)) {
             if (packet)
                 mc.player.connection.sendPacket(new CPacketUseEntity(entity));
+            else
+                mc.playerController.attackEntity(mc.player, entity);
+
+            mc.player.swingArm(EnumHand.MAIN_HAND);
+            mc.player.resetCooldown();
+        }
+    }
+
+    private void attackEntity(Entity entity, boolean cooldown, boolean sync, boolean packet, Vec3d val) {
+        if (!cooldown || (mc.player.getCooledAttackStrength(sync ? (20 - TickrateManager.getTPS()) : 0) >= 1)) {
+            if (packet)
+                mc.player.connection.sendPacket(new CPacketUseEntity(entity, EnumHand.MAIN_HAND, val));
             else
                 mc.playerController.attackEntity(mc.player, entity);
 

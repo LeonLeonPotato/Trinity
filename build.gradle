@@ -79,6 +79,8 @@ dependencies {
 
     //Minn RPC
     compile group: 'club.minnced', name: 'java-discord-rpc', version: '2.0.1'
+
+    compile group: 'net.jodah', name: 'typetools', version: '0.5.0'
 }
 
 processResources {

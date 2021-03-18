@@ -8,9 +8,6 @@ import me.zero.alpine.fork.listener.EventHandler;
 import me.zero.alpine.fork.listener.Listenable;
 import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.network.play.server.SPacketTimeUpdate;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class TickrateManager implements Listenable {
     public long prevTime;
@@ -38,14 +35,14 @@ public class TickrateManager implements Listenable {
             }
         }
 
-        return (float) MathUtils.roundAvoid(MathUtils.clamp((tickRate / tickCount), 0.0f, 20.0f), 2);
+        return (float) MathUtils.roundAvoid(MathUtils.clamp(0, 20, (tickRate / tickCount)), 2);
     }
 
     @EventHandler
     private final Listener<EventPacketRecieve> onPacketReceive = new Listener<>(event -> {
         if (event.getPacket() instanceof SPacketTimeUpdate) {
             if (prevTime != -1) {
-                TPS[currentTick % TPS.length] = MathHelper.clamp((20.0f / ((float) (System.currentTimeMillis() - prevTime) / 1000.0f)), 0.0f, 20.0f);
+                TPS[currentTick % TPS.length] = (float) MathUtils.clamp( 0.0d, 20.0d, (20.0f / ((float) (System.currentTimeMillis() - prevTime) / 1000.0f)));
                 currentTick++;
             }
 

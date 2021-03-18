@@ -56,14 +56,14 @@ public class SubMode extends Component {
             if(button == 0) {
                 EventModeChange event = new EventModeChange(EventStage.PRE, this.set);
                 Trinity.dispatcher.post(event);
-                if(event.isCanceled()) return;
+                if(event.isCancelled()) return;
 
                 String val = this.set.getValue();
                 this.set.setValue(this.set.getValues().get(add(this.set.getValues().size(), place)));
 
                 EventModeChange event0 = new EventModeChange(EventStage.POST, this.set);
                 Trinity.dispatcher.post(event0);
-                if(event.isCanceled()) this.set.setValue(val);
+                if(event.isCancelled()) this.set.setValue(val);
             }
             if(button == 1) {
                 this.open = !open;

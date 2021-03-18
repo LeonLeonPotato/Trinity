@@ -5,9 +5,11 @@ import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
-import me.leon.trinity.hacks.combat.Velocity;
+import me.leon.trinity.hacks.movement.Velocity;
 import me.leon.trinity.hacks.player.AutoSprint;
 import me.leon.trinity.hacks.combat.KillAura;
+import me.leon.trinity.hacks.misc.NoRotate;
+import me.leon.trinity.hacks.render.FullBright;
 import me.leon.trinity.setting.Setting;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -28,7 +30,17 @@ public class ModuleManager {
 
         // Combat
         addMod(new KillAura());
+
+
+        // Misc
+        addMod(new NoRotate());
+
+        // Movement
         addMod(new Velocity());
+
+        // Render
+        addMod(new FullBright());
+
     }
 
     private void addMod(Module mod) {
