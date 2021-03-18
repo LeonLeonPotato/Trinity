@@ -5,8 +5,10 @@ import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
+import me.leon.trinity.hacks.misc.ChatSuffix;
+import me.leon.trinity.hacks.movement.AutoSprint;
+import me.leon.trinity.hacks.movement.IceSpeed;
 import me.leon.trinity.hacks.movement.Velocity;
-import me.leon.trinity.hacks.player.AutoSprint;
 import me.leon.trinity.hacks.combat.KillAura;
 import me.leon.trinity.hacks.misc.NoRotate;
 import me.leon.trinity.hacks.render.FullBright;
@@ -26,7 +28,7 @@ public class ModuleManager {
         addMod(new ClientColor());
 
         // Player
-        addMod(new AutoSprint());
+
 
         // Combat
         addMod(new KillAura());
@@ -34,9 +36,12 @@ public class ModuleManager {
 
         // Misc
         addMod(new NoRotate());
+        addMod(new ChatSuffix());
 
         // Movement
         addMod(new Velocity());
+        addMod(new AutoSprint());
+        addMod(new IceSpeed());
 
         // Render
         addMod(new FullBright());
