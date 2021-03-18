@@ -103,6 +103,7 @@ shadowJar {
         include(dependency('cabaletta:baritone-api'))
         include(dependency("com.github.ionar2:Alpine:1.9f"))
         include(dependency('club.minnced:java-discord-rpc:2.0.1'))
+        include(dependency('net.jodah:typetools'))
     }
 
     exclude 'dummyThing'

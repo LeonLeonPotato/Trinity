@@ -10,6 +10,9 @@ public class AutoSprint extends Module {
 
     @Override
     public void onUpdate() {
+        if(nullCheck())
+            return;
+
         if (mc.player.movementInput.moveForward > 0 && !mc.player.isSneaking() && !mc.player.collidedHorizontally) {
             mc.player.setSprinting(true);
         }
