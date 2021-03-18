@@ -8,6 +8,7 @@ import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.hacks.combat.KillAura;
 import me.leon.trinity.hacks.misc.NoRotate;
 import me.leon.trinity.hacks.movement.Velocity;
+import me.leon.trinity.hacks.render.FullBright;
 import me.leon.trinity.setting.Setting;
 
 import java.lang.reflect.Field;
@@ -32,6 +33,9 @@ public class ModuleManager {
 
         // Movement
         addMod(new Velocity());
+
+        // Render
+        addMod(new FullBright());
     }
 
     private void addMod(Module mod) {
