@@ -18,7 +18,6 @@ public class MixinNetworkManager implements IMixin {
     @Inject(method = "sendPacket(Lnet/minecraft/network/Packet;)V", at = @At("HEAD"), cancellable = true)
     private void onSendPacket(Packet<?> packet, CallbackInfo callbackInfo) {
         EventPacketSend event = new EventPacketSend(EventStage.PRE, packet);
-
         Trinity.dispatcher.post(event);
 
         if(event.isCancelled()) {
@@ -31,6 +30,8 @@ public class MixinNetworkManager implements IMixin {
         EventPacketRecieve event = new EventPacketRecieve(EventStage.PRE, packet);
         Trinity.dispatcher.post(event);
 
-        if(event.isCancelled()) callbackInfo.cancel();
+        if(event.isCancelled()) {
+            callbackInfo.cancel();
+        }
     }
 }

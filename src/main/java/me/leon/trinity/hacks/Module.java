@@ -127,6 +127,6 @@ public abstract class Module implements Listenable, Util {
     }
 
     protected boolean nullCheck() {
-        return mc.world == null || mc.player == null;
+        return (mc.world == null || mc.player == null);
     }
 }

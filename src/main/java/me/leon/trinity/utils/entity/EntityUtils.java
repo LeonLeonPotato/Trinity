@@ -18,28 +18,29 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class EntityUtils implements Util {
-    public static EntityLivingBase getTarget(boolean players, boolean friends, boolean hostile, boolean passive, double range, int mode) {
+    public static EntityLivingBase getTarget(boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range, int mode) {
         EntityLivingBase entity = null;
 
         if(mode == 0) {
             entity = (EntityLivingBase) mc.world.loadedEntityList.stream()
-                    .filter(entity1 -> isValid(entity1, players, friends, hostile, passive, range))
+                    .filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
                     .min(Comparator.comparing(entity1 -> mc.player.getPositionVector().distanceTo(entity1.getPositionVector())))
                     .orElse(null);
         } else
         if(mode == 1) {
             entity = mc.world.loadedEntityList.stream()
-                    .filter(entity1 -> isValid(entity1, players, friends, hostile, passive, range))
+                    .filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
                     .map(entity1 -> (EntityLivingBase) entity1)
                     .min(Comparator.comparing(EntityLivingBase::getHealth))
                     .orElse(null);
-        }
+        } else
         if(mode == 2) {
             entity = mc.world.loadedEntityList.stream()
-                    .filter(entity1 -> isValid(entity1, players, friends, hostile, passive, range))
+                    .filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
                     .map(entity1 -> (EntityLivingBase) entity1)
                     .max(Comparator.comparing(EntityLivingBase::getHealth))
                     .orElse(null);
@@ -47,16 +48,47 @@ public class EntityUtils implements Util {
         return entity;
     }
 
-    private static boolean isValid(Entity entity, boolean players, boolean friends, boolean hostile, boolean passive, double range) {
-        if(entity instanceof EntityLivingBase && entity != mc.player)
-        if(entity.getDistance(mc.player) <= range) {
-            if(entity instanceof EntityPlayer && players) {
-                if(!friends) {
-                    Trinity.friendManager.isFriend((EntityPlayer) entity);
+    public static ArrayList<EntityLivingBase> getTargets(boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range, int mode) {
+        ArrayList<EntityLivingBase> toReturn = new ArrayList<>();
+
+        if(mode == 0) {
+            toReturn.add(mc.world.loadedEntityList.stream()
+                    .filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
+                    .map(entity1 -> (EntityLivingBase) entity1)
+                    .min(Comparator.comparing(entity1 -> mc.player.getPositionVector().distanceTo(entity1.getPositionVector())))
+                    .orElse(null));
+        } else
+        if(mode == 1) {
+            toReturn.add(mc.world.loadedEntityList.stream()
+                    .filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
+                    .map(entity1 -> (EntityLivingBase) entity1)
+                    .min(Comparator.comparing(EntityLivingBase::getHealth))
+                    .orElse(null));
+        } else
+        if(mode == 2) {
+            toReturn.add(mc.world.loadedEntityList.stream()
+                    .filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
+                    .map(entity1 -> (EntityLivingBase) entity1)
+                    .max(Comparator.comparing(EntityLivingBase::getHealth))
+                    .orElse(null));
+        }
+        return toReturn;
+    }
+
+    private static boolean isValid(Entity entity, boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range) {
+        if(entity instanceof EntityLivingBase && entity != mc.player) {
+            if(entity.getDistance(mc.player) <= range) {
+                if(entity instanceof EntityPlayer && players) {
+                    if(!friends) {
+                        return !Trinity.friendManager.isFriend((EntityPlayer) entity);
+                    } else {
+                        return true;
+                    }
                 }
+                if(isHostileMob(entity) && hostile) return true;
+                if(isNeutralMob(entity) && neutral) return true;
+                return isPassive(entity) && passive;
             }
-            if(isHostileMob(entity) && hostile) return true;
-            if(isPassive(entity) && passive) return true;
         }
         return false;
     }

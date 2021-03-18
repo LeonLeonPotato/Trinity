@@ -23,12 +23,8 @@ public class TrinityEvent implements ICancellable {
         this.canceled = false;
     }
 
-    public boolean isCanceled() {
-        return canceled;
-    }
-
     @Override
     public boolean isCancelled() {
-        return false;
+        return canceled;
     }
 }

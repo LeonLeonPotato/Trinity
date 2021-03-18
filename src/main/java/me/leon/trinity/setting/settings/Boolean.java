@@ -26,7 +26,7 @@ public class Boolean extends Setting {
         EventBooleanToggle event = new EventBooleanToggle(EventStage.PRE, this, enabled);
         Trinity.settingsDispatcher.post(event);
 
-        if(event.isCanceled()) {
+        if(event.isCancelled()) {
             this.enabled = !enabled;
         }
     }

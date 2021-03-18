@@ -17,7 +17,7 @@ public class MixinEntityPlayerSP {
         RotationEvent event = new RotationEvent(EventStage.PRE);
         Trinity.dispatcher.post(event);
 
-        if (event.isCanceled()) {
+        if (event.isCancelled()) {
             info.cancel();
 
             RotationUtils.updateRotationPackets(event);

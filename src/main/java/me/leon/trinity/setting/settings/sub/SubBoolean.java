@@ -27,7 +27,7 @@ public class SubBoolean extends SubSetting {
         EventBooleanToggle event = new EventBooleanToggle(EventStage.PRE, this, enabled);
         Trinity.settingsDispatcher.post(event);
 
-        if(event.isCanceled()) {
+        if(event.isCancelled()) {
             this.enabled = !enabled;
         }
     }
