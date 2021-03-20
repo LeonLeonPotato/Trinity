@@ -83,7 +83,7 @@ public class SubColorPicker extends Component {
             if(ClickGUI.barMode.getValue().equals("Rainbow")) {
                 RenderUtils.drawRainbowRectVertical(this.parent.parent.parent.x + 15, trueY + 28, this.parent.parent.parent.x + 13, 128, 3, 6, 200);
             } else if(ClickGUI.barMode.getValue().equals("Static")) {
-                RenderUtils.drawRect(this.parent.parent.parent.x + 15, trueY + 28, this.parent.parent.parent.x + 13, trueY + 130, ClickGUI.barColor.getValue());
+                RenderUtils.drawRect(this.parent.parent.parent.x + 15, trueY + 130 + 28, this.parent.parent.parent.x + 13, trueY + 28, ClickGUI.barColor.getValue());
             }
         }
     }

@@ -3,6 +3,7 @@ package me.leon.trinity.hacks.render;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.setting.settings.Mode;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
@@ -23,7 +24,7 @@ public class FullBright extends Module {
                 break;
             }
             case "Potion": {
-                mc.player.addPotionEffect(new PotionEffect(Potion.getPotionById(373), 69420));
+                mc.player.addPotionEffect(new PotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 80950, 1, false, false)));
                 break;
             }
         }

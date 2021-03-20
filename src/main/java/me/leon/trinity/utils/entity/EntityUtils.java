@@ -16,6 +16,7 @@ import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
@@ -129,5 +130,44 @@ public class EntityUtils implements Util {
 
     public static double getRange(Entity entity) {
         return mc.player.getPositionVector().add(0, mc.player.height / 2d, 0).distanceTo(entity.getPositionVector().add(0, entity.height / 2d, 0));
+    }
+
+    public static Vec3d interpolateEntity(Entity entity, float n) {
+        return new Vec3d(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * n, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * n, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * n);
+    }
+
+    public static Vec3d interpolateEntityTime(Entity entity, float time) {
+        return new Vec3d(entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) time, entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) time, entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double) time);
+    }
+
+    public static Vec3d getInterpolatedPos(Entity entity, float ticks) {
+        return new Vec3d(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ).add(getInterpolatedAmount(entity, ticks));
+    }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, double x, double y, double z) {
+        return new Vec3d((entity.posX - entity.lastTickPosX) * x, (entity.posY - entity.lastTickPosY) * y, (entity.posZ - entity.lastTickPosZ) * z);
+    }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, double ticks) {
+        return getInterpolatedAmount(entity, ticks, ticks, ticks);
+    }
+
+    public static Vec3d getInterpolatedAmount(Entity entity, Vec3d vec) {
+        return getInterpolatedAmount(entity, vec.x, vec.y, vec.z);
+    }
+
+    public static double calculateDistanceWithPartialTicks(double originalPos, double finalPos, float renderPartialTicks) {
+        return finalPos + (originalPos - finalPos) * mc.getRenderPartialTicks();
+    }
+
+    public static Vec3d interpolateEntityByTicks(Entity entity, float renderPartialTicks) {
+        return new Vec3d (calculateDistanceWithPartialTicks(entity.posX, entity.lastTickPosX, renderPartialTicks) - mc.getRenderManager().renderPosX, calculateDistanceWithPartialTicks(entity.posY, entity.lastTickPosY, renderPartialTicks) - mc.getRenderManager().renderPosY, calculateDistanceWithPartialTicks(entity.posZ, entity.lastTickPosZ, renderPartialTicks) - mc.getRenderManager().renderPosZ);
+    }
+
+    public static double getDistance(double x, double y, double z, double finalX, double finalY, double finalZ) {
+        double interpolationX = x - finalX;
+        double interpolationY = y - finalY;
+        double interpolationZ = z - finalZ;
+        return MathHelper.sqrt(interpolationX * interpolationX + interpolationY * interpolationY + interpolationZ * interpolationZ);
     }
 }

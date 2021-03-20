@@ -4,6 +4,7 @@ import me.leon.trinity.main.Trinity;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
+import me.leon.trinity.mixins.IMixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +15,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 @Mixin(AbstractClientPlayer.class)
-public abstract class MixinAbstractClientPlayer {
-
+public abstract class MixinAbstractClientPlayer implements IMixin {
     @Shadow @Nullable
     protected abstract NetworkPlayerInfo getPlayerInfo();
 
@@ -27,5 +27,4 @@ public abstract class MixinAbstractClientPlayer {
             cir.setReturnValue(Trinity.capeManager.getCapeForUUID(uuid));
         }
     }
-
 }
