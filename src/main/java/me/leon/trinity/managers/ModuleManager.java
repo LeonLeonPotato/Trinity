@@ -39,7 +39,9 @@ public class ModuleManager {
 
         // Misc
         addMod(new NoRotate());
-
+        
+        addMod(new FakePlayer());
+        
         addMod(new ChatSuffix());
 
         addMod(new FreeCam());
@@ -53,6 +55,7 @@ public class ModuleManager {
         addMod(new Yaw());
         addMod(new ReverseStep());
         addMod(new AutoWalk());
+        addMod(new Parkour());
         // Render
         addMod(new FullBright());
 
