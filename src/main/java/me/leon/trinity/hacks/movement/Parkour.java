@@ -7,7 +7,7 @@ public class Parkour extends Module {
     public Parkour(){
         super("Parkour","Automatically jumps for you", Category.MOVEMENT);
     }
-
+@Override
     public void onUpdate() {
         if (nullCheck())
             return;
