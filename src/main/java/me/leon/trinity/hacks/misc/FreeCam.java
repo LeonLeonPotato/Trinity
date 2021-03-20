@@ -41,16 +41,14 @@ public class FreeCam extends Module {
         super("FreeCam", "Out-of-body experience", Category.MISC);
     }
 
-    private EntityZombie other;
-    private EntityOtherPlayerMP other0;
+    private EntityOtherPlayerMP other;
 
     @Override
     public void onDisable() {
         if(nullCheck()) return;
-        if(other == null || other0 == null) return;
+        if(other == null) return;
         mc.player.setInvisible(false);
         mc.world.removeEntity(other);
-        mc.world.removeEntity(other0);
         setRender(mc.player);
     }
 
@@ -61,16 +59,7 @@ public class FreeCam extends Module {
             this.setEnabled(false);
             return;
         }
-        if(other == null || other0 == null) return;
-
-        /*
-        other0.copyLocationAndAnglesFrom(mc.player);
-        other0.inventory.copyInventory(mc.player.inventory);
-        other0.rotationYawHead = mc.player.rotationYawHead;
-        other0.limbSwing = mc.player.limbSwing;
-        other0.limbSwingAmount = mc.player.limbSwingAmount;
-
-         */
+        if(other == null) return;
 
         float playerSpeed = (float) (speed.getValue() / 10);
         float moveForward = getMoveForward();
@@ -118,14 +107,10 @@ public class FreeCam extends Module {
     public void onEnable() {
         if(nullCheck()) return;
 
-        this.other = new EntityZombie(mc.world);
+        this.other = new EntityOtherPlayerMP(mc.world, mc.player.gameProfile);
         other.copyLocationAndAnglesFrom(mc.player);
         other.setInvisible(true);
         mc.world.addEntityToWorld(1234, other);
-
-        this.other0 = new EntityOtherPlayerMP(mc.world, mc.player.gameProfile);
-        other0.copyLocationAndAnglesFrom(mc.player);
-        mc.world.addEntityToWorld(1235, other0);
         setRender(other);
     }
 

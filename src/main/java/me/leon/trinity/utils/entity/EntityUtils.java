@@ -129,7 +129,7 @@ public class EntityUtils implements Util {
     }
 
     public static double getRange(Entity entity) {
-        return mc.player.getPositionVector().add(0, mc.player.height / 2d, 0).distanceTo(entity.getPositionVector().add(0, entity.height / 2d, 0));
+        return mc.player.getPositionVector().add(0, mc.player.height + mc.player.eyeHeight, 0).distanceTo(entity.getPositionVector().add(0, entity.height / 2d, 0));
     }
 
     public static Vec3d interpolateEntity(Entity entity, float n) {
