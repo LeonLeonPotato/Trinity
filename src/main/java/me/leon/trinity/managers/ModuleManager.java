@@ -49,7 +49,10 @@ public class ModuleManager {
         addMod(new Velocity());
         addMod(new AutoSprint());
         addMod(new IceSpeed());
-
+        addMod(new NoVoid());
+        addMod(new Yaw());
+        addMod(new ReverseStep());
+        addMod(new AutoWalk());
         // Render
         addMod(new FullBright());
 
