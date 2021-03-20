@@ -9,6 +9,7 @@ public class NoVoid extends Module {
 	public NoVoid() {
 		super("NoVoid", "avoids getting voided", Category.MOVEMENT);
 	}
+	@Override
 	public void onUpdate() {
 		if (mc.player == null || mc.world == null) {
 			return;
