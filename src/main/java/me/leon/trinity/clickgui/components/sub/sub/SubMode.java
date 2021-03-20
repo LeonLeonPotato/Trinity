@@ -55,14 +55,14 @@ public class SubMode extends Component {
         if(isMouseOnButtonMain(mouseX, mouseY) && this.parent.open && this.parent.parent.open && this.parent.parent.parent.open) {
             if(button == 0) {
                 EventModeChange event = new EventModeChange(EventStage.PRE, this.set);
-                Trinity.dispatcher.post(event);
+                Trinity.settingsDispatcher.post(event);
                 if(event.isCancelled()) return;
 
                 String val = this.set.getValue();
                 this.set.setValue(this.set.getValues().get(add(this.set.getValues().size(), place)));
 
                 EventModeChange event0 = new EventModeChange(EventStage.POST, this.set);
-                Trinity.dispatcher.post(event0);
+                Trinity.settingsDispatcher.post(event0);
                 if(event.isCancelled()) this.set.setValue(val);
             }
             if(button == 1) {

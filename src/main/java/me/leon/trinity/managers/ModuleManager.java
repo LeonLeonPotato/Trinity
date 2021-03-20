@@ -10,7 +10,10 @@ import me.leon.trinity.hacks.movement.AutoSprint;
 import me.leon.trinity.hacks.movement.IceSpeed;
 import me.leon.trinity.hacks.movement.Velocity;
 import me.leon.trinity.hacks.combat.KillAura;
+import me.leon.trinity.hacks.misc.FreeCam;
 import me.leon.trinity.hacks.misc.NoRotate;
+import me.leon.trinity.hacks.movement.Velocity;
+import me.leon.trinity.hacks.render.FreeLook;
 import me.leon.trinity.hacks.render.FullBright;
 import me.leon.trinity.setting.Setting;
 import java.lang.reflect.Field;
@@ -36,7 +39,11 @@ public class ModuleManager {
 
         // Misc
         addMod(new NoRotate());
+
         addMod(new ChatSuffix());
+
+        addMod(new FreeCam());
+
 
         // Movement
         addMod(new Velocity());
@@ -45,6 +52,9 @@ public class ModuleManager {
 
         // Render
         addMod(new FullBright());
+
+
+        addMod(new FreeLook());
 
     }
 

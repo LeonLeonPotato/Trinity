@@ -55,7 +55,7 @@ public class Mode extends Component {
         if(isMouseOnButtonMain(mouseX, mouseY) && this.parent.open) {
             if(button == 0) {
                 EventModeChange event = new EventModeChange(EventStage.PRE, this.set);
-                Trinity.dispatcher.post(event);
+                Trinity.settingsDispatcher.post(event);
                 if(event.isCancelled()) return;
 
                 java.lang.String val = this.set.getValue();
