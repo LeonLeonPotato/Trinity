@@ -5,6 +5,10 @@ import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
+import me.leon.trinity.hacks.misc.ChatSuffix;
+import me.leon.trinity.hacks.movement.AutoSprint;
+import me.leon.trinity.hacks.movement.IceSpeed;
+import me.leon.trinity.hacks.movement.Velocity;
 import me.leon.trinity.hacks.combat.KillAura;
 import me.leon.trinity.hacks.misc.FreeCam;
 import me.leon.trinity.hacks.misc.NoRotate;
@@ -12,7 +16,6 @@ import me.leon.trinity.hacks.movement.Velocity;
 import me.leon.trinity.hacks.render.FreeLook;
 import me.leon.trinity.hacks.render.FullBright;
 import me.leon.trinity.setting.Setting;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -27,19 +30,32 @@ public class ModuleManager {
         addMod(new ClickGUI());
         addMod(new ClientColor());
 
+        // Player
+
+
         // Combat
         addMod(new KillAura());
 
+
         // Misc
         addMod(new NoRotate());
+
+        addMod(new ChatSuffix());
+
         addMod(new FreeCam());
+
 
         // Movement
         addMod(new Velocity());
+        addMod(new AutoSprint());
+        addMod(new IceSpeed());
 
         // Render
         addMod(new FullBright());
+
+
         addMod(new FreeLook());
+
     }
 
     private void addMod(Module mod) {
