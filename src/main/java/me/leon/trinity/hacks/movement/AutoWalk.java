@@ -2,6 +2,7 @@ package me.leon.trinity.hacks.movement;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import net.minecraft.client.settings.KeyBinding;
 
 public class AutoWalk extends Module {
     public AutoWalk(){
