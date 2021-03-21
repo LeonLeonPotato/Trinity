@@ -16,6 +16,7 @@ import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -129,7 +130,7 @@ public class EntityUtils implements Util {
     }
 
     public static double getRange(Entity entity) {
-        return mc.player.getPositionVector().add(0, mc.player.height + mc.player.eyeHeight, 0).distanceTo(entity.getPositionVector().add(0, entity.height / 2d, 0));
+        return mc.player.getPositionVector().add(0, mc.player.eyeHeight, 0).distanceTo(entity.getPositionVector().add(0, entity.height / 2d, 0));
     }
 
     public static Vec3d interpolateEntity(Entity entity, float n) {
@@ -169,5 +170,9 @@ public class EntityUtils implements Util {
         double interpolationY = y - finalY;
         double interpolationZ = z - finalZ;
         return MathHelper.sqrt(interpolationX * interpolationX + interpolationY * interpolationY + interpolationZ * interpolationZ);
+    }
+
+    public static BlockPos getEntityPosFloored(Entity entity) {
+        return new BlockPos(Math.floor(entity.posX), Math.floor(entity.posY), Math.floor(entity.posZ));
     }
 }

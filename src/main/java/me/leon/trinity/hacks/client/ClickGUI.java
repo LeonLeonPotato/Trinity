@@ -53,6 +53,11 @@ public class ClickGUI extends Module {
     }
 
     @Override
+    public void onUpdate() {
+        if(mc.world == null) this.setEnabled(false);
+    }
+
+    @Override
     public void onDisable() {
         mc.displayGuiScreen(null);
         if(background.getValue().equalsIgnoreCase("Blur") || background.getValue().equalsIgnoreCase("Both")) {

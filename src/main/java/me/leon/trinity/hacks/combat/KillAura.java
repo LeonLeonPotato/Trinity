@@ -64,7 +64,6 @@ public class KillAura extends Module {
     public static SubBoolean hostile = new SubBoolean("Hostile", targeting, true);
 
     public static EntityLivingBase target = null;
-    private MODES mode;
     private final Timer timer;
 
     public KillAura() {
@@ -94,7 +93,6 @@ public class KillAura extends Module {
 
     private void killAura() {
         if(EntityUtils.getRange(target) > normalRange.getValue()) return;
-        this.mode = MODES.INSIGHT;
 
         Vec3d vec = null;
         if(rayTraceMode.getValue().equalsIgnoreCase("Leon")) {
@@ -104,7 +102,6 @@ public class KillAura extends Module {
                     clean();
                     return;
                 } else {
-                    this.mode = MODES.WALL;
                     vec = target.getPositionVector().add(0, target.height / 2, 0);
                 }
             }
@@ -115,7 +112,7 @@ public class KillAura extends Module {
                 if(EntityUtils.getRange(target) > wallsRange.getValue()) {
                     clean();
                     return;
-                } else this.mode = MODES.WALL;
+                }
             }
         } else
         if(rayTraceMode.getValue().equalsIgnoreCase("Offset-Simple")) {
@@ -124,7 +121,7 @@ public class KillAura extends Module {
                 if(EntityUtils.getRange(target) > wallsRange.getValue()) {
                     clean();
                     return;
-                } else this.mode = MODES.WALL;
+                }
             }
         }
 
@@ -208,10 +205,5 @@ public class KillAura extends Module {
 
     private void clean() {
         this.timer.reset();
-        this.mode = MODES.INSIGHT;
-    }
-
-    private enum MODES {
-        WALL, INSIGHT
     }
 }

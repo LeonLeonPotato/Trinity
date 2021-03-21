@@ -1,6 +1,5 @@
 package me.leon.trinity.managers;
 
-import io.netty.util.internal.MathUtil;
 import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.math.MathUtils;

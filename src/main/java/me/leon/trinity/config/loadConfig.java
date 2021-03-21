@@ -82,6 +82,9 @@ public class loadConfig {
                             }
 
                             // SubSettings
+                            if(set instanceof SettingParent && set.name.equals(setting[1])) {
+                                ((SettingParent) set).setEnabled(java.lang.Boolean.parseBoolean(setting[2]));
+                            }
                             if(set instanceof SubMode && set.name.equals(setting[1]) && ((SubMode) set).getParent().name.equals(setting[2])) {
                                 ((SubMode) set).setValue(setting[3]);
                             }

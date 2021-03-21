@@ -80,6 +80,10 @@ public class WorldUtils implements Util {
         return null;
     }
 
+    public static double getRange(Vec3d vec) {
+        return mc.player.getPositionVector().add(0, mc.player.eyeHeight, 0).distanceTo(vec);
+    }
+
     public static EnumFacing getEnumFacing(boolean rayTrace, BlockPos placePosition) {
         RayTraceResult result = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(placePosition.getX() + 0.5, placePosition.getY() - 0.5, placePosition.getZ() + 0.5));
 

@@ -91,6 +91,9 @@ public class saveConfig extends Thread {
                     }
 
                     // SubSettings
+                    if(set instanceof SettingParent) {
+                        settings.add(mod.getName() + ":" + set.name + ":" + ((SettingParent) set).getValue());
+                    }
                     if(set instanceof SubMode) {
                         settings.add(mod.getName() + ":" + set.name + ":" + ((SubMode) set).getParent().name + ":" + ((SubMode) set).getValue());
                     }
