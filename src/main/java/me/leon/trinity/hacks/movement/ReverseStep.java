@@ -9,7 +9,7 @@ public class ReverseStep extends Module {
         super("ReverseStep","moves down", Category.MOVEMENT);
     }
 	//gamesense
-    public static Slider height = new Slider("Height", 2.5, 0.5, 10, true);
+    public static Slider height = new Slider("Height", 0.5, 2.5, 10, true);
 
 	public void onUpdate() {
 		if (mc.world == null || mc.player == null || mc.player.isInWater() || mc.player.isInLava() || mc.player.isOnLadder()
