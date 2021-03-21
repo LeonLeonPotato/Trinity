@@ -1,4 +1,4 @@
-package me.leon.trinity.hacks.movement;
+package me.leon.trinity.hacks.misc;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class FakePlayer extends Module {
     public FakePlayer() {
-        super("FakePlayer", "Spawns in a fakeplayer", Category.MOVEMENT);
+        super("FakePlayer", "Spawns in a fakeplayer", Category.MISC);
     }
 
     private EntityOtherPlayerMP fake_player;
