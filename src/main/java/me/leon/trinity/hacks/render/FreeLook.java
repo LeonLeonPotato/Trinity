@@ -1,6 +1,5 @@
 package me.leon.trinity.hacks.render;
 
-import javafx.scene.Camera;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.setting.settings.Boolean;
