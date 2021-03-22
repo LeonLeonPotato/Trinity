@@ -72,6 +72,7 @@ public class AutoCrystal extends Module {
     public static SubMode       switchPlace = new SubMode("Switch", Place, "None", "None", "Packet", "Normal");
     public static SubBoolean    multiPlace = new SubBoolean("Multiplace", Place, false);
     public static SubBoolean    bounds = new SubBoolean("Bounds", Place, true);
+    public static SubBoolean    extraCalc = new SubBoolean("Extra Calc", Place, true);
 
     public static SettingParent Break = new SettingParent("Break", true, true);
     public static SubMode       breakMode = new SubMode("Break Mode", Break, "Smart", "Smart", "All", "Only Own");
@@ -432,8 +433,8 @@ public class AutoCrystal extends Module {
             mc.playerController.updateController();
         }
 
-        if(curPosPlace != null && getHand() != null)
-            place(curPosPlace.base, getHand(), packetPlace.getValue());
+        if(curPosPlace != null)
+            place(curPosPlace.base, (mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND), packetPlace.getValue());
 
         switch (swingArmPlace.getValue()) {
             case "Mainhand": {
@@ -555,20 +556,6 @@ public class AutoCrystal extends Module {
 
 
 
-    private EnumHand getHand() {
-        if(mc.player.inventory.getCurrentItem() != ItemStack.EMPTY) {
-            if(mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL) {
-                return EnumHand.MAIN_HAND;
-            }
-        }
-        if(mc.player.getHeldItemOffhand() != ItemStack.EMPTY) {
-            if(mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL) {
-                return EnumHand.OFF_HAND;
-            }
-        }
-        return null;
-    }
-
     private void attackCrystal(int entityId) {
         CPacketUseEntity sequentialCrystal = new CPacketUseEntity();
         sequentialCrystal.entityId = entityId;
@@ -626,14 +613,27 @@ public class AutoCrystal extends Module {
 
     private boolean canPlaceCrystal(BlockPos blockPos, boolean oneThirteen) {
         BlockPos boost = blockPos.add(0, 1, 0);
-        BlockPos boost2 = blockPos.add(0, 2, 0);
-        if(!oneThirteen) {
-            if((mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
-                    || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
-                    && mc.world.getBlockState(boost).getBlock() == Blocks.AIR
-                    && mc.world.getBlockState(boost2).getBlock() == Blocks.AIR)
-            {
-                for(Entity en : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
+        AxisAlignedBB bb = new AxisAlignedBB(boost).expand(0, 1, 0);
+        if((mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
+                || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
+                && (oneThirteen || (mc.world.getBlockState(boost).getBlock() == Blocks.AIR && mc.world.getBlockState(boost.up()).getBlock() == Blocks.AIR)))
+        {
+            for(Entity en : mc.world.getEntitiesWithinAABB(Entity.class, bb)) {
+                if(extraCalc.getValue()) {
+                    if(multiPlace.getValue()) {
+                        if(!en.isDead) {
+                            return false;
+                        }
+                    } else {
+                        if(!en.isDead && !(en instanceof EntityEnderCrystal)) {
+                            return false;
+                        } else if(en instanceof EntityEnderCrystal) {
+                            if(!en.getPosition().down().equals(blockPos)) {
+                                return false;
+                            }
+                        }
+                    }
+                } else {
                     if(multiPlace.getValue()) {
                         if(!en.isDead) {
                             return false;
@@ -644,48 +644,8 @@ public class AutoCrystal extends Module {
                         }
                     }
                 }
-                for(Entity en : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2))) {
-                    if(multiPlace.getValue()) {
-                        if(!en.isDead) {
-                            return false;
-                        }
-                    } else {
-                        if(!en.isDead && !(en instanceof EntityEnderCrystal)) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
             }
-        }
-        else {
-            if(mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK
-                    || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
-            {
-                for(Entity en : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
-                    if(multiPlace.getValue()) {
-                        if(!en.isDead) {
-                            return false;
-                        }
-                    } else {
-                        if(!en.isDead && !(en instanceof EntityEnderCrystal)) {
-                            return false;
-                        }
-                    }
-                }
-                for(Entity en : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2))) {
-                    if(multiPlace.getValue()) {
-                        if(!en.isDead) {
-                            return false;
-                        }
-                    } else {
-                        if(!en.isDead && !(en instanceof EntityEnderCrystal)) {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            }
+            return true;
         }
         return false;
     }
