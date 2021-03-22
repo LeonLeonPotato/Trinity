@@ -1,5 +1,6 @@
 package me.leon.trinity.hacks.misc;
 
+import com.mojang.authlib.GameProfile;
 import me.leon.trinity.events.main.MoveEvent;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
@@ -10,58 +11,48 @@ import me.leon.trinity.setting.settings.Slider;
 import me.zero.alpine.fork.listener.EventHandler;
 import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
 
 public class FreeCam extends Module {
-    private static Mode mode = new Mode("Mode", "Camera", "Camera", "Normal");
-    private static Slider speed = new Slider("Speed", 0, 10, 20, false);
+    private static final Mode mode = new Mode("Mode", "Camera", "Camera", "Normal");
+    private static final Slider speed = new Slider("Speed", 0, 10, 20, false);
 
     public FreeCam() {
         super("FreeCam", "Out-of-body experience", Category.MISC);
     }
 
-    private EntityOtherPlayerMP other;
+    private EntityPlayerCamera other;
+    private Entity renderViewOg = null;
 
     @Override
     public void onDisable() {
         if(nullCheck()) return;
         if(other == null) return;
-        mc.player.setInvisible(false);
         mc.world.removeEntity(other);
         setRender(mc.player);
     }
 
-    @SuppressWarnings("all")
     @SubscribeEvent
-    public void onFast(TickEvent event) {
-        if(nullCheck()) {
+    public void onRender(TickEvent.RenderTickEvent event) {
+        if (nullCheck()) {
             this.setEnabled(false);
             return;
         }
-        if(other == null) return;
-
-        float playerSpeed = (float) (speed.getValue() / 10);
-        float moveForward = getMoveForward();
-        float moveStrafe = getMoveStrafe();
-        float rotationYaw = other.rotationYaw;
-
-        double x = ((moveForward * playerSpeed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))) + (moveStrafe * playerSpeed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))));
-        double z = ((moveForward * playerSpeed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))) - (moveStrafe * playerSpeed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))));
-
-        other.noClip = true;
-        other.move(MoverType.PLAYER, x, getY(), z);
-        other.noClip = true;
-    }
-
-    @SubscribeEvent
-    public void onRender(TickEvent.RenderTickEvent event) {
         if(mc.currentScreen != null) return;
+        if(other == null) return;
 
         double cameraYaw = other.rotationYaw;
         double cameraPitch = other.rotationPitch;
@@ -79,22 +70,33 @@ public class FreeCam extends Module {
 
         other.rotationPitch = (float) cameraPitch;
         other.rotationYaw = (float) cameraYaw;
-    }
 
-    @EventHandler
-    private final Listener<MoveEvent> eventMove = new Listener<>(event -> {
-        if(event.type == MoverType.SELF) {
-            //event.cancel();
-        }
-    });
+        float playerSpeed = (float) (speed.getValue() / 10);
+        float moveForward = getMoveForward();
+        float moveStrafe = getMoveStrafe();
+        float rotationYaw = other.rotationYaw;
+
+        double x = ((moveForward * playerSpeed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))) + (moveStrafe * playerSpeed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))));
+        double z = ((moveForward * playerSpeed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))) - (moveStrafe * playerSpeed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))));
+
+        other.noClip = true;
+        other.move(MoverType.SELF, x, getY(), z);
+    }
 
     @Override
     public void onEnable() {
         if(nullCheck()) return;
 
-        this.other = new EntityOtherPlayerMP(mc.world, mc.player.gameProfile);
+        this.other = new EntityPlayerCamera(mc.world, mc.player.gameProfile);
         other.copyLocationAndAnglesFrom(mc.player);
-        other.setInvisible(true);
+        other.noClip = true;
+        EntityPlayer player = mc.player;
+
+        if (player != null)
+        {
+            other.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+            other.setRotationYawHead(player.rotationYaw);
+        }
         mc.world.addEntityToWorld(1234, other);
         setRender(other);
     }
@@ -144,6 +146,60 @@ public class FreeCam extends Module {
             if(ClickGUI.background.getValue().equalsIgnoreCase("Blur") || ClickGUI.background.getValue().equalsIgnoreCase("Both")) {
                 mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onRenderPlayerPre(RenderPlayerEvent.Pre event)
+    {
+        RenderManager manager = mc.getRenderManager();
+        if (event.getEntityPlayer().isUser())
+        {
+            this.renderViewOg = other;
+            manager.renderViewEntity = mc.player;
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onRenderWorldLast(RenderWorldLastEvent event)
+    {
+        if(other == null) return;
+        mc.getRenderManager().renderEntityStatic(this.other, event.getPartialTicks(), false);
+    }
+
+    @SubscribeEvent
+    public void onRenderLivingPre(RenderLivingEvent.Pre<EntityPlayer> event)
+    {
+        if (this.renderViewOg != null)
+        {
+            mc.getRenderManager().renderViewEntity = this.renderViewOg;
+            this.renderViewOg = null;
+        }
+    }
+
+    private class EntityPlayerCamera extends EntityOtherPlayerMP
+    {
+        public EntityPlayerCamera(World worldIn, GameProfile gameProfileIn)
+        {
+            super(worldIn, gameProfileIn);
+        }
+
+        @Override
+        public boolean isInvisible()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean isInvisibleToPlayer(EntityPlayer player)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean isSpectator()
+        {
+            return false;
         }
     }
 }

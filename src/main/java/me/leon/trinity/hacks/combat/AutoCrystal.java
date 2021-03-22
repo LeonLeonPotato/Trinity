@@ -153,10 +153,10 @@ public class AutoCrystal extends Module {
         {
             for(int id : placedCrystals) {
                 if(placedCrystals.contains(id) && (mc.world.getEntityByID(id) == null || !(mc.world.getEntityByID(id) instanceof EntityEnderCrystal))) {
-                    placedCrystals.remove((Object) id);
+                    //placedCrystals.remove((Object) id);
                 } else
                 if(EntityUtils.getRange(Objects.requireNonNull(mc.world.getEntityByID(id))) > 10) {
-                    placedCrystals.remove((Object) id);
+                    //placedCrystals.remove((Object) id);
                 }
             }
 
