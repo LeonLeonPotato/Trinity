@@ -2,8 +2,6 @@ package me.leon.trinity.hacks.combat;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
-import me.leon.trinity.managers.RotationManager;
 import me.leon.trinity.managers.TickrateManager;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
@@ -13,21 +11,15 @@ import me.leon.trinity.utils.entity.EntityUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
 import me.leon.trinity.utils.misc.MessageBus;
 import me.leon.trinity.utils.world.RaytraceUtils;
-import me.leon.trinity.utils.world.Rotation.Rotation;
 import me.leon.trinity.utils.world.Rotation.RotationUtils;
 import me.leon.trinity.utils.world.Timer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
-import net.minecraft.network.play.client.CPacketHeldItemChange;
-import net.minecraft.network.play.client.CPacketPlayerAbilities;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.ArrayList;
 
 public class KillAura extends Module {
     public static SettingParent main = new SettingParent("Main", true, false);

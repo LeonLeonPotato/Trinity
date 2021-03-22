@@ -2,7 +2,6 @@ package me.leon.trinity.utils.misc;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.utils.Util;
-import me.leon.trinity.utils.rendering.Coloring;
 import net.minecraft.util.text.TextComponentString;
 
 public class MessageBus implements Util {

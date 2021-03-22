@@ -2,7 +2,6 @@ package me.leon.trinity.hacks;
 
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
-import me.leon.trinity.utils.Util;
 import me.zero.alpine.fork.listener.Listenable;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;

@@ -1,7 +1,6 @@
 package me.leon.trinity.utils.rendering;
 
 import me.leon.trinity.utils.Util;
-import me.leon.trinity.utils.world.WorldUtils;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;

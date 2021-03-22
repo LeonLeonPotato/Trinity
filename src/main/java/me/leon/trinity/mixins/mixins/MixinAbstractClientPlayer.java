@@ -1,10 +1,10 @@
 package me.leon.trinity.mixins.mixins;
 
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.mixins.IMixin;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
-import me.leon.trinity.mixins.IMixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;

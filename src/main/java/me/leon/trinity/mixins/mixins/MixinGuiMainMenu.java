@@ -1,7 +1,6 @@
 package me.leon.trinity.mixins.mixins;
 
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.mixins.IMixin;
 import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;

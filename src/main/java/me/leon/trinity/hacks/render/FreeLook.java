@@ -2,20 +2,14 @@ package me.leon.trinity.hacks.render;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.Slider;
-import me.leon.trinity.setting.settings.sub.SubSlider;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Mouse;
-
-import java.util.Random;
 
 public class FreeLook extends Module {
 

@@ -2,7 +2,6 @@ package me.leon.trinity.utils.entity;
 
 import me.leon.trinity.utils.Util;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumHand;
 
 public class InventoryUtil implements Util {
     public static int findFirst(Class<? extends Item> clazz) {

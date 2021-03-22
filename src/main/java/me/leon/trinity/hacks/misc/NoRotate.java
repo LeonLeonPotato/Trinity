@@ -8,7 +8,6 @@ import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.network.play.client.CPacketPlayer;
-import net.minecraft.network.play.server.SPacketEntity;
 import net.minecraft.network.play.server.SPacketPlayerPosLook;
 
 import java.util.Objects;

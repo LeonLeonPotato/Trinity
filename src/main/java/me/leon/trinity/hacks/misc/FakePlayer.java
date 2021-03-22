@@ -1,9 +1,10 @@
 package me.leon.trinity.hacks.misc;
 
+import com.mojang.authlib.GameProfile;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import com.mojang.authlib.GameProfile;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+
 import java.util.UUID;
 
 public class FakePlayer extends Module {
