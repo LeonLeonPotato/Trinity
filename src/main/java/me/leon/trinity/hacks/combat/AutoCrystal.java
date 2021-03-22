@@ -4,6 +4,7 @@ import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubMode;
@@ -26,6 +27,7 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -42,6 +44,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -104,7 +107,7 @@ public class AutoCrystal extends Module {
     public static SubBoolean hostile = new SubBoolean("Hostile", targeting, true);
 
     // Variables
-    private static CopyOnWriteArrayList<Integer> placedCrystals;
+    private static ArrayList<BlockPos> placedCrystals;
     private static crystalPosition curPosPlace;
     private static EntityEnderCrystal curBreakCrystal;
     public static EntityLivingBase target;
@@ -114,7 +117,7 @@ public class AutoCrystal extends Module {
 
     public AutoCrystal() {
         super("AutoCrystal", "Nagasaki", Category.COMBAT);
-        placedCrystals = new CopyOnWriteArrayList<>();
+        placedCrystals = new ArrayList<>();
     }
 
     @SubscribeEvent
@@ -151,15 +154,7 @@ public class AutoCrystal extends Module {
     private void autoCrystal() {
         for(int a = 0; a < iterations.getValue(); a++)
         {
-            for(int id : placedCrystals) {
-                if(placedCrystals.contains(id) && (mc.world.getEntityByID(id) == null || !(mc.world.getEntityByID(id) instanceof EntityEnderCrystal))) {
-                    //placedCrystals.remove((Object) id);
-                } else
-                if(EntityUtils.getRange(Objects.requireNonNull(mc.world.getEntityByID(id))) > 10) {
-                    //placedCrystals.remove((Object) id);
-                }
-            }
-
+            placedCrystals.removeIf(id -> WorldUtils.getRange(new Vec3d(id.x + 0.5, id.y + 0.5, id.z + 0.5)) > 10);
             updateEntityID();
 
             switch (logicMode.getValue()) {
@@ -357,7 +352,7 @@ public class AutoCrystal extends Module {
             for(Entity entity : entities) {
                 if(WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY + 1, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
                     if(WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY + 1, entity.posZ + 0.5, target) > minTargetDamageBreak.getValue()) {
-                        if(!placedCrystals.contains(entity.entityId)) {
+                        if(!placedCrystals.contains(entity.getPosition().down())) {
                             continue;
                         }
 
@@ -372,8 +367,6 @@ public class AutoCrystal extends Module {
                         if(syncMode.getValue().equalsIgnoreCase("Instant")) {
                             entity.setDead();
                         }
-
-                        placedCrystals.remove((Object) entity.entityId);
 
                         switch (swingArmBreak.getValue()) {
                             case "Mainhand": {
@@ -439,7 +432,8 @@ public class AutoCrystal extends Module {
             mc.playerController.updateController();
         }
 
-        place(curPosPlace.base, ((mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL) ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND), packetPlace.getValue());
+        if(curPosPlace != null && getHand() != null)
+            place(curPosPlace.base, getHand(), packetPlace.getValue());
 
         switch (swingArmPlace.getValue()) {
             case "Mainhand": {
@@ -478,14 +472,18 @@ public class AutoCrystal extends Module {
         }
     }
 
+    @SuppressWarnings("unused")
     @EventHandler
     private final Listener<EventPacketSend> sendListener = new Listener<>(event -> {
         if (event.getPacket() instanceof CPacketUseEntity && ((CPacketUseEntity) event.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK && ((CPacketUseEntity) event.getPacket()).getEntityFromWorld(mc.world) instanceof EntityEnderCrystal) {
-            if (syncMode.getValue().equalsIgnoreCase("Instant"))
+            if (syncMode.getValue().equalsIgnoreCase("Instant")){
                 Objects.requireNonNull(((CPacketUseEntity) event.getPacket()).getEntityFromWorld(mc.world)).setDead();
+            }
+            placedCrystals.remove(((CPacketUseEntity) event.getPacket()).getEntityFromWorld(mc.world).getPosition().down());
         }
     });
 
+    @SuppressWarnings("unused")
     @EventHandler
     private final Listener<EventPacketSend> sendListener0 = new Listener<>(event -> {
         if(event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && target != null && curPosPlace != null && ((CPacketPlayerTryUseItemOnBlock) event.getPacket()).position == curPosPlace.base) {
@@ -498,8 +496,10 @@ public class AutoCrystal extends Module {
         }
     });
 
+    @SuppressWarnings("unused")
     @EventHandler
     private final Listener<EventPacketRecieve> recieveListener = new Listener<>(event -> {
+        if(wCheck()) return;
         if (event.getPacket() instanceof SPacketSpawnObject && ((SPacketSpawnObject) event.getPacket()).getType() == 51 && sequential.getValue() && Break.getValue()) {
             if (mc.player.getDistance(((SPacketSpawnObject) event.getPacket()).getX(), ((SPacketSpawnObject) event.getPacket()).getY(), ((SPacketSpawnObject) event.getPacket()).getZ()) > breakRange.getValue())
                 return;
@@ -508,6 +508,7 @@ public class AutoCrystal extends Module {
         }
     });
 
+    @SuppressWarnings("unused")
     @EventHandler
     private final Listener<EventPacketRecieve> packetReceiveListener = new Listener<>(event -> {
         if(syncMode.getValue().equalsIgnoreCase("Sound")) {
@@ -527,10 +528,12 @@ public class AutoCrystal extends Module {
     });
 
 
+    @SuppressWarnings("unused")
     @EventHandler
     private final Listener<EventPacketRecieve> recieveListener0 = new Listener<>(event -> {
         if (event.getPacket() instanceof SPacketSpawnObject) {
-            if(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID()) instanceof EntityEnderCrystal && curPosPlace != null && target != null) placedCrystals.add(((SPacketSpawnObject) event.getPacket()).getEntityID());
+            if(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID()) instanceof EntityEnderCrystal && curPosPlace != null && target != null)
+                placedCrystals.add(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
             this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
         } else if (event.getPacket() instanceof SPacketSpawnExperienceOrb) {
             this.checkID(((SPacketSpawnExperienceOrb)event.getPacket()).getEntityID());
@@ -551,6 +554,20 @@ public class AutoCrystal extends Module {
 
 
 
+
+    private EnumHand getHand() {
+        if(mc.player.inventory.getCurrentItem() != ItemStack.EMPTY) {
+            if(mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL) {
+                return EnumHand.MAIN_HAND;
+            }
+        }
+        if(mc.player.getHeldItemOffhand() != ItemStack.EMPTY) {
+            if(mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL) {
+                return EnumHand.OFF_HAND;
+            }
+        }
+        return null;
+    }
 
     private void attackCrystal(int entityId) {
         CPacketUseEntity sequentialCrystal = new CPacketUseEntity();
