@@ -118,8 +118,15 @@ public class AutoCrystal extends Module {
         placedCrystals = new ArrayList<>();
     }
 
-    @SubscribeEvent
-    public void onFast(TickEvent event) {
+    @Override public void onUpdate() {
+        if(nullCheck()) return;
+        if(!timingMode.getValue().equalsIgnoreCase("Tick")) return;
+
+        target = EntityUtils.getTarget(players.getValue(), neutral.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
+        autoCrystal();
+    }
+
+    @SubscribeEvent public void onFast(TickEvent event) {
         try {
             if (nullCheck()) return;
             if (!timingMode.getValue().equalsIgnoreCase("Fast")) return;
@@ -130,18 +137,7 @@ public class AutoCrystal extends Module {
 
         }
     }
-
-    @Override
-    public void onUpdate() {
-        if(nullCheck()) return;
-        if(!timingMode.getValue().equalsIgnoreCase("Tick")) return;
-
-        target = EntityUtils.getTarget(players.getValue(), neutral.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
-        autoCrystal();
-    }
-
-    @SubscribeEvent
-    public void onRender(RenderWorldLastEvent event) {
+    @SubscribeEvent public void onRender(RenderWorldLastEvent event) {
         if(curPosPlace == null) return;
         Tessellator.drawBBOutline(curPosPlace.base, 3, new Color(255, 255, 255, 255));
     }
@@ -384,7 +380,6 @@ public class AutoCrystal extends Module {
             }
         }
     }
-
     private void placeCrystal() {
         if(target == null) {
             clean();
@@ -406,20 +401,13 @@ public class AutoCrystal extends Module {
             mc.playerController.updateController();
         }
 
-        if(curPosPlace != null) place(curPosPlace.base, (mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND), packetPlace.getValue());
-
+        if(curPosPlace != null) { if (!place(curPosPlace.base, getCrystalHand(), packetPlace.getValue())) return; }
         swingHand();
 
         if(switchPlace.getValue().equalsIgnoreCase("Packet")) {
             mc.player.inventory.currentItem = current;
             mc.playerController.updateController();
         }
-    }
-    private void attackCrystal(int entityId) {
-        CPacketUseEntity sequentialCrystal = new CPacketUseEntity();
-        sequentialCrystal.entityId = entityId;
-        sequentialCrystal.action = CPacketUseEntity.Action.ATTACK;
-        mc.player.connection.sendPacket(sequentialCrystal);
     }
     private void swingHand() {
         switch (swingArmPlace.getValue()) {
@@ -560,6 +548,12 @@ public class AutoCrystal extends Module {
             highestID = entity.getEntityId();
         }
     }
+    private void attackCrystal(int entityId) {
+        CPacketUseEntity sequentialCrystal = new CPacketUseEntity();
+        sequentialCrystal.entityId = entityId;
+        sequentialCrystal.action = CPacketUseEntity.Action.ATTACK;
+        mc.player.connection.sendPacket(sequentialCrystal);
+    }
 
     public static boolean isRunning() {
         return target != null;
@@ -657,6 +651,9 @@ public class AutoCrystal extends Module {
         }
 
         return EnumFacing.UP;
+    }
+    private EnumHand getCrystalHand() {
+        return mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
     }
     private static class CrystalPosition {
         private float self;
