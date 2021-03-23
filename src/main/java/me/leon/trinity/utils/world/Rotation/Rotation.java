@@ -8,6 +8,7 @@ public class Rotation implements Util {
     public boolean packet, stay;
     public Timer rotationStay = new Timer();
     public int time;
+    public RotationMode rotationMode;
     public RotationPriority priority;
 
     public Rotation(float pitch, float yaw) {
@@ -43,6 +44,15 @@ public class Rotation implements Util {
         this.priority = priority;
     }
 
+    public Rotation(float yaw, float pitch, RotationMode mode, RotationPriority rotationPriority) {
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.rotationMode = mode;
+        this.priority = rotationPriority;
+
+        rotationStay.reset();
+    }
+
     // updates player rotations here
     public void updateRotations() {
         try {
@@ -63,5 +73,10 @@ public class Rotation implements Util {
         this.pitch = mc.player.rotationPitch;
 
         this.rotationStay.reset();
+    }
+
+    public enum RotationMode {
+        Packet,
+        Legit
     }
 }

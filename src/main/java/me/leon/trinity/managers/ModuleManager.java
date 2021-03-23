@@ -6,6 +6,7 @@ import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.hacks.combat.AutoCrystal;
+import me.leon.trinity.hacks.combat.InstantBurrow;
 import me.leon.trinity.hacks.combat.KillAura;
 import me.leon.trinity.hacks.misc.ChatSuffix;
 import me.leon.trinity.hacks.misc.FakePlayer;
@@ -33,6 +34,7 @@ public class ModuleManager {
         // Combat
         addMod(new KillAura());
         addMod(new AutoCrystal());
+        addMod(new InstantBurrow());
 
         // Misc
         addMod(new NoRotate());
