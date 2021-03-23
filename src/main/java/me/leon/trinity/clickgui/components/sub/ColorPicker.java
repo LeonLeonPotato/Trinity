@@ -38,8 +38,8 @@ public class ColorPicker extends Component {
         this.parent = parent;
         this.offset = offset;
         this.renderAtSpeed = (this.set.speed / 5f) * 60f;
-        this.renderAtHue = Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[] {0, 0, 0})[0] * 60;
-        this.circlePos = new float[] {Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[] {0, 0, 0})[1] * 60, Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[] {0, 0, 0})[2] * 60};
+        this.renderAtHue = Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[]{0, 0, 0})[0] * 60;
+        this.circlePos = new float[]{Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[]{0, 0, 0})[1] * 60, Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[]{0, 0, 0})[2] * 60};
         this.renderAtAlpha = (this.set.a / 255f) * 60;
     }
 
@@ -48,7 +48,7 @@ public class ColorPicker extends Component {
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
         FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
         RenderUtils.drawRect((float) (this.parent.parent.x + (ClickGUI.width.getValue() - 5)), this.parent.parent.y + this.parent.offset + this.offset + 14 + 12, (float) (this.parent.parent.x + (ClickGUI.width.getValue() - 15)), this.parent.parent.y + this.parent.offset + this.offset + 14 + 2, this.set.getValue());
-        if(this.open) {
+        if (this.open) {
             RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 135, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
 
             RenderUtils.drawAlphaRect(this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 70, 67, 10, this.set.getValue());
@@ -66,19 +66,19 @@ public class ColorPicker extends Component {
 
             RenderUtils.drawRect(this.parent.parent.x + 25, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 95, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85, new Color(0xa9b7c6));
             FontUtil.drawString("Rainbow", this.parent.parent.x + 30, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
-            if(this.set.rainbow) {
+            if (this.set.rainbow) {
                 RenderUtils.drawRect(this.parent.parent.x + 23, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 93, this.parent.parent.x + 17, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 87, new Color(50, 243, 50));
             }
 
             RenderUtils.drawRect(this.parent.parent.x + 25, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 125, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 115, new Color(0xa9b7c6));
             FontUtil.drawString("Sync", this.parent.parent.x + 30, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 115 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
-            if(this.set.sync) {
+            if (this.set.sync) {
                 RenderUtils.drawRect(this.parent.parent.x + 23, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 123, this.parent.parent.x + 17, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 117, new Color(50, 243, 50));
             }
 
-            if(ClickGUI.barMode.getValue().equals("Rainbow")) {
+            if (ClickGUI.barMode.getValue().equals("Rainbow")) {
                 RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 28, this.parent.parent.x + 8, 133, 3, 6, 200);
-            } else if(ClickGUI.barMode.getValue().equals("Static")) {
+            } else if (ClickGUI.barMode.getValue().equals("Static")) {
                 RenderUtils.drawRect(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 135 + 28, this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 28, ClickGUI.barColor.getValue());
             }
         }
@@ -86,21 +86,21 @@ public class ColorPicker extends Component {
 
     @Override
     public void updateComponent(int mouseX, int mouseY) {
-        if(draggingHue) {
+        if (draggingHue) {
             this.renderAtHue = Math.min(60, Math.max(0, mouseY - (this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3)));
         }
-        if(draggingColor) {
+        if (draggingColor) {
             double y = Math.min(60, Math.max(0, mouseY - (this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3)));
             double x = Math.min(60, Math.max(0, mouseX - (this.parent.parent.x + 15)));
 
             this.circlePos[0] = (float) x;
             this.circlePos[1] = (float) y;
         }
-        if(draggingAlpha) {
+        if (draggingAlpha) {
             this.renderAtAlpha = Math.min(60, Math.max(7, mouseX - (this.parent.parent.x + 15)));
             this.set.a = ((int) ((renderAtAlpha / 67) * 255));
         }
-        if(draggingColor || draggingHue || saveRainbow) {
+        if (draggingColor || draggingHue || saveRainbow) {
             final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / ClickGui.width, (circlePos[1] * (10 / 6f)) / ClickGui.width));
 
             this.set.r = (color.getRed());
@@ -108,7 +108,7 @@ public class ColorPicker extends Component {
             this.set.b = (color.getBlue());
             this.saveRainbow = false;
         }
-        if(draggingSpeed) {
+        if (draggingSpeed) {
             this.renderAtSpeed = Math.min(60, Math.max(0, mouseX - (this.parent.parent.x + 15)));
             this.set.speed = (int) ((renderAtSpeed / 60) * 5);
         }
@@ -116,43 +116,43 @@ public class ColorPicker extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(isMouseOnButtonMain(mouseX, mouseY) && this.parent.open) {
-            if(button == 1) {
+        if (isMouseOnButtonMain(mouseX, mouseY) && this.parent.open) {
+            if (button == 1) {
                 this.open = !open;
                 this.parent.refresh();
                 this.parent.parent.refresh();
             }
         }
-        if(isMouseOnButtonColor(mouseX, mouseY) && this.parent.open && this.open) {
-            if(button == 0) {
+        if (isMouseOnButtonColor(mouseX, mouseY) && this.parent.open && this.open) {
+            if (button == 0) {
                 this.draggingColor = true;
             }
         }
-        if(isMouseOnButtonHue(mouseX, mouseY) && this.parent.open && this.open) {
-            if(button == 0) {
+        if (isMouseOnButtonHue(mouseX, mouseY) && this.parent.open && this.open) {
+            if (button == 0) {
                 this.draggingHue = true;
             }
         }
-        if(isMouseOnButtonAlpha(mouseX, mouseY) && this.parent.open && this.open) {
-            if(button == 0) {
+        if (isMouseOnButtonAlpha(mouseX, mouseY) && this.parent.open && this.open) {
+            if (button == 0) {
                 this.draggingAlpha = true;
             }
         }
-        if(isMouseOnButtonRainbow(mouseX, mouseY) && this.parent.open && this.open) {
-            if(button == 0) {
+        if (isMouseOnButtonRainbow(mouseX, mouseY) && this.parent.open && this.open) {
+            if (button == 0) {
                 this.set.rainbow = !this.set.rainbow;
-                if(!this.set.rainbow) {
+                if (!this.set.rainbow) {
                     this.saveRainbow = true;
                 }
             }
         }
-        if(isMouseOnButtonSpeed(mouseX, mouseY) && this.parent.open && this.open) {
-            if(button == 0) {
+        if (isMouseOnButtonSpeed(mouseX, mouseY) && this.parent.open && this.open) {
+            if (button == 0) {
                 this.draggingSpeed = true;
             }
         }
-        if(isButtonOnSync(mouseX, mouseY) && this.parent.open && this.open) {
-            if(button == 0) {
+        if (isButtonOnSync(mouseX, mouseY) && this.parent.open && this.open) {
+            if (button == 0) {
                 this.set.sync = !this.set.sync;
             }
         }
@@ -208,7 +208,7 @@ public class ColorPicker extends Component {
 
     @Override
     public int getHeight() {
-        if(this.open) {
+        if (this.open) {
             return 14 + 135;
         }
         return 14;
@@ -216,7 +216,7 @@ public class ColorPicker extends Component {
 
     @SubscribeEvent
     public void onUpdate(TickEvent.ClientTickEvent event) {
-        if(this.set.rainbow) {
+        if (this.set.rainbow) {
             rainbow0.updateColor(this.set.speed);
             this.set.r = (rainbow0.getColor().getRed());
             this.set.g = (rainbow0.getColor().getBlue());
