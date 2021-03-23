@@ -4,6 +4,7 @@ import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.*;
 import me.leon.trinity.hacks.combat.*;
+import me.leon.trinity.hacks.exploits.*;
 import me.leon.trinity.hacks.misc.*;
 import me.leon.trinity.hacks.movement.*;
 import me.leon.trinity.hacks.render.*;
@@ -46,6 +47,9 @@ public class ModuleManager {
         // Render
         addMod(new FullBright());
         addMod(new FreeLook());
+        // Exploits
+        addMod(new FastEXP());
+        addMod(new Reach());
     }
 
     private void addMod(Module mod) {
