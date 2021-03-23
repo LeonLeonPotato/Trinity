@@ -6,7 +6,7 @@ import me.leon.trinity.hacks.Module;
 
 public class Timer extends Module {
     public Timer() {
-        super("Timer", "Spawns in a fakeplayer", Category.MISC);
+        super("Timer", "Increases your client tick speed", Category.MISC);
     }
 
     private static final Slider speed = new Slider("Speed", 0, 3, 20, false);
