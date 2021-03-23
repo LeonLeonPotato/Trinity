@@ -6,9 +6,16 @@ import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.Slider;
 import me.leon.trinity.utils.entity.BlockUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
+import net.minecraft.block.BlockObsidian;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
+import java.io.BufferedReader;
 
 public class InstantBurrow extends Module {
 
@@ -33,44 +40,38 @@ public class InstantBurrow extends Module {
         if (nullCheck())
             return;
         originalPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
-
-        int slot;
-        // Change to obsidian slot
-        slot = InventoryUtil.findObsidianSlot(false, true);
-        if (slot != -1 && mc.player.inventory.currentItem != slot) {
-            mc.player.inventory.currentItem = slot;
-
-        }
-
-        if(insta.getValue()) {
-            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, true));
-            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, true));
-            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, true));
-            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
-        }else {
-            mc.player.jump();
+        if (mc.world.getBlockState(new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ)).getBlock().equals(Blocks.OBSIDIAN) ||
+                intersectsWithEntity(this.originalPos)) {
+            toggle();
+            return;
         }
     }
 
     public void onUpdate() {
-
-            // Fake jump // doesnt work wtf - momin5
-            //mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, true));
-            //mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, true));
-            //mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, true));
-            //mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
-            //mc.player.jump();
-
-            // Place block
-            BlockUtils.placeBlockScaffold(originalPos);
-
-            // Rubberband
-            mc.player.motionY = 1.0D;
-            //mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 7, mc.player.posZ, false));
-
-            // AutoDisable
+        if (InventoryUtil.findHotbarBlock(BlockObsidian.class) == -1) {
             toggle();
-
+            return;
         }
+        InventoryUtil.switchToSlot(InventoryUtil.findHotbarBlock(BlockObsidian.class));
+
+        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, true));
+        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, true));
+        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, true));
+        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
+
+        BlockUtils.placeBlock(originalPos, EnumHand.MAIN_HAND, rotate.getValue(), true, false);
+        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + offset.getValue(), mc.player.posZ, false));
+        InventoryUtil.switchToSlot(oldSlot);
+        toggle();
+        }
+
+    private boolean intersectsWithEntity(final BlockPos pos) {
+        for (final Entity entity : mc.world.loadedEntityList) {
+            if (entity.equals(mc.player)) continue;
+            if (entity instanceof EntityItem) continue;
+            if (new AxisAlignedBB(pos).intersects(entity.getEntityBoundingBox())) return true;
+        }
+        return false;
+    }
 
     }

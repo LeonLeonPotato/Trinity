@@ -2,6 +2,7 @@ package me.leon.trinity.managers;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+<<<<<<< HEAD
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.hacks.client.Font;
@@ -12,9 +13,14 @@ import me.leon.trinity.hacks.misc.ChatSuffix;
 import me.leon.trinity.hacks.misc.FakePlayer;
 import me.leon.trinity.hacks.misc.FreeCam;
 import me.leon.trinity.hacks.misc.NoRotate;
+=======
+import me.leon.trinity.hacks.client.*;
+import me.leon.trinity.hacks.combat.*;
+import me.leon.trinity.hacks.exploits.*;
+import me.leon.trinity.hacks.misc.*;
+>>>>>>> 474725779b0e592593f1641a31366416067d3572
 import me.leon.trinity.hacks.movement.*;
-import me.leon.trinity.hacks.render.FreeLook;
-import me.leon.trinity.hacks.render.FullBright;
+import me.leon.trinity.hacks.render.*;
 import me.leon.trinity.setting.Setting;
 
 import java.lang.reflect.Field;
@@ -41,7 +47,7 @@ public class ModuleManager {
         addMod(new FreeCam());
         addMod(new ChatSuffix());
         addMod(new FakePlayer());
-
+        addMod(new Timer());
         // Movement
         addMod(new Velocity());
         addMod(new AutoSprint());
@@ -55,6 +61,9 @@ public class ModuleManager {
         // Render
         addMod(new FullBright());
         addMod(new FreeLook());
+        // Exploits
+        addMod(new FastEXP());
+        addMod(new Reach());
     }
 
     private void addMod(Module mod) {

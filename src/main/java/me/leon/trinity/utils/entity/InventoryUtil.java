@@ -71,35 +71,36 @@ public class InventoryUtil implements Util {
     }
 
 
-    public static void switchToSlot(int slot) {
-        if (slot != -1 && mc.player.inventory.currentItem != slot)
-            mc.player.inventory.currentItem = slot;
-    }
 
     public static void switchToSlot(Block block) {
         if (getBlockInHotbar(block) != -1 && mc.player.inventory.currentItem != getBlockInHotbar(block))
             mc.player.inventory.currentItem = getBlockInHotbar(block);
     }
 
-
-    public static int findObsidianSlot(boolean offHandActived, boolean activeBefore) {
-        int slot = -1;
-        List<ItemStack> mainInventory = mc.player.inventory.mainInventory;
-
-
+    public static int findHotbarBlock(Class clazz) {
         for (int i = 0; i < 9; i++) {
-            ItemStack stack = mainInventory.get(i);
-
-            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock)) {
+            ItemStack stack = mc.player.inventory.getStackInSlot(i);
+            if (stack == ItemStack.EMPTY) {
                 continue;
             }
 
-            Block block = ((ItemBlock) stack.getItem()).getBlock();
-            if (block instanceof BlockObsidian) {
-                slot = i;
-                break;
+            if (clazz.isInstance(stack.getItem())) {
+                return i;
+            }
+
+            if (stack.getItem() instanceof ItemBlock) {
+                Block block = ((ItemBlock) stack.getItem()).getBlock();
+                if (clazz.isInstance(block)) {
+                    return i;
+                }
             }
         }
-        return slot;
+        return -1;
     }
+
+    public static void switchToSlot(int slot) {
+        if (slot != -1 && mc.player.inventory.currentItem != slot)
+            mc.player.inventory.currentItem = slot;
+    }
+
 }
