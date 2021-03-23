@@ -16,6 +16,7 @@ import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -174,5 +175,15 @@ public class EntityUtils implements Util {
 
     public static BlockPos getEntityPosFloored(Entity entity) {
         return new BlockPos(Math.floor(entity.posX), Math.floor(entity.posY), Math.floor(entity.posZ));
+    }
+
+
+    public static boolean isIntercepted(BlockPos pos) {
+        for (Entity entity : mc.world.loadedEntityList) {
+            if (new AxisAlignedBB(pos).intersects(entity.getEntityBoundingBox()))
+                return true;
+        }
+
+        return false;
     }
 }

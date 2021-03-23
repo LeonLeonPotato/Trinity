@@ -17,9 +17,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class saveConfig extends Thread {
-    public static File defaultDir = new File(System.getProperty("user.home") + "/Documents/Trinity/Default");
-    public static File confDir = new File(System.getProperty("user.home") + "/Documents/Trinity");
-    public static File presetDir = new File(System.getProperty("user.home") + "/Documents/Trinity/essentials");
+    public static File confDir = new File("Trinity");
+    public static File defaultDir = new File("Trinity/Default");
+    public static File presetDir = new File("Trinity/essentials");
 
     @Override
     public void run() {

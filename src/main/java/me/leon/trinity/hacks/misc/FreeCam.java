@@ -1,15 +1,12 @@
 package me.leon.trinity.hacks.misc;
 
 import com.mojang.authlib.GameProfile;
-import me.leon.trinity.events.main.MoveEvent;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.Slider;
-import me.zero.alpine.fork.listener.EventHandler;
-import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;

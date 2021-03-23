@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 public class loadConfig {
     public static class LoadConfig {
-        public static File presetDir = new File(System.getProperty("user.home") + "/Documents/Trinity/essentials");
+        public static File presetDir = new File("Trinity/essentials");
 
         public static void loadModules(boolean preset) {
             try {
@@ -182,7 +182,7 @@ public class loadConfig {
                     if(Trinity.presetManager.getPreset(line) != null) {
                         Trinity.curPreset = Trinity.presetManager.getPreset(line);
                     } else {
-                        Trinity.curPreset = new Preset(new File(System.getProperty("user.home") + "/Documents/Trinity/Default"));
+                        Trinity.curPreset = new Preset(new File("Trinity/Default"));
                         Trinity.presetManager.presets.add(Trinity.curPreset);
                     }
                 }
