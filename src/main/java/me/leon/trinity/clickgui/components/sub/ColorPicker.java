@@ -45,35 +45,37 @@ public class ColorPicker extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
+        final int trueY = this.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
+        
+        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
         FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
         RenderUtils.drawRect((float) (this.parent.parent.x + (ClickGUI.width.getValue() - 5)), this.parent.parent.y + this.parent.offset + this.offset + 14 + 12, (float) (this.parent.parent.x + (ClickGUI.width.getValue() - 15)), this.parent.parent.y + this.parent.offset + this.offset + 14 + 2, this.set.getValue());
         if(this.open) {
-            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 135, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
+            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY + 135, this.parent.parent.x, trueY, new Color(0x2b2b2b));
 
-            RenderUtils.drawAlphaRect(this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 70, 67, 10, this.set.getValue());
-            RenderUtils.drawRect(this.parent.parent.x + 8 + renderAtAlpha + 1, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 81, this.parent.parent.x + 8 + renderAtAlpha - 1, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 69, new Color(0xa9b7c6));
+            RenderUtils.drawAlphaRect(this.parent.parent.x + 8, trueY + 70, 67, 10, this.set.getValue());
+            RenderUtils.drawRect(this.parent.parent.x + 8 + renderAtAlpha + 1, trueY + 81, this.parent.parent.x + 8 + renderAtAlpha - 1, trueY + 69, new Color(0xa9b7c6));
 
-            RenderUtils.drawRect(this.parent.parent.x + 75, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 110, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 100, new Color(0x454545));
-            RenderUtils.drawRect(this.parent.parent.x + 15 + renderAtSpeed, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 110, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 100, ClickGUI.sliderColor.getValue());
-            FontUtil.drawString("Speed: " + this.set.speed, this.parent.parent.x + 17, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 100 + ((10 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
+            RenderUtils.drawRect(this.parent.parent.x + 75, trueY + 110, this.parent.parent.x + 15, trueY + 100, new Color(0x454545));
+            RenderUtils.drawRect(this.parent.parent.x + 15 + renderAtSpeed, trueY + 110, this.parent.parent.x + 15, trueY + 100, ClickGUI.sliderColor.getValue());
+            FontUtil.drawString("Speed: " + this.set.speed, this.parent.parent.x + 17, trueY + 100 + ((10 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
 
-            RenderUtils.drawColorPickerSquare(this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3, 60, 60, (int) (this.renderAtHue * 6f), this.set.a);
-            RenderUtils.drawCircle(this.parent.parent.x + 15 + circlePos[0], this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3 + circlePos[1], 2f, 0.2f, new Color(255, 255, 255, 255));
+            RenderUtils.drawColorPickerSquare(this.parent.parent.x + 15, trueY + 3, 60, 60, (int) (this.renderAtHue * 6f), this.set.a);
+            RenderUtils.drawCircle(this.parent.parent.x + 15 + circlePos[0], trueY + 3 + circlePos[1], 2f, 0.2f, new Color(255, 255, 255, 255));
 
-            RenderUtils.drawHueRect(this.parent.parent.x + 80, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3, 10, 60);
-            RenderUtils.drawRect(this.parent.parent.x + 92, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3 + renderAtHue + 1, this.parent.parent.x + 78, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 3 + renderAtHue - 1, new Color(0xa9b7c6));
+            RenderUtils.drawHueRect(this.parent.parent.x + 80, trueY + 3, 10, 60);
+            RenderUtils.drawRect(this.parent.parent.x + 92, trueY + 3 + renderAtHue + 1, this.parent.parent.x + 78, trueY + 3 + renderAtHue - 1, new Color(0xa9b7c6));
 
-            RenderUtils.drawRect(this.parent.parent.x + 25, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 95, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85, new Color(0xa9b7c6));
-            FontUtil.drawString("Rainbow", this.parent.parent.x + 30, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 85 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+            RenderUtils.drawRect(this.parent.parent.x + 25, trueY + 95, this.parent.parent.x + 15, trueY + 85, new Color(0xa9b7c6));
+            FontUtil.drawString("Rainbow", this.parent.parent.x + 30, trueY + 85 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
             if(this.set.rainbow) {
-                RenderUtils.drawRect(this.parent.parent.x + 23, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 93, this.parent.parent.x + 17, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 87, new Color(50, 243, 50));
+                RenderUtils.drawRect(this.parent.parent.x + 23, trueY + 93, this.parent.parent.x + 17, trueY + 87, new Color(50, 243, 50));
             }
 
-            RenderUtils.drawRect(this.parent.parent.x + 25, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 125, this.parent.parent.x + 15, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 115, new Color(0xa9b7c6));
-            FontUtil.drawString("Sync", this.parent.parent.x + 30, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 115 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
+            RenderUtils.drawRect(this.parent.parent.x + 25, trueY + 125, this.parent.parent.x + 15, trueY + 115, new Color(0xa9b7c6));
+            FontUtil.drawString("Sync", this.parent.parent.x + 30, trueY + 115 + ((10 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
             if(this.set.sync) {
-                RenderUtils.drawRect(this.parent.parent.x + 23, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 123, this.parent.parent.x + 17, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14 + 117, new Color(50, 243, 50));
+                RenderUtils.drawRect(this.parent.parent.x + 23, trueY + 123, this.parent.parent.x + 17, trueY + 117, new Color(50, 243, 50));
             }
 
             if(ClickGUI.barMode.getValue().equals("Rainbow")) {

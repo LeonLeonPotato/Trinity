@@ -14,6 +14,7 @@ public class Font extends Module {
 
     public Font() {
         super("Font", "Customize font settings", Category.CLIENT);
+        this.setEnabled(true);
     }
 
     public static boolean enabled() {

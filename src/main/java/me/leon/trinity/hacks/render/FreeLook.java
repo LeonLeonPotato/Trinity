@@ -1,11 +1,21 @@
 package me.leon.trinity.hacks.render;
 
+import baritone.api.utils.RotationUtils;
+import com.mojang.authlib.GameProfile;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.setting.settings.Slider;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -15,9 +25,8 @@ public class FreeLook extends Module {
 
     private static float cameraYaw;
     private static float cameraPitch;
-    private static float playerPitch;
-    private static float playerYaw;
-    private static boolean enabled = false;
+    private static EntityPlayerCamera camera;
+    private static Entity renderViewOg;
 
     public static Slider range = new Slider("Range", 0, 5, 7, false);
 
@@ -25,68 +34,11 @@ public class FreeLook extends Module {
         super("FreeLook", "LUNAR MODE", Category.RENDER);
     }
 
-    private void updateCamera(boolean start) {
-        if(mc.currentScreen != null || !mc.inGameHasFocus) {
-            return;
-        }
-        Entity view = mc.getRenderViewEntity();
-
-        float f = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
-        float f1 = f * f * f * 8.0F;
-
-        double dx = Mouse.getDX() * f1 * 0.15D;
-        double dy = Mouse.getDY() * f1 * 0.15D;
-
-        cameraYaw += dx;
-        cameraPitch += dy;
-
-        cameraPitch = MathHelper.clamp(cameraPitch, -90.0F, 90.0F);
-        cameraYaw = MathHelper.clamp(cameraYaw, (mc.player.rotationYaw + -100.0F), (mc.player.rotationYaw + 100.0F));
-
-        mc.player.rotationYaw = mc.player.prevRotationYaw = playerYaw;
-        mc.player.rotationPitch = mc.player.prevRotationPitch = playerPitch;
-
-        if(start) {
-            view.rotationPitch = cameraPitch;
-            view.rotationYaw = cameraYaw;
-        } else {
-            view.rotationYaw = mc.player.rotationYaw - cameraYaw + playerYaw;
-            view.prevRotationYaw = mc.player.prevRotationYaw - cameraYaw + playerYaw;
-
-            view.rotationPitch = -playerPitch;
-            view.prevRotationPitch = -playerPitch;
-        }
-    }
-
-    public static void cameraEnabled(boolean start) {
-        Minecraft mc = Minecraft.getMinecraft();
-        Entity player = mc.getRenderViewEntity();
-        if (player == null && !mc.inGameHasFocus) {
+    private void updateCamera() {
+        if (nullCheck() || camera == null) {
             return;
         }
         if (mc.inGameHasFocus) {
-            updateCamera2();
-            if (start) {
-
-                player.rotationYaw = player.prevRotationYaw = cameraYaw;
-                player.rotationPitch = player.prevRotationPitch = -cameraPitch;
-
-            } else {
-                player.rotationYaw = mc.player.rotationYaw - cameraYaw + playerYaw;
-                player.prevRotationYaw = mc.player.prevRotationYaw - cameraYaw + playerYaw;
-
-                player.rotationPitch = -playerPitch;
-                player.prevRotationPitch = -playerPitch;
-            }
-        }
-
-    }
-
-    private static void updateCamera2() {
-        Minecraft mc = Minecraft.getMinecraft();
-
-        if (mc.inGameHasFocus) {
-
             float f = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
             float f1 = f * f * f * 8.0F;
 
@@ -94,11 +46,28 @@ public class FreeLook extends Module {
             double dy = Mouse.getDY() * f1 * 0.15D;
 
             cameraYaw += dx;
-            cameraPitch += dy;
+            cameraPitch += dy * -1;
 
             cameraPitch = MathHelper.clamp(cameraPitch, -90.0F, 90.0F);
-            cameraYaw = MathHelper.clamp(cameraYaw, (playerYaw + -100.0F), (playerYaw + 100.0F));
+            cameraYaw = MathHelper.clamp(cameraYaw, (cameraYaw + -100.0F), (cameraYaw + 100.0F));
+
+            camera.rotationPitch = cameraPitch;
+            camera.rotationYaw = cameraYaw;
         }
+    }
+
+    private void updateCamera2() {
+        /*
+        double x = (mc.player.posX + (range.getValue() * Math.cos(Math.toRadians(cameraYaw - 90))));
+        double z = (mc.player.posY + (range.getValue() * Math.sin(Math.toRadians(cameraPitch))));
+        double dist = Math.abs(mc.player.posX - x);
+
+         */
+
+        double x1 = (mc.player.posX + (range.getValue() * Math.cos(Math.toRadians(cameraYaw - 90))));
+        double z1 = (mc.player.posZ + (range.getValue() * Math.sin(Math.toRadians(cameraYaw - 90))));
+
+        camera.setPosition(x1, mc.player.posY, z1);
     }
 
     @SubscribeEvent
@@ -108,24 +77,91 @@ public class FreeLook extends Module {
 
     @SubscribeEvent
     public void onRender(TickEvent.RenderTickEvent event) {
-        if (nullCheck()) {
+        if (nullCheck() || camera == null) {
             return;
         }
-        updateCamera(event.phase.equals(TickEvent.Phase.START));
-        if(enabled) {
-            cameraEnabled(event.phase == TickEvent.Phase.START);
-            enabled = true;
-        }
-    }
-
-    @Override
-    public void onDisable() {
-        enabled = false;
+        updateCamera();
+        updateCamera2();
     }
 
     @Override
     public void onEnable() {
-        playerPitch = cameraPitch = mc.player.rotationPitch;
-        playerYaw = cameraYaw = mc.player.rotationYaw;
+        if(nullCheck()) return;
+        cameraPitch = mc.player.rotationPitch;
+        cameraYaw = mc.player.rotationYaw;
+        camera = new EntityPlayerCamera(mc.world, mc.player.gameProfile);
+        EntityPlayer player = mc.player;
+
+        if (player != null)
+        {
+            camera.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+            camera.setRotationYawHead(player.rotationYaw);
+        }
+        mc.world.addEntityToWorld(-9283, camera);
+        mc.renderViewEntity = camera;
+    }
+
+    @Override
+    public void onDisable() {
+        if (nullCheck() || camera == null) {
+            return;
+        }
+        mc.renderViewEntity = mc.player;
+        mc.world.removeEntity(camera);
+    }
+
+    @SubscribeEvent
+    public void onRenderPlayerPre(RenderPlayerEvent.Pre event)
+    {
+        RenderManager manager = mc.getRenderManager();
+        if (event.getEntityPlayer().isUser())
+        {
+            renderViewOg = camera;
+            manager.renderViewEntity = mc.player;
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onRenderWorldLast(RenderWorldLastEvent event)
+    {
+        if(camera == null) return;
+        mc.getRenderManager().renderEntityStatic(camera, event.getPartialTicks(), false);
+    }
+
+    @SubscribeEvent
+    public void onRenderLivingPre(RenderLivingEvent.Pre<EntityPlayer> event)
+    {
+        if (renderViewOg != null)
+        {
+            mc.getRenderManager().renderViewEntity = renderViewOg;
+            renderViewOg = null;
+        }
+    }
+
+    @SuppressWarnings("all")
+    private class EntityPlayerCamera extends EntityOtherPlayerMP
+    {
+        public EntityPlayerCamera(World worldIn, GameProfile gameProfileIn)
+        {
+            super(worldIn, gameProfileIn);
+        }
+
+        @Override
+        public boolean isInvisible()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean isInvisibleToPlayer(EntityPlayer player)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean isSpectator()
+        {
+            return false;
+        }
     }
 }

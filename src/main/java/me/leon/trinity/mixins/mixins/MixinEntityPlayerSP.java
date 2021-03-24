@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.main.MoveEvent;
 import me.leon.trinity.events.main.RotationEvent;
+import me.leon.trinity.hacks.misc.FreeCam;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.world.Rotation.RotationUtils;
 import net.minecraft.client.entity.AbstractClientPlayer;

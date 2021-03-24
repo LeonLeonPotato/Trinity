@@ -4,6 +4,7 @@ import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubMode;
@@ -26,6 +27,7 @@ import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -45,6 +47,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 public class AutoCrystal extends Module {
@@ -105,7 +108,7 @@ public class AutoCrystal extends Module {
     public static SubBoolean hostile = new SubBoolean("Hostile", targeting, true);
 
     // Variables
-    private static ArrayList<BlockPos> placedCrystals;
+    private static ConcurrentLinkedDeque<BlockPos> placedCrystals; // i just need the concurrency lol
     private static crystalPosition curPosPlace;
     private static EntityEnderCrystal curBreakCrystal;
     public static EntityLivingBase target;
@@ -115,7 +118,7 @@ public class AutoCrystal extends Module {
 
     public AutoCrystal() {
         super("AutoCrystal", "Nagasaki", Category.COMBAT);
-        placedCrystals = new ArrayList<>();
+        placedCrystals = new ConcurrentLinkedDeque<>();
     }
 
     @SubscribeEvent
@@ -503,6 +506,36 @@ public class AutoCrystal extends Module {
                 return;
 
             attackCrystal(((SPacketSpawnObject) event.getPacket()).getEntityID());
+        }
+    });
+
+    @SuppressWarnings("unused")
+    @EventHandler
+    private final Listener<EventPacketRecieve> recieveListener1 = new Listener<>(event -> {
+        if(wCheck()) return;
+        if (event.getPacket() instanceof SPacketDestroyEntities && sequential.getValue() && Place.getValue()) {
+            SPacketDestroyEntities packet = (SPacketDestroyEntities) event.getPacket();
+            boolean found = false;
+            int id = 0;
+            for(int id0 : packet.getEntityIDs()) {
+                if(mc.world.getEntityByID(id) == null) continue;
+
+                if(mc.world.getEntityByID(id0) == curBreakCrystal) {
+                    found = true;
+                    id = id0;
+                    break;
+                }
+            }
+            if(!found) return;
+
+            if(mc.world.getEntityByID(id) == null) return;
+            if (EntityUtils.getRange(mc.world.getEntityByID(id)) > placeRange.getValue()) {
+                return;
+            }
+
+            curBreakCrystal.setDead();
+            mapPlacePosition();
+            placeCrystal();
         }
     });
 

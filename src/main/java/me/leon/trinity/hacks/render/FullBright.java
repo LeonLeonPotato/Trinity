@@ -12,7 +12,6 @@ import net.minecraft.potion.PotionEffect;
 
 public class FullBright extends Module {
     private final Mode mode = new Mode("Mode", "Gamma", "Gamma", "Potion");
-    private PotionEffect effect = null;
     private float gamma = 0;
 
     public FullBright() {
@@ -41,7 +40,6 @@ public class FullBright extends Module {
         if(event.getSet() == mode) {
             if(mode.getValue().equalsIgnoreCase("Gamma")) {
                 mc.player.removeActivePotionEffect(MobEffects.NIGHT_VISION);
-                mc.player.addPotionEffect(effect);
             }
         }
     });
@@ -50,16 +48,11 @@ public class FullBright extends Module {
     public void onDisable() {
         if(nullCheck()) return;
         mc.gameSettings.gammaSetting = gamma;
-        if(effect != null) {
-            mc.player.removeActivePotionEffect(MobEffects.NIGHT_VISION);
-            mc.player.addPotionEffect(effect);
-        }
+        mc.player.removeActivePotionEffect(MobEffects.NIGHT_VISION);
     }
 
     @Override
     public void onEnable() {
-        if(nullCheck()) return;
-        this.effect = mc.player.getActivePotionEffect(MobEffects.NIGHT_VISION);
         this.gamma = mc.gameSettings.gammaSetting;
     }
 }
