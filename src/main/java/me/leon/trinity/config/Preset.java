@@ -19,12 +19,12 @@ public class Preset {
         this.file = file;
 
         //paths for presets
-        this.enabledModules = new File((file.getAbsolutePath() + "/EnabledModules"));
-        this.binds = new File(file.getAbsolutePath() + "/binds");
-        this.settings = new File(file.getAbsolutePath() + "/Settings");
-        this.GUI = new File(file.getAbsolutePath() + "/GUI");
-        this.search = new File(file.getAbsolutePath() + "/Search");
-        this.HUD = new File(file.getAbsolutePath() + "/HUD");
-        this.Friends = new File(file.getAbsolutePath() + "/Friends");
+        this.enabledModules = new File((file.getAbsolutePath() + "/EnabledModules.txt"));
+        this.binds = new File(file.getAbsolutePath() + "/binds.txt");
+        this.settings = new File(file.getAbsolutePath() + "/Settings.txt");
+        this.GUI = new File(file.getAbsolutePath() + "/GUI.txt");
+        this.search = new File(file.getAbsolutePath() + "/Search.txt");
+        this.HUD = new File(file.getAbsolutePath() + "/HUD.txt");
+        this.Friends = new File(file.getAbsolutePath() + "/Friends.txt");
     }
 }

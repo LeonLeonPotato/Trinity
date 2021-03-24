@@ -45,10 +45,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -110,7 +108,7 @@ public class AutoCrystal extends Module {
     public static SubBoolean hostile = new SubBoolean("Hostile", targeting, true);
 
     // Variables
-    private static ConcurrentLinkedDeque<BlockPos> placedCrystals;
+    private static ArrayList<BlockPos> placedCrystals;
     private static crystalPosition curPosPlace;
     private static EntityEnderCrystal curBreakCrystal;
     public static EntityLivingBase target;
@@ -120,7 +118,7 @@ public class AutoCrystal extends Module {
 
     public AutoCrystal() {
         super("AutoCrystal", "Nagasaki", Category.COMBAT);
-        placedCrystals = new ConcurrentLinkedDeque<>();
+        placedCrystals = new ArrayList<>();
     }
 
     @SubscribeEvent
@@ -265,10 +263,8 @@ public class AutoCrystal extends Module {
                         }
 
                         if(syncMode.getValue().equalsIgnoreCase("Instant")) {
-                            curBreakCrystal.setDead();
+                            entity.setDead();
                         }
-
-                        placedCrystals.remove(entity.getPosition().down());
 
                         switch (swingArmBreak.getValue()) {
                             case "Mainhand": {
@@ -314,12 +310,6 @@ public class AutoCrystal extends Module {
                     else
                         mc.playerController.attackEntity(mc.player, curBreakCrystal);
                 }
-
-                if(syncMode.getValue().equalsIgnoreCase("Instant")) {
-                    curBreakCrystal.setDead();
-                }
-
-                placedCrystals.remove(entity.getPosition().down());
 
                 switch (swingArmBreak.getValue()) {
                     case "Mainhand": {
@@ -376,10 +366,8 @@ public class AutoCrystal extends Module {
                         }
 
                         if(syncMode.getValue().equalsIgnoreCase("Instant")) {
-                            curBreakCrystal.setDead();
+                            entity.setDead();
                         }
-
-                        placedCrystals.remove(entity.getPosition().down());
 
                         switch (swingArmBreak.getValue()) {
                             case "Mainhand": {
@@ -445,9 +433,8 @@ public class AutoCrystal extends Module {
             mc.playerController.updateController();
         }
 
-        place(curPosPlace.base, (mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND), packetPlace.getValue());
-
-        placedCrystals.add(curPosPlace.base);
+        if(curPosPlace != null)
+            place(curPosPlace.base, (mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND), packetPlace.getValue());
 
         switch (swingArmPlace.getValue()) {
             case "Mainhand": {
@@ -493,6 +480,7 @@ public class AutoCrystal extends Module {
             if (syncMode.getValue().equalsIgnoreCase("Instant")){
                 Objects.requireNonNull(((CPacketUseEntity) event.getPacket()).getEntityFromWorld(mc.world)).setDead();
             }
+            placedCrystals.remove(((CPacketUseEntity) event.getPacket()).getEntityFromWorld(mc.world).getPosition().down());
         }
     });
 
@@ -523,36 +511,6 @@ public class AutoCrystal extends Module {
 
     @SuppressWarnings("unused")
     @EventHandler
-    private final Listener<EventPacketRecieve> recieveListener1 = new Listener<>(event -> {
-        if(wCheck()) return;
-        if (event.getPacket() instanceof SPacketDestroyEntities && sequential.getValue() && Place.getValue()) {
-            SPacketDestroyEntities packet = (SPacketDestroyEntities) event.getPacket();
-            boolean found = false;
-            int id = 0;
-            for(int id0 : packet.getEntityIDs()) {
-                if(mc.world.getEntityByID(id) == null) continue;
-
-                if(mc.world.getEntityByID(id0) == curBreakCrystal) {
-                    found = true;
-                    id = id0;
-                    break;
-                }
-            }
-            if(!found) return;
-
-            if(mc.world.getEntityByID(id) == null) return;
-            if (EntityUtils.getRange(mc.world.getEntityByID(id)) > placeRange.getValue()) {
-                return;
-            }
-
-            curBreakCrystal.setDead();
-            mapPlacePosition();
-            placeCrystal();
-        }
-    });
-
-    @SuppressWarnings("unused")
-    @EventHandler
     private final Listener<EventPacketRecieve> packetReceiveListener = new Listener<>(event -> {
         if(syncMode.getValue().equalsIgnoreCase("Sound")) {
             if (event.getPacket() instanceof SPacketSoundEffect) {
@@ -575,6 +533,8 @@ public class AutoCrystal extends Module {
     @EventHandler
     private final Listener<EventPacketRecieve> recieveListener0 = new Listener<>(event -> {
         if (event.getPacket() instanceof SPacketSpawnObject) {
+            if(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID()) instanceof EntityEnderCrystal && curPosPlace != null && target != null)
+                placedCrystals.add(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
             this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
         } else if (event.getPacket() instanceof SPacketSpawnExperienceOrb) {
             this.checkID(((SPacketSpawnExperienceOrb)event.getPacket()).getEntityID());
@@ -729,16 +689,16 @@ public class AutoCrystal extends Module {
         if(rayTracePlaceMode.getValue().equalsIgnoreCase("Leon")) {
             Vec3d vec = RaytraceUtils.rayTraceLeon(pos);
             if(vec == null) {
-                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1.1, pos.z + 0.5)) < placeRangeWalls.getValue());
+                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1, pos.z + 0.5)) < placeRangeWalls.getValue());
             }
         } else
         if(rayTracePlaceMode.getValue().equalsIgnoreCase("Simple")) {
             if(!RaytraceUtils.rayTraceSimple(pos)) {
-                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1.1, pos.z + 0.5)) < placeRangeWalls.getValue());
+                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1, pos.z + 0.5)) < placeRangeWalls.getValue());
             }
         } else
         if(rayTracePlaceMode.getValue().equalsIgnoreCase("Simple-Offset")) {
-            if(!RaytraceUtils.rayTraceSimple(pos, offsetPlace.getValue())) {
+            if(!RaytraceUtils.rayTraceSimple(target, offsetPlace.getValue())) {
                 return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + offsetPlace.getValue(), pos.z + 0.5)) < placeRangeWalls.getValue());
             }
         }
