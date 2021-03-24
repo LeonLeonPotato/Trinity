@@ -20,14 +20,6 @@ import java.io.BufferedReader;
 public class InstantBurrow extends Module {
 
     public Boolean rotate = new Boolean("Rotate", true);
-    //public Mode mode = new Mode("Mode","Rubberband","Rubberband","Teleport","Clip");
-    //public Boolean instant = new Boolean("Insta",true);
-    //public Boolean centerPlayer = new Boolean("Center", false);
-    //public Boolean silent = new Boolean("Silent", false);
-    //public Boolean onGround = new Boolean("On Ground", false);
-    public Slider offset = new Slider("Offset", -20.0f, 7.0f, 20.0F, false);
-    public Boolean insta = new Boolean("Insta",false);
-
     private BlockPos originalPos;
     private int oldSlot = -1;
 
@@ -60,7 +52,7 @@ public class InstantBurrow extends Module {
         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
 
         BlockUtils.placeBlock(originalPos, EnumHand.MAIN_HAND, rotate.getValue(), true, false);
-        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + offset.getValue(), mc.player.posZ, false));
+        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 7, mc.player.posZ, false));
         InventoryUtil.switchToSlot(oldSlot);
         toggle();
         }
