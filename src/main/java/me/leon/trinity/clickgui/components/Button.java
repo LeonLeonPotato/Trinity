@@ -2,6 +2,7 @@ package me.leon.trinity.clickgui.components;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
+import me.leon.trinity.clickgui.components.sub.Binding;
 import me.leon.trinity.clickgui.components.sub.ColorPicker;
 import me.leon.trinity.clickgui.components.sub.String;
 import me.leon.trinity.hacks.Module;
@@ -53,6 +54,10 @@ public class Button extends Component {
             }
             if(c instanceof SettingParent) {
                 this.subs.add(new me.leon.trinity.clickgui.components.sub.SubSetting((SettingParent) c, this, this.opY));
+                this.opY += 14;
+            }
+            if(c instanceof KeyBinding) {
+                this.subs.add(new me.leon.trinity.clickgui.components.sub.Binding((KeyBinding) c, this, this.opY));
                 this.opY += 14;
             }
         }

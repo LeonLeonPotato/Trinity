@@ -73,8 +73,11 @@ public class InventoryUtil implements Util {
 
 
     public static void switchToSlot(Block block) {
-        if (getBlockInHotbar(block) != -1 && mc.player.inventory.currentItem != getBlockInHotbar(block))
+        if (getBlockInHotbar(block) != -1 && mc.player.inventory.currentItem != getBlockInHotbar(block)){
             mc.player.inventory.currentItem = getBlockInHotbar(block);
+            mc.playerController.updateController();
+        }
+
     }
 
     public static int findHotbarBlock(Class clazz) {
@@ -99,8 +102,11 @@ public class InventoryUtil implements Util {
     }
 
     public static void switchToSlot(int slot) {
-        if (slot != -1 && mc.player.inventory.currentItem != slot)
+        if (slot != -1 && mc.player.inventory.currentItem != slot) {
             mc.player.inventory.currentItem = slot;
+            mc.playerController.updateController();
+        }
+
     }
 
 }

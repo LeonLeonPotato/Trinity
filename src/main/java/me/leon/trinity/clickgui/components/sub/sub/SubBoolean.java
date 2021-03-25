@@ -3,6 +3,7 @@ package me.leon.trinity.clickgui.components.sub.sub;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.SubSetting;
+import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -21,9 +22,9 @@ public class SubBoolean extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14, new Color(0x2b2b2b));
         if(set.getValue()) {
-            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x + 11, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, new Color(0x787878));
+            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, this.parent.parent.parent.y + this.parent.offset + this.parent.parent.offset + this.offset + 14 + 14 + 14, this.parent.parent.parent.x + 11, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14 + 14, this.set.getValue() ? ClickGUI.enabledBooleanColor.getValue() : ClickGUI.disabledBooleanColor.getValue());
         }
         FontUtil.drawString(this.set.name, this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + 14 + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
     }
@@ -35,7 +36,7 @@ public class SubBoolean extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(isWithinButton(mouseX, mouseY) && this.parent.open) {
+        if(isWithinButton(mouseX, mouseY) && this.parent.open && this.parent.parent.open && this.parent.parent.parent.open) {
             if(button == 0) {
                 this.set.setEnabled(!this.set.getValue());
             }

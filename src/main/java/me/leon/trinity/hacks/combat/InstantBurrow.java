@@ -27,9 +27,9 @@ public class InstantBurrow extends Module {
     //public Boolean onGround = new Boolean("On Ground", false);
     public Slider offset = new Slider("Offset", -20.0f, 7.0f, 20.0F, false);
     public Boolean insta = new Boolean("Insta",false);
+    public Boolean switchback = new Boolean("SwitchBack", true);
 
     private BlockPos originalPos;
-    private int oldSlot = -1;
 
     public InstantBurrow() {
         super("InstantBurrow", "Instantly Burrow / glitch yourself into a block to avoid being crystalled", Category.COMBAT);
@@ -41,7 +41,8 @@ public class InstantBurrow extends Module {
             return;
         originalPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
         if (mc.world.getBlockState(new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ)).getBlock().equals(Blocks.OBSIDIAN) ||
-                intersectsWithEntity(this.originalPos)) {
+                intersectsWithEntity(this.originalPos))
+        {
             toggle();
             return;
         }
@@ -52,18 +53,26 @@ public class InstantBurrow extends Module {
             toggle();
             return;
         }
+        int slot = mc.player.inventory.currentItem;
         InventoryUtil.switchToSlot(InventoryUtil.findHotbarBlock(BlockObsidian.class));
 
-        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, true));
-        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, true));
-        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, true));
-        mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
+        if(insta.getValue()) {
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ, true));
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ, true));
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, true));
+            mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
+        } else {
+            mc.player.setPosition(mc.player.posX, mc.player.posY + 0.41999998688698D, mc.player.posZ);
+            mc.player.setPosition(mc.player.posX, mc.player.posY + 0.7531999805211997D, mc.player.posZ);
+            mc.player.setPosition(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ);
+            mc.player.setPosition(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ);
+        }
 
         BlockUtils.placeBlock(originalPos, EnumHand.MAIN_HAND, rotate.getValue(), true, false);
         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + offset.getValue(), mc.player.posZ, false));
-        InventoryUtil.switchToSlot(oldSlot);
+        InventoryUtil.switchToSlot(slot);
         toggle();
-        }
+    }
 
     private boolean intersectsWithEntity(final BlockPos pos) {
         for (final Entity entity : mc.world.loadedEntityList) {
@@ -73,5 +82,4 @@ public class InstantBurrow extends Module {
         }
         return false;
     }
-
-    }
+}

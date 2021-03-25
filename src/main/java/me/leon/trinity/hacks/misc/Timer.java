@@ -15,8 +15,9 @@ public class Timer extends Module {
     public void onDisable() {
         mc.timer.tickLength = 50.0f;
     }
+
     @Override
     public void onUpdate() {
-        mc.timer.tickLength = 50.0F / ((float)this.speed.getValue() == 0.0F ? 0.1F : (float)this.speed.getValue());
+        mc.timer.tickLength = 50.0F / ((float)speed.getValue() == 0.0F ? 0.1F : (float)speed.getValue());
     }
 }

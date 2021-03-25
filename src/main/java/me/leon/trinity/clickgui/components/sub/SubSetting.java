@@ -8,10 +8,7 @@ import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
 import me.leon.trinity.setting.settings.SettingParent;
-import me.leon.trinity.setting.settings.sub.SubBoolean;
-import me.leon.trinity.setting.settings.sub.SubColor;
-import me.leon.trinity.setting.settings.sub.SubMode;
-import me.leon.trinity.setting.settings.sub.SubSlider;
+import me.leon.trinity.setting.settings.sub.*;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -49,6 +46,10 @@ public class SubSetting extends Component {
                 this.comps.add(new me.leon.trinity.clickgui.components.sub.sub.SubColorPicker((SubColor) set0, this, setY));
                 this.setY += 14;
             }
+            if(set0 instanceof SubKeyBinding) {
+                this.comps.add(new me.leon.trinity.clickgui.components.sub.sub.SubBinding((SubKeyBinding) set0, this, setY));
+                this.setY += 14;
+            }
         }
     }
 
@@ -74,7 +75,7 @@ public class SubSetting extends Component {
 
     @Override
     public void updateComponent(int mouseX, int mouseY) {
-        if(open) {
+        if(open && parent.open && parent.parent.open) {
             for(Component c : this.comps) {
                 c.updateComponent(mouseX, mouseY);
             }
@@ -92,7 +93,7 @@ public class SubSetting extends Component {
         if(set.canEnable() && isWithinButton(mouseX, mouseY) && button == 0) {
             this.set.setEnabled(!set.getValue());
         }
-        if(open) {
+        if(open && parent.open && parent.parent.open) {
             for(Component c : this.comps) {
                 c.mouseClicked(mouseX, mouseY, button);
             }
@@ -101,7 +102,7 @@ public class SubSetting extends Component {
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int mouseButton) {
-        if(open) {
+        if(open && parent.open && parent.parent.open) {
             for(Component c : this.comps) {
                 c.mouseReleased(mouseX, mouseY, mouseButton);
             }
@@ -115,7 +116,7 @@ public class SubSetting extends Component {
 
     @Override
     public void keyTyped(char typedChar, int key) {
-        if(open) {
+        if(open && parent.open && parent.parent.open) {
             for(Component c : this.comps) {
                 c.keyTyped(typedChar, key);
             }

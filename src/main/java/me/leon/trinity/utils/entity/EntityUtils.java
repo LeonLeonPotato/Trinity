@@ -2,6 +2,9 @@ package me.leon.trinity.utils.entity;
 
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
+import me.leon.trinity.utils.world.WorldUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockObsidian;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +19,10 @@ import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -78,7 +85,124 @@ public class EntityUtils implements Util {
         return toReturn;
     }
 
+    public static ArrayList<Block> isColliding(double posX, double posY, double posZ, Entity entity) {
+        ArrayList<Block> block = new ArrayList<>();
+        if (entity != null) {
+            final AxisAlignedBB bb = entity.ridingEntity != null ? entity.ridingEntity.getEntityBoundingBox().contract(0.0d, 0.0d, 0.0d).offset(posX, posY, posZ) : entity.getEntityBoundingBox().contract(0.0d, 1d, 0.0d).offset(posX, posY, posZ);
+            int y = (int) bb.minY;
+            for (int x = (int) Math.floor(bb.minX); x < Math.floor(bb.maxX) + 1; x++) {
+                for (int z = (int) Math.floor(bb.minZ); z < Math.floor(bb.maxZ) + 1; z++) {
+                    block.add(mc.world.getBlockState(new BlockPos(x, y, z)).getBlock());
+                }
+            }
+        }
+        return block;
+    }
+
+    public static ArrayList<BlockPos> getPos(double posX, double posY, double posZ, Entity entity) {
+        ArrayList<BlockPos> block = new ArrayList<>();
+        if (entity != null) {
+            final AxisAlignedBB bb = entity.ridingEntity != null ? entity.ridingEntity.getEntityBoundingBox().contract(0.0d, 0.0d, 0.0d).offset(posX, posY, posZ) : entity.getEntityBoundingBox().contract(0.01d, 1d, 0.01d).offset(posX, posY, posZ);
+            int y = (int) bb.minY;
+            for (int x = (int) Math.floor(bb.minX); x < Math.floor(bb.maxX) + 1; x++) {
+                for (int z = (int) Math.floor(bb.minZ); z < Math.floor(bb.maxZ) + 1; z++) {
+                    block.add(new BlockPos(x, y, z));
+                }
+            }
+        }
+        return block;
+    }
+
+    public static boolean isBurrowed(EntityLivingBase entity) {
+        return WorldUtils.getBlock(getEntityPosFloored(entity)) == Blocks.OBSIDIAN
+                || WorldUtils.getBlock(getEntityPosFloored(entity)) == Blocks.BEDROCK
+                || WorldUtils.getBlock(getEntityPosFloored(entity)) == Blocks.ENDER_CHEST;
+    }
+
+    public static boolean isInHole(EntityLivingBase entity) {
+        final ArrayList<BlockPos> blocks = getPos(0, 0, 0, entity);
+        if(blocks.size() == 2) {
+            BlockPos pos2 = null;
+            BlockPos pos = null;
+            for(BlockPos block : blocks) {
+                for(EnumFacing facing : EnumFacing.values()) {
+                    if(facing == EnumFacing.DOWN || facing == EnumFacing.UP) continue;
+
+                    if(WorldUtils.getBlock(block) == Blocks.AIR) {
+                        if(WorldUtils.getBlock(block.offset(facing)) == Blocks.AIR) {
+                            pos = block;
+                            pos2 = block.offset(facing);
+                            break;
+                        }
+                    }
+                }
+                if(pos != null) break;
+            }
+
+            if(pos == null) return false;
+
+            BlockPos[] offsets = {
+                    pos.north(), pos.south(), pos.east(), pos.west()
+            };
+            BlockPos[] offsets2 = {
+                    pos2.north(), pos2.south(), pos2.east(), pos2.west()
+            };
+
+            int checked = 0;
+
+            for(BlockPos off : offsets) {
+                if(off == pos2) continue;
+                Block block = WorldUtils.getBlock(off);
+                if(block == Blocks.OBSIDIAN || (block == Blocks.BEDROCK)) {
+                    checked++;
+                }
+            }
+            for(BlockPos off : offsets2) {
+                if(off == pos) continue;
+                Block block = WorldUtils.getBlock(off);
+                if(block == Blocks.OBSIDIAN || (block == Blocks.BEDROCK)) {
+                    checked++;
+                }
+            }
+            return checked >= 6;
+        } else if(blocks.size() == 1) {
+            BlockPos pos = getEntityPosFloored(entity);
+            BlockPos[] offsets = {
+                    pos.north(), pos.south(), pos.east(), pos.west()
+            };
+
+            int checked = 0;
+            for(BlockPos pos0 : offsets) {
+                Block block = WorldUtils.getBlock(pos0);
+                if(block == Blocks.BEDROCK || block == Blocks.OBSIDIAN) {
+                    checked++;
+                }
+            }
+            return checked >= 4;
+        }
+        return false;
+    }
+
+    /**
+     * checks to see if the durability is <b>under</b> the provided durability
+     * @param target
+     * @param durability
+     * @return
+     */
+    public static boolean getArmor(EntityPlayer target, double durability) {
+        for (ItemStack stack : target.getArmorInventoryList()) {
+            if (stack == null || stack.getItem() == Items.AIR)
+                return true;
+
+            if (durability >= ((float) (stack.getMaxDamage() - stack.getItemDamage()) / (float) stack.getMaxDamage()) * 100.0f)
+                return true;
+        }
+
+        return false;
+    }
+
     private static boolean isValid(Entity entity, boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range) {
+        if(entity.isDead) return false;
         if(entity instanceof EntityLivingBase && entity != mc.player) {
             if(entity.getDistance(mc.player) <= range) {
                 if(entity instanceof EntityPlayer && players) {

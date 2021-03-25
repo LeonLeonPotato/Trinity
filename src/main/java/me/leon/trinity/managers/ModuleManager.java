@@ -45,6 +45,7 @@ public class ModuleManager {
         addMod(new ChatSuffix());
         addMod(new FakePlayer());
         addMod(new Timer());
+
         // Movement
         addMod(new Velocity());
         addMod(new AutoSprint());
@@ -58,8 +59,9 @@ public class ModuleManager {
         // Render
         addMod(new FullBright());
         addMod(new FreeLook());
+
         // Exploits
-        addMod(new FastEXP());
+        addMod(new FastUse());
         addMod(new Reach());
     }
 

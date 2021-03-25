@@ -155,7 +155,7 @@ public class SubColorPicker extends Component {
                 }
             }
         }
-        if(isButtonOnSync(mouseX, mouseY) && this.parent.open && this.open) {
+        if(isButtonOnSync(mouseX, mouseY) && this.parent.open && this.open && this.parent.parent.open) {
             if(button == 0) {
                 this.set.sync = !this.set.sync;
             }
