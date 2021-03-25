@@ -8,7 +8,7 @@ import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.hacks.combat.AutoCrystal;
 import me.leon.trinity.hacks.combat.InstantBurrow;
 import me.leon.trinity.hacks.combat.KillAura;
-import me.leon.trinity.hacks.exploits.FastEXP;
+import me.leon.trinity.hacks.exploits.FastUse;
 import me.leon.trinity.hacks.exploits.Reach;
 import me.leon.trinity.hacks.misc.*;
 import me.leon.trinity.hacks.movement.*;
