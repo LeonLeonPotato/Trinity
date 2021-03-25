@@ -8,23 +8,20 @@ import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.hacks.combat.AutoCrystal;
 import me.leon.trinity.hacks.combat.InstantBurrow;
 import me.leon.trinity.hacks.combat.KillAura;
-import me.leon.trinity.hacks.misc.ChatSuffix;
-import me.leon.trinity.hacks.misc.FakePlayer;
-import me.leon.trinity.hacks.misc.FreeCam;
-import me.leon.trinity.hacks.misc.NoRotate;
-import me.leon.trinity.hacks.client.*;
-import me.leon.trinity.hacks.combat.*;
-import me.leon.trinity.hacks.exploits.*;
+import me.leon.trinity.hacks.exploits.FastEXP;
+import me.leon.trinity.hacks.exploits.Reach;
 import me.leon.trinity.hacks.misc.*;
 import me.leon.trinity.hacks.movement.*;
-import me.leon.trinity.hacks.render.*;
+import me.leon.trinity.hacks.player.InventoryMove;
+import me.leon.trinity.hacks.render.FreeLook;
+import me.leon.trinity.hacks.render.FullBright;
 import me.leon.trinity.setting.Setting;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class ModuleManager {
-    public ArrayList<Module> modules;
+    public static ArrayList<Module> modules;
 
     public ModuleManager() {
         this.modules = new ArrayList<>();
@@ -63,6 +60,8 @@ public class ModuleManager {
         // Exploits
         addMod(new FastUse());
         addMod(new Reach());
+        // Player
+        addMod(new InventoryMove());
     }
 
     private void addMod(Module mod) {
@@ -86,15 +85,15 @@ public class ModuleManager {
         this.modules.add(mod);
     }
 
-    public Module getMod(String name) {
+    public static Module getMod(String name) {
         return modules.stream().filter(mod0 -> mod0.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public Module getMod(String name, Category cat) {
+    public static Module getMod(String name, Category cat) {
         return modules.stream().filter(mod0 -> mod0.getName().equalsIgnoreCase(name) && mod0.getCategory() == cat).findFirst().orElse(null);
     }
 
-    public Module getMod(Class<? extends Module> clazz) {
+    public static Module getMod(Class<? extends Module> clazz) {
         return modules.stream().filter(mod0 -> mod0.getClass() == clazz).findFirst().orElse(null);
     }
 
