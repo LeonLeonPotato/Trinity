@@ -1,3 +1,1 @@
-# Trinity
-
-Carried by Zihasz jk, LeonLeonPotato owns you and all!
+retarded readme :) :trol:
