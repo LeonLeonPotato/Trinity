@@ -48,6 +48,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -151,7 +152,8 @@ public class AutoCrystal extends Module {
         autoCrystal();
     }
 
-    @SubscribeEvent public void onRender(RenderWorldLastEvent event) {
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
         if(curPosPlace == null) return;
         Tessellator.drawBBOutline(curPosPlace.base, 3, new Color(255, 255, 255, 255));
     }
@@ -382,35 +384,37 @@ public class AutoCrystal extends Module {
             }
         }
 
-        switch (swingArmBreak.getValue()) {
-            case "Mainhand": {
-                if(packetSwingBreak.getValue())
-                    mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
-                else
-                    mc.player.swingArm(EnumHand.MAIN_HAND);
-                break;
-            }
-            case "Offhand": {
-                if(packetSwingBreak.getValue())
-                    mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.OFF_HAND));
-                else
-                    mc.player.swingArm(EnumHand.OFF_HAND);
-                break;
-            }
-            case "Both": {
-                if(packetSwingBreak.getValue()) {
-                    mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.OFF_HAND));
-                    mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+        if(curBreakCrystal != null) {
+            switch (swingArmBreak.getValue()) {
+                case "Mainhand": {
+                    if (packetSwingBreak.getValue())
+                        mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                    else
+                        mc.player.swingArm(EnumHand.MAIN_HAND);
+                    break;
                 }
-                else {
-                    mc.player.swingArm(EnumHand.MAIN_HAND);
-                    mc.player.swingArm(EnumHand.OFF_HAND);
+                case "Offhand": {
+                    if (packetSwingBreak.getValue())
+                        mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.OFF_HAND));
+                    else
+                        mc.player.swingArm(EnumHand.OFF_HAND);
+                    break;
                 }
-                break;
+                case "Both": {
+                    if (packetSwingBreak.getValue()) {
+                        mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.OFF_HAND));
+                        mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
+                    } else {
+                        mc.player.swingArm(EnumHand.MAIN_HAND);
+                        mc.player.swingArm(EnumHand.OFF_HAND);
+                    }
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
-            default: {
-                break;
-            }
+            curBreakCrystal = null;
         }
     }
 
@@ -452,7 +456,7 @@ public class AutoCrystal extends Module {
         }
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"null", "unused"})
     @EventHandler
     private final Listener<EventPacketSend> sendListener = new Listener<>(event -> {
         if (event.getPacket() instanceof CPacketUseEntity && ((CPacketUseEntity) event.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK && ((CPacketUseEntity) event.getPacket()).getEntityFromWorld(mc.world) instanceof EntityEnderCrystal) {
@@ -623,13 +627,13 @@ public class AutoCrystal extends Module {
         }
     }
 
-    private boolean isBreakValid(Entity entity) {
-        if(nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Destroy")) {
-            if(mc.player.getHealth() <= WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, mc.player) + 1) return false;
-        }
+    private boolean isBreakValid(final Entity entity) {
         if(!(entity instanceof EntityEnderCrystal)) return false;
         if(entity.isDead) return false;
         if(EntityUtils.getRange(entity) > breakRange.getValue()) return false;
+        if(nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Destroy")) {
+            if(mc.player.getHealth() <= WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, mc.player) + 1) return false;
+        }
         switch (rayTraceBreakMode.getValue()) {
             case "Leon":
                 Vec3d vec = RaytraceUtils.rayTraceLeon(entity);
