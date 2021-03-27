@@ -148,11 +148,7 @@ public class KillAura extends Module {
             if(armorMelt.getValue())
                 mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 9, mc.player.inventory.currentItem, ClickType.SWAP, mc.player);
 
-            if(rayTraceMode.getValue().equalsIgnoreCase("Leon")) {
-                attackEntity(target, true, sync.getValue(), packet.getValue(), vec);
-            } else {
-                attackEntity(target, true, sync.getValue(), packet.getValue());
-            }
+            attackEntity(target, true, sync.getValue(), packet.getValue());
 
             if(armorMelt.getValue()) {
                 mc.playerController.windowClick(mc.player.inventoryContainer.windowId, 9, mc.player.inventory.currentItem, ClickType.SWAP, mc.player);
@@ -162,31 +158,15 @@ public class KillAura extends Module {
             if(timer.hasPassed((int) delay.getValue())) {
                 this.timer.reset();
 
-                if(rayTraceMode.getValue().equalsIgnoreCase("Leon"))
-                    attackEntity(target, false, sync.getValue(), packet.getValue(), vec);
-                else
-                    attackEntity(target, false, sync.getValue(), packet.getValue());
+                attackEntity(target, false, sync.getValue(), packet.getValue());
             }
         }
-        //Trinity.LOGGER.info("e");
     }
 
     private void attackEntity(Entity entity, boolean cooldown, boolean sync, boolean packet) {
         if (!cooldown || (mc.player.getCooledAttackStrength(sync ? (20 - TickrateManager.getTPS()) : 0) >= 1)) {
             if (packet)
                 mc.player.connection.sendPacket(new CPacketUseEntity(entity));
-            else
-                mc.playerController.attackEntity(mc.player, entity);
-
-            mc.player.swingArm(EnumHand.MAIN_HAND);
-            mc.player.resetCooldown();
-        }
-    }
-
-    private void attackEntity(Entity entity, boolean cooldown, boolean sync, boolean packet, Vec3d val) {
-        if (!cooldown || (mc.player.getCooledAttackStrength(sync ? (20 - TickrateManager.getTPS()) : 0) >= 1)) {
-            if (packet)
-                mc.player.connection.sendPacket(new CPacketUseEntity(entity, EnumHand.MAIN_HAND, val));
             else
                 mc.playerController.attackEntity(mc.player, entity);
 

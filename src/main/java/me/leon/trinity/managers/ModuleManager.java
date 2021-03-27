@@ -18,7 +18,7 @@ public class ModuleManager {
     public static ArrayList<Module> modules;
 
     public ModuleManager() {
-        this.modules = new ArrayList<>();
+        modules = new ArrayList<>();
 
         // Client
         addMod(new Font());
@@ -33,6 +33,7 @@ public class ModuleManager {
 
         // Misc
         addMod(new NoRotate());
+        addMod(new DiscordRPC());
         addMod(new FreeCam());
         addMod(new ChatSuffix());
         addMod(new FakePlayer());
