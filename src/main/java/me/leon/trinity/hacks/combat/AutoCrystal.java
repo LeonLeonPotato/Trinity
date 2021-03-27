@@ -4,7 +4,6 @@ import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubKeyBinding;
@@ -29,8 +28,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketAnimation;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
@@ -48,7 +45,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -251,12 +247,12 @@ public class AutoCrystal extends Module {
                     if(target instanceof EntityPlayer) {
                         if(!EntityUtils.getArmor((EntityPlayer) target, armorBreakerScale.getValue())) {
                             curPosPlace = null;
-                            return;
-                        } else
-                        a = true;
+                        } else {
+                            a = true;
+                        }
                     }
                 }
-                if(target.getHealth() >= facePlaceMinHealth.getValue() && !a) {
+                if(target.getHealth() > facePlaceMinHealth.getValue() && !a) {
                     curPosPlace = null;
                     return;
                 }

@@ -10,6 +10,9 @@ import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.util.MovementInput;
+import net.minecraft.util.MovementInputFromOptions;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -57,17 +60,14 @@ public class FreeLook extends Module {
     }
 
     private void updateCamera2() {
-        /*
-        double x = (mc.player.posX + (range.getValue() * Math.cos(Math.toRadians(cameraYaw - 90))));
+        double x = (mc.player.posX + (range.getValue() * Math.cos(Math.toRadians(cameraPitch))));
         double z = (mc.player.posY + (range.getValue() * Math.sin(Math.toRadians(cameraPitch))));
         double dist = Math.abs(mc.player.posX - x);
 
-         */
+        double x1 = (mc.player.posX + (dist * Math.cos(Math.toRadians(cameraYaw - 90))));
+        double z1 = (mc.player.posZ + (dist * Math.sin(Math.toRadians(cameraYaw - 90))));
 
-        double x1 = (mc.player.posX + (range.getValue() * Math.cos(Math.toRadians(cameraYaw - 90))));
-        double z1 = (mc.player.posZ + (range.getValue() * Math.sin(Math.toRadians(cameraYaw - 90))));
-
-        camera.setPosition(x1, mc.player.posY, z1);
+        camera.setPosition(x1, z, z1);
     }
 
     @SubscribeEvent
@@ -109,6 +109,7 @@ public class FreeLook extends Module {
         mc.renderViewEntity = mc.player;
         mc.world.removeEntity(camera);
     }
+
 
     @SubscribeEvent
     public void onRenderPlayerPre(RenderPlayerEvent.Pre event)

@@ -4,6 +4,8 @@ import me.leon.trinity.managers.RotationManager;
 import me.leon.trinity.utils.Util;
 import me.leon.trinity.utils.world.Rotation.Rotation;
 import me.leon.trinity.utils.world.Rotation.RotationPriority;
+import me.leon.trinity.utils.world.Rotation.RotationUtils;
+import me.leon.trinity.utils.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -115,7 +117,6 @@ public class BlockUtils implements Util {
         EnumFacing opposite = side.getOpposite();
 
         Vec3d hitVec = new Vec3d(neighbour).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
-        Block neighbourBlock = mc.world.getBlockState(neighbour).getBlock();
 
         if (!mc.player.isSneaking()) {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
@@ -124,7 +125,7 @@ public class BlockUtils implements Util {
         }
 
         if (rotate) {
-            faceVector(hitVec, true);
+            RotationUtils.rotateTowards(hitVec, true, RotationPriority.High);
         }
 
         rightClickBlock(neighbour, hitVec, hand, opposite, packet);
@@ -172,11 +173,6 @@ public class BlockUtils implements Util {
                 mc.player.rotationYaw + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw),
                 mc.player.rotationPitch + MathHelper.wrapDegrees(pitch - mc.player.rotationPitch)
         };
-    }
-
-    public static void faceVector(Vec3d vec, boolean normalizeAngle) {
-        float[] rotations = getLegitRotations(vec);
-        mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0], normalizeAngle ? MathHelper.normalizeAngle((int) rotations[1], 360) : rotations[1], mc.player.onGround));
     }
 
     public static void rightClickBlock(BlockPos pos, Vec3d vec, EnumHand hand, EnumFacing direction, boolean packet) {

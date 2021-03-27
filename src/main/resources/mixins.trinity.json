@@ -8,6 +8,7 @@
     "MixinGuiMainMenu",
     "MixinNetworkManager",
     "MixinRenderLivingBase",
-    "MixinEntity"
+    "MixinEntity",
+    "MixinMovementInputFromOptions"
   ]
 }

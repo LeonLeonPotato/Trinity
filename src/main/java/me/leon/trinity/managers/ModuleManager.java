@@ -8,6 +8,7 @@ import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.hacks.combat.AutoCrystal;
 import me.leon.trinity.hacks.combat.InstantBurrow;
 import me.leon.trinity.hacks.combat.KillAura;
+import me.leon.trinity.hacks.combat.Surround;
 import me.leon.trinity.hacks.exploits.FastUse;
 import me.leon.trinity.hacks.exploits.Reach;
 import me.leon.trinity.hacks.misc.*;
@@ -34,6 +35,7 @@ public class ModuleManager {
         // Combat
         addMod(new KillAura());
         addMod(new AutoCrystal());
+        addMod(new Surround());
         addMod(new InstantBurrow());
 
         // Misc
@@ -49,6 +51,7 @@ public class ModuleManager {
         addMod(new AutoWalk());
         addMod(new IceSpeed());
         addMod(new NoVoid());
+        addMod(new NoSlow());
         addMod(new Parkour());
         addMod(new ReverseStep());
         addMod(new Yaw());
@@ -60,6 +63,7 @@ public class ModuleManager {
         // Exploits
         addMod(new FastUse());
         addMod(new Reach());
+
         // Player
         addMod(new InventoryMove());
     }
