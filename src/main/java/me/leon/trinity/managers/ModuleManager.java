@@ -2,20 +2,13 @@ package me.leon.trinity.managers;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.hacks.client.ClientColor;
-import me.leon.trinity.hacks.client.Font;
-import me.leon.trinity.hacks.combat.AutoCrystal;
-import me.leon.trinity.hacks.combat.InstantBurrow;
-import me.leon.trinity.hacks.combat.KillAura;
-import me.leon.trinity.hacks.combat.Surround;
-import me.leon.trinity.hacks.exploits.FastUse;
-import me.leon.trinity.hacks.exploits.Reach;
+import me.leon.trinity.hacks.client.*;
+import me.leon.trinity.hacks.combat.*;
+import me.leon.trinity.hacks.exploits.*;
 import me.leon.trinity.hacks.misc.*;
 import me.leon.trinity.hacks.movement.*;
-import me.leon.trinity.hacks.player.InventoryMove;
-import me.leon.trinity.hacks.render.FreeLook;
-import me.leon.trinity.hacks.render.FullBright;
+import me.leon.trinity.hacks.player.*;
+import me.leon.trinity.hacks.render.*;
 import me.leon.trinity.setting.Setting;
 
 import java.lang.reflect.Field;
@@ -63,6 +56,7 @@ public class ModuleManager {
         // Exploits
         addMod(new FastUse());
         addMod(new Reach());
+        addMod(new EntityMine());
 
         // Player
         addMod(new InventoryMove());
