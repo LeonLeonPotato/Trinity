@@ -12,10 +12,8 @@ public class DiscordRPC extends Module {
 
     @Override
     public void onEnable() {
-        if (nullCheck())
-            return;
-
-        MessageBus.sendClientMessage("Discord Rich Presence started!", true);
+        if (!nullCheck())
+            MessageBus.sendClientMessage("Discord Rich Presence started!", true);
         RPCHandler.start();
     }
 

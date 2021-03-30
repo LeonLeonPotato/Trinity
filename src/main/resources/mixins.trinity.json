@@ -9,6 +9,13 @@
     "MixinNetworkManager",
     "MixinRenderLivingBase",
     "MixinEntity",
-    "MixinMovementInputFromOptions"
+    "MixinMovementInputFromOptions",
+    "MixinTileSignRenderer",
+    "MixinLayerArmorBase",
+    "MixinEntityRenderer",
+    "MixinTileEntityEnderChestRenderer",
+    "MixinTileEntityChestRenderer",
+    "MixinTileEntityShulkerBoxRenderer",
+    "MixinRenderEntityItem"
   ]
 }

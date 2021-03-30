@@ -10,6 +10,7 @@ import me.leon.trinity.hacks.movement.*;
 import me.leon.trinity.hacks.player.*;
 import me.leon.trinity.hacks.render.*;
 import me.leon.trinity.setting.Setting;
+import me.leon.trinity.hacks.render.NoRender;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -53,8 +54,10 @@ public class ModuleManager {
         // Render
         addMod(new FullBright());
         addMod(new FreeLook());
+        addMod(new NoRender());
 
         // Exploits
+        addMod(new PacketFly());
         addMod(new FastUse());
         addMod(new Reach());
         addMod(new EntityMine());

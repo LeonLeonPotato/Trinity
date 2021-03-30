@@ -42,6 +42,7 @@ public class InstantBurrow extends Module {
     }
 
     public void onUpdate() {
+        if(nullCheck()) return;
         if (InventoryUtil.findHotbarBlock(BlockObsidian.class) == -1) {
             this.setEnabled(false);
             return;
@@ -55,7 +56,7 @@ public class InstantBurrow extends Module {
         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.00133597911214D, mc.player.posZ, true));
         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 1.16610926093821D, mc.player.posZ, true));
 
-        BlockUtils.placeBlock(originalPos, EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), false);
+        BlockUtils.placeBlock(originalPos, EnumHand.MAIN_HAND, rotate.getValue(), packet.getValue(), true);
         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + offset.getValue(), mc.player.posZ, false));
         InventoryUtil.switchToSlot(oldSlot);
         this.setEnabled(false);

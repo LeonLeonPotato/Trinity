@@ -5,6 +5,7 @@ import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
@@ -22,17 +23,17 @@ public class loadConfig {
 
         public static void loadModules(boolean preset) {
             try {
-                for(Module s : Trinity.moduleManager.modules) {
+                for(Module s : ModuleManager.modules) {
                     if(s.isEnabled()) if(preset) s.setEnabled(false);
                 }
 
                 Scanner scanner = new Scanner(Trinity.curPreset.enabledModules);
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
-                    if(Trinity.moduleManager.getMod(line) == null) {
+                    if(ModuleManager.getMod(line) == null) {
                         continue;
                     }
-                    Trinity.moduleManager.getMod(line).setEnabled(true);
+                    ModuleManager.getMod(line).setEnabled(true);
                 }
             } catch (Exception e) {System.out.println("could not find file to load enabled modules from! \n error: \n "); e.printStackTrace();}
         }

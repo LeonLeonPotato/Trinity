@@ -3,14 +3,18 @@ package me.leon.trinity.mixins.mixins;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.main.EventRenderEntityModel;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.mixins.IMixin;
+import me.leon.trinity.hacks.render.NoRender;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -22,16 +26,6 @@ public abstract class MixinRenderLivingBase<T extends EntityLivingBase> extends 
     protected MixinRenderLivingBase(final RenderManager renderManager, final ModelBase modelBaseIn, final float shadowSizeIn) {
         super(renderManager);
     }
-/*
-    @Inject(method = { "renderModel" }, at = @At("HEAD"), cancellable = false)
-    private void renderModelHook(final EntityLivingBase base, final float limbSwing, final float limbSwingAmount, final float ageInTicks, final float netHeadYaw, final float headPitch, final float scale, CallbackInfo info) {
-        if(Trinity.moduleManager.getMod(FreeCam.class).isEnabled()) {
-
-        }
-    }
-
- */
-
 
     @Redirect(method = { "renderModel" }, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
     private void renderModelHook(final ModelBase modelBase, final Entity entityIn, final float limbSwing, final float limbSwingAmount, final float ageInTicks, final float netHeadYaw, final float headPitch, final float scale) {
@@ -41,6 +35,15 @@ public abstract class MixinRenderLivingBase<T extends EntityLivingBase> extends 
         if (!event.isCancelled()) {
             modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
         }
+    }
+
+    @Shadow
+    protected ModelBase mainModel;
+
+    @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
+    private void renderModelWrapper(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, CallbackInfo info) {
+        if (ModuleManager.getMod("NoRender").isEnabled() && NoRender.noCluster.getValue() && entitylivingbaseIn != mc.player && mc.player.getDistance(entitylivingbaseIn) < 1)
+            GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
     }
 
     @Inject(method = { "doRender" }, at = { @At("HEAD") })

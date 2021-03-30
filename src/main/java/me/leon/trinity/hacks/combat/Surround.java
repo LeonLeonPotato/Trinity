@@ -2,6 +2,8 @@ package me.leon.trinity.hacks.combat;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.hacks.exploits.PacketFly;
+import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.Slider;
@@ -54,6 +56,10 @@ public class Surround extends Module {
     public void onUpdate() {
         if(nullCheck()) return;
         if(shift.getValue() && !mc.gameSettings.keyBindSneak.isKeyDown()) {
+            this.draw = null;
+            return;
+        }
+        if(ModuleManager.getMod(PacketFly.class).isEnabled()) {
             this.draw = null;
             return;
         }

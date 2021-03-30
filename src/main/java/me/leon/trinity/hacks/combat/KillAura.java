@@ -17,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
@@ -117,8 +119,8 @@ public class KillAura extends Module {
             }
         }
 
-        int slot = InventoryUtil.find(Items.DIAMOND_SWORD);
-        int slot0 = InventoryUtil.find(Items.DIAMOND_AXE);
+        int slot = InventoryUtil.find(ItemSword.class);
+        int slot0 = InventoryUtil.find(ItemAxe.class);
         if(Switch.getValue().equalsIgnoreCase("Normal")) {
             if(slot != -1) {
                 mc.player.inventory.currentItem = slot;
