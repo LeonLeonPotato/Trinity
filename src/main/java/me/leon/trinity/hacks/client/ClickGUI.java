@@ -47,9 +47,8 @@ public class ClickGUI extends Module {
     @Override
     public void onEnable() {
         mc.displayGuiScreen(Trinity.clickGui);
-        if(background.getValue().equalsIgnoreCase("Blur") || background.getValue().equalsIgnoreCase("Both")) {
-            mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
-        }
+        loadShader();
+        this.setEnabled(false);
     }
 
     @Override
@@ -57,16 +56,29 @@ public class ClickGUI extends Module {
         if(mc.world == null) this.setEnabled(false);
     }
 
+    @EventHandler
+    private final Listener<EventModeChange> toggleListener = new Listener<>(event -> {
+        updateShader(event);
+    });
+
     @Override
-    public void onDisable() {
-        mc.displayGuiScreen(null);
+    public boolean shouldSave() {
+        return false;
+    }
+
+    public static void loadShader() {
+        if(background.getValue().equalsIgnoreCase("Blur") || background.getValue().equalsIgnoreCase("Both")) {
+            mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
+        }
+    }
+
+    public static void stopShader() {
         if(background.getValue().equalsIgnoreCase("Blur") || background.getValue().equalsIgnoreCase("Both")) {
             mc.entityRenderer.getShaderGroup().deleteShaderGroup();
         }
     }
 
-    @EventHandler
-    private final Listener<EventModeChange> toggleListener = new Listener<>(event -> {
+    public static void updateShader(EventModeChange event) {
         if(event.getStage() != EventStage.POST) return;
         if(event.getSet() == background) {
             if(!background.getValue().equalsIgnoreCase("Blur") && !background.getValue().equalsIgnoreCase("Both")) {
@@ -76,10 +88,5 @@ public class ClickGUI extends Module {
                 mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
             }
         }
-    });
-
-    @Override
-    public boolean shouldSave() {
-        return false;
     }
 }

@@ -72,7 +72,7 @@ public class ClickGui extends GuiScreen {
                 c.drag = false;
             }
             mc.displayGuiScreen(null);
-            Trinity.moduleManager.getMod(ClickGUI.class).setEnabled(false);
+            ClickGUI.stopShader();
             return;
         }
 

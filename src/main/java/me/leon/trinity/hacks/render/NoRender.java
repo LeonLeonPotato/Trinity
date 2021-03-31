@@ -25,6 +25,7 @@ public class NoRender extends Module {
     public static Boolean water = new Boolean("Water", true);
     public static Boolean signs = new Boolean("Signs", false);
     public static Boolean armor = new Boolean("Armor", false);
+    public static Boolean weather = new Boolean("Weather", false);
     public static Boolean noCluster = new Boolean("NoCluster", true);
     public static SettingParent storage = new SettingParent("Storage", true, false);
     public static SubBoolean shulkers = new SubBoolean("Shulkers", storage, false);
@@ -33,13 +34,6 @@ public class NoRender extends Module {
 
     public NoRender() {
         super("NoRender", "Prevents rendering of certain stuff", Category.RENDER);
-    }
-
-    @SubscribeEvent
-    public void onRenderOverlay(RenderGameOverlayEvent event) {
-        if(bosslist.getValue() && event.getType() == RenderGameOverlayEvent.ElementType.BOSSHEALTH) {
-            event.setCanceled(true);
-        }
     }
 
     @SubscribeEvent

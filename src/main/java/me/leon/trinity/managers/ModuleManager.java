@@ -23,6 +23,8 @@ public class ModuleManager {
 
         // Client
         addMod(new Font());
+        addMod(new HUD());
+        addMod(new HUDeditor());
         addMod(new ClickGUI());
         addMod(new ClientColor());
 

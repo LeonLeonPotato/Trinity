@@ -151,7 +151,7 @@ public class WorldUtils implements Util {
                 finald = getBlastReduction((EntityLivingBase) entity, getDamageMultiplied(damage), new Explosion(mc.world, null, posX, posY, posZ, 6F, false, true));
             }
         }catch (NullPointerException e){
-
+            e.printStackTrace();
         }
         return (float) finald;
     }

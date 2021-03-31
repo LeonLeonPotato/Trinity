@@ -7,6 +7,7 @@ import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.hud.HUDeditor;
 import me.leon.trinity.managers.*;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.zero.alpine.fork.bus.EventBus;
@@ -45,6 +46,7 @@ public class Trinity {
     public static EventBus settingsDispatcher;
 
     public static ClickGui clickGui;
+    public static HUDeditor hudEditor;
 
     public static CapeManager capeManager;
     public static ModuleManager moduleManager;
@@ -54,6 +56,7 @@ public class Trinity {
     public static FriendManager friendManager;
     public static RotationManager rotationManager;
     public static TickrateManager tickrateManager;
+    public static HudManager hudManager;
 
     public static Preset curPreset;
 
@@ -84,9 +87,11 @@ public class Trinity {
         friendManager = new FriendManager();
         rotationManager = new RotationManager();
         tickrateManager = new TickrateManager();
+        hudManager = new HudManager();
 
         // init gui(s)
         clickGui = new ClickGui();
+        hudEditor = new HUDeditor();
 
         Runtime.getRuntime().addShutdownHook(new saveConfig());
         loadConfig.LoadConfig.loadBinds();
@@ -97,11 +102,11 @@ public class Trinity {
         loadConfig.LoadConfig.loadSearch();
         loadConfig.LoadConfig.loadSettings();
 
-        if(moduleManager.getMod(ClickGUI.class).getKey() == 0) {
-            moduleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
+        if(ModuleManager.getMod(ClickGUI.class).getKey() == 0) {
+            ModuleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
         }
 
-        moduleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
+        ModuleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
     }
 
     @SubscribeEvent

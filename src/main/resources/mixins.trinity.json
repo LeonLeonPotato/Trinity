@@ -16,6 +16,8 @@
     "MixinTileEntityEnderChestRenderer",
     "MixinTileEntityChestRenderer",
     "MixinTileEntityShulkerBoxRenderer",
-    "MixinRenderEntityItem"
+    "MixinRenderEntityItem",
+    "MixinWorld",
+    "MixinGuiBossOverlay"
   ]
 }

@@ -1,9 +1,12 @@
 package me.leon.trinity.hacks.combat;
 
+import com.mojang.authlib.GameProfile;
+import io.netty.util.internal.MathUtil;
 import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubKeyBinding;
@@ -12,6 +15,7 @@ import me.leon.trinity.setting.settings.sub.SubSlider;
 import me.leon.trinity.utils.entity.EntityUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
 import me.leon.trinity.utils.entity.PlayerUtils;
+import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.rendering.Tessellator;
 import me.leon.trinity.utils.world.RaytraceUtils;
 import me.leon.trinity.utils.world.Timer;
@@ -21,6 +25,7 @@ import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockObsidian;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityOtherPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityEnderCrystal;
@@ -47,12 +52,14 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 public class AutoCrystal extends Module {
     // Settings
     public static SettingParent main = new SettingParent("Main", true, false);
+    public static SubBoolean    limit = new SubBoolean("Limit", main, false);
     public static SubSlider iterations = new SubSlider("Iterations", main, 1, 1, 3, true);
     public static SubMode nosuicide = new SubMode("NoSuicide", main, "Both", "Place", "Destroy", "None", "Both");
     public static SubSlider minHealth = new SubSlider("Pause Health", main, 0, 6, 20, true);
@@ -73,6 +80,8 @@ public class AutoCrystal extends Module {
     public static SubBoolean    multiPlace = new SubBoolean("Multiplace", Place, false);
     public static SubBoolean    bounds = new SubBoolean("Bounds", Place, true);
     public static SubBoolean    extraCalc = new SubBoolean("Extra Calc", Place, true);
+    public static SubBoolean    predict = new SubBoolean("Predict", Place, true);
+    public static SubSlider     predictTicks = new SubSlider("Predict Ticks", Place, 0, 3, 10, true);
 
     public static SettingParent Break = new SettingParent("Break", true, true);
     public static SubMode       breakMode = new SubMode("Break Mode", Break, "Smart", "Smart", "All", "Only Own");
@@ -192,7 +201,7 @@ public class AutoCrystal extends Module {
         final boolean oneThirteen = version.getValue().equals("1.13+");
         List<CrystalPosition> poss = WorldUtils.getSphere(PlayerUtils.getPlayerPosFloored(), (float) placeRange.getValue(), (int) placeRange.getValue(), false, true, 0).stream()
                 .filter(pos -> checkPlace(pos, oneThirteen))
-                .map(pos -> new CrystalPosition(WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, mc.player), WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, target), pos))
+                .map(pos -> new CrystalPosition(WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, mc.player), WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, getPredict()), pos))
                 .collect(Collectors.toList());
 
         if(!EntityUtils.isInHole(target)) {
@@ -425,6 +434,13 @@ public class AutoCrystal extends Module {
         if(!placeTimer.hasPassed((int) (placeDelay.getValue() * 50))) {
             return;
         }
+
+        if(EntityUtils.isInHole(target) && limit.getValue()) {
+            if(!placeTimer.hasPassed(700)) {
+                return;
+            }
+        }
+
         placeTimer.reset();
         if(mc.player.getHealth() <= minHealth.getValue()) return;
 
@@ -564,6 +580,23 @@ public class AutoCrystal extends Module {
 
 
 
+
+    private EntityLivingBase getPredict() {
+        if(!predict.getValue() || !(target instanceof EntityPlayer))
+        {
+            return target;
+        }
+
+        final EntityPlayer target0 = (EntityPlayer) target;
+        Vec3d vec = MathUtils.extrapolatePlayerPosition(target0, (int) predictTicks.getValue());
+        EntityOtherPlayerMP pre = new EntityOtherPlayerMP(target0.getEntityWorld(), target0.gameProfile);
+        pre.setHealth(target0.getHealth());
+        pre.inventory.copyInventory(target0.inventory);
+        pre.posX = vec.x;
+        pre.posY = vec.y;
+        pre.posZ = vec.z;
+        return pre;
+    }
 
     private void attackCrystal(int entityId) {
         CPacketUseEntity sequentialCrystal = new CPacketUseEntity();

@@ -1,4 +1,4 @@
-package me.leon.trinity.hacks.exploits;
+package me.leon.trinity.hacks.player;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
@@ -21,7 +21,7 @@ public class FastUse extends Module {
     public static final Boolean everything = new Boolean("Everything", true);
 
     public FastUse() {
-        super("FastUse", "Use items faster", Category.EXPLOITS);
+        super("FastUse", "Use items faster", Category.PLAYER);
     }
 
     @Override

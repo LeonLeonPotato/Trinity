@@ -7,6 +7,7 @@ import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
+import net.minecraft.client.particle.ParticleRain;
 
 import java.util.ArrayList;
 
