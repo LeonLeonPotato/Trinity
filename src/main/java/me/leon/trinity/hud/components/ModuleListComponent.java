@@ -36,9 +36,7 @@ public class ModuleListComponent extends Component {
         map.clear();
         int alphaBefore = this.alpha.alpha;
         boolean up = this.alpha.up;
-        this.rainbow0.updateColor(3);
-        this.rainbow.setMode(rainbow0.getMode());
-        this.rainbow.setColor(rainbow0.getColor().getRed(), rainbow0.getColor().getGreen(), rainbow0.getColor().getBlue());
+        this.rainbow.push();
         for(Module mod : ModuleManager.modules) {
             if(mod.isEnabled() && mod.visible) {
                 map.put(mod, FontUtil.getStringWidth(mod.getName()));
@@ -84,6 +82,8 @@ public class ModuleListComponent extends Component {
             this.alpha.alpha = alphaBefore;
             this.alpha.updateAlpha(3);
         };
+        this.rainbow.pop();
+        this.rainbow.updateColor(3);
     }
 
     @Override
