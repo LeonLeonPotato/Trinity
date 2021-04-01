@@ -34,7 +34,6 @@ public class ModuleManager {
         addMod(new AutoCrystal());
         addMod(new Surround());
         addMod(new InstantBurrow());
-        addMod(new AutoTotem());
         // Misc
         addMod(new NoRotate());
         addMod(new DiscordRPC());
