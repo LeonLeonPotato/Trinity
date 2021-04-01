@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 
 public class RagDollComponent extends Component {
     public RagDollComponent() {
+        super("RagDollComponent");
         visible = true;
         this.x = 0;
         this.y = 0;

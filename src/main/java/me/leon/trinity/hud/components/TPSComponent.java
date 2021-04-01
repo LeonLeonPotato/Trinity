@@ -1,28 +1,25 @@
 package me.leon.trinity.hud.components;
 
 import me.leon.trinity.hud.Component;
+import me.leon.trinity.managers.TickrateManager;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Coloring;
 import net.minecraft.client.Minecraft;
 
-public class FPSComponent extends Component {
-
-    public FPSComponent() {
-        super("FPSComponent");
-        visible = true;
-        this.x = 0;
-        this.y = this.res.getScaledHeight() / 2f;
+public class TPSComponent extends Component {
+    public TPSComponent() {
+        super("TPSComponent");
     }
 
     @Override
     public void render() {
         drawBackground();
-        FontUtil.drawString("FPS: " + Coloring.getWHITE() + Minecraft.getDebugFPS(), this.x + 1, this.y + 1, getTextColor());
+        FontUtil.drawString("TPS: " + Coloring.getWHITE() + TickrateManager.getTPS(), this.x + 1, this.y + 1, getTextColor());
     }
 
     @Override
     public float width() {
-        return FontUtil.getStringWidth("FPS: " + Coloring.getWHITE() + Minecraft.getDebugFPS()) + 3;
+        return FontUtil.getStringWidth("TPS: " + Coloring.getWHITE() + TickrateManager.getTPS()) + 3;
     }
 
     @Override

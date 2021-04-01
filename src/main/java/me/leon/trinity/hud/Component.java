@@ -8,12 +8,17 @@ import net.minecraft.client.gui.ScaledResolution;
 import java.awt.*;
 
 public abstract class Component {
+    public String name;
     public float x, y;
     public boolean dragging;
     public boolean visible;
     protected Minecraft mc = Minecraft.getMinecraft();
     public ScaledResolution res = new ScaledResolution(mc);
     public AnchorPoint anchorPoint = null;
+
+    public Component(String name) {
+        this.name = name;
+    }
 
     public abstract void render();
     public abstract float width();

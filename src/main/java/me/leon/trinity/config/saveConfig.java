@@ -2,7 +2,9 @@ package me.leon.trinity.config;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.components.Frame;
+import me.leon.trinity.hud.Component;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.*;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
@@ -50,7 +52,7 @@ public class saveConfig extends Thread {
                 writer.write(m + "\n");
             }
             writer.close();
-        } catch (Exception e) {Trinity.LOGGER.warn("could not save enabled module settings! " + e);}
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     public static void saveBinds() {
@@ -66,12 +68,12 @@ public class saveConfig extends Thread {
                 writer.write(b + "\n");
             }
             writer.close();
-        } catch (Exception e) {Trinity.LOGGER.warn("could not save module binds! " + e);}
+        } catch (Exception e) {e.printStackTrace();}
     }
 
     public static void saveSettings() {
         ArrayList<String> settings = new ArrayList<>();
-        Trinity.moduleManager.modules.forEach(mod -> {
+        ModuleManager.modules.forEach(mod -> {
             Trinity.settingManager.sets.forEach(set -> {
                 if(set.parent == mod) {
                     if(set instanceof Mode) {
@@ -118,7 +120,7 @@ public class saveConfig extends Thread {
                 writer.write(s + "\n");
             }
             writer.close();
-        } catch (Exception e) { Trinity.LOGGER.warn("could not save settings! " + e); }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     public static void saveSearch() {
@@ -134,17 +136,13 @@ public class saveConfig extends Thread {
     }
 
     public static void saveHud() {
-        /*ArrayList<component> components = new ArrayList<>(componentManager.components);
-
         try {
             PrintWriter writer = new PrintWriter(new FileOutputStream(Trinity.curPreset.HUD, false), true);
-            for(component c : components) {
-                writer.write(c.name + ":" + c.getX() + ":" + c.getY() + ":" + c.isEnabled() + "\n");
+            for(Component c : Trinity.hudManager.comps) {
+                writer.write(c.name + ":" + c.x + ":" + c.y + ":" + c.visible + ":" + c.anchorPoint.name() + "\n");
             }
             writer.close();
-        } catch (Exception e) { Trinity.LOGGER.warn("could not save HUD settings! " + e); }
-
-         */
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     public static void saveFriends() {

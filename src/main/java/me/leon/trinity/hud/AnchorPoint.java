@@ -1,5 +1,5 @@
 package me.leon.trinity.hud;
 
 public enum AnchorPoint {
-    TOPRIGHT, TOPLEFT, BOTTOMRIGHT, BOTTOMLEFT, CENTER;
+    TOPRIGHT, TOPLEFT, BOTTOMRIGHT, BOTTOMLEFT;
 }

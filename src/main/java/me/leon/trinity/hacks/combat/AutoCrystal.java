@@ -97,7 +97,7 @@ public class AutoCrystal extends Module {
 
     public static SettingParent timing = new SettingParent("Timing", true, false);
     // ˇˇ This is bullshit by the way
-    public static SubMode       timingMode = new SubMode("Mode", timing, "Fast", "Tick", "Fast");
+    public static SubMode       timingMode = new SubMode("Mode", timing, "Tick", "Tick", "Fast");
     public static SubBoolean    sequential = new SubBoolean("Sequential", timing, true);
     public static SubBoolean    nowait = new SubBoolean("GodMode", timing, false);
 
@@ -716,7 +716,7 @@ public class AutoCrystal extends Module {
         }
 
         final EntityPlayer target0 = (EntityPlayer) target;
-        Vec3d vec = MathUtils.extrapolatePlayerPosition(target0, (int) predictTicks.getValue());
+        final Vec3d vec = MathUtils.extrapolatePlayerPosition(target0, (int) predictTicks.getValue());
         EntityOtherPlayerMP pre = new EntityOtherPlayerMP(target0.getEntityWorld(), target0.gameProfile);
         pre.setHealth(target0.getHealth());
         pre.inventory.copyInventory(target0.inventory);

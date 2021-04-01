@@ -1,6 +1,8 @@
 package me.leon.trinity.utils.misc;
 
+import io.netty.util.internal.MathUtil;
 import me.leon.trinity.utils.Util;
+import me.leon.trinity.utils.math.MathUtils;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.IResourceManager;
@@ -54,7 +56,10 @@ public class FontRender extends FontRenderer implements Util {
         }
 
         if (dropShadow)
-            this.drawText(text, x + 0.4f, currY + 0.3f, new Color(0, 0, 0, 150).getRGB(), true);
+        {
+            final Color c = new Color(color);
+            this.drawText(text, x + 0.4f, currY + 0.3f, new Color(0, 0, 0, (int) MathUtils.clamp(0, 255, c.getAlpha() - 100)).getRGB(), true);
+        }
 
         return this.drawText(text, x, currY, color, false);
     }

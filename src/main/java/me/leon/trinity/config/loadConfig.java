@@ -4,7 +4,10 @@ import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.components.Frame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.hud.AnchorPoint;
+import me.leon.trinity.hud.Component;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.managers.HudManager;
 import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.*;
@@ -45,10 +48,10 @@ public class loadConfig {
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     String[] string = line.split(":");
-                    if(Trinity.moduleManager.getMod(string[0]) == null) {
+                    if(ModuleManager.getMod(string[0]) == null) {
                         continue;
                     }
-                    Trinity.moduleManager.getMod(string[0]).setKey((Integer.parseInt(string[1])));
+                    ModuleManager.getMod(string[0]).setKey((Integer.parseInt(string[1])));
                 }
 
             } catch (Exception e) {Trinity.LOGGER.info("could not find file to load module binds from! \n error code: \n"); e.printStackTrace();}
@@ -123,21 +126,20 @@ public class loadConfig {
         }
 
         public static void loadHud() {
-            /*try {
+            try {
                 Scanner scanner = new Scanner(Trinity.curPreset.HUD);
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
                     String[] hud = line.split(":");
 
-                    component c = componentManager.getCompByName(hud[0]);
-                    c.setX(Float.parseFloat(hud[1]));
-                    c.setY(Float.parseFloat(hud[2]));
-                    c.setEnabled(Boolean.parseBoolean(hud[3]));
+                    Component c = Trinity.hudManager.getComponentByName(hud[0]);
+                    if(c == null) continue;
+                    c.x = (Float.parseFloat(hud[1]));
+                    c.y = (Float.parseFloat(hud[2]));
+                    c.visible = (java.lang.Boolean.parseBoolean(hud[3]));
+                    c.anchorPoint = AnchorPoint.valueOf(hud[4]);
                 }
-
             } catch (Exception e) {e.printStackTrace();}
-
-             */
         }
 
         public static void loadFriends() {

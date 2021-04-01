@@ -10,6 +10,11 @@ public class Rainbow {
     private int b;
     private modes mode;
 
+    private int tr;
+    private int tg;
+    private int tb;
+    private modes tMode;
+
     public Rainbow() {
         this.r = 255;
         this.g = 0;
@@ -49,13 +54,35 @@ public class Rainbow {
         return new Color(r, g, b);
     }
 
+    public void setMode(modes mode) {
+        this.mode = mode;
+    }
+
+    public modes getMode() {
+        return mode;
+    }
+
+    public void push() {
+        this.tr = r;
+        this.tg = g;
+        this.tb = b;
+        this.tMode = mode;
+    }
+
+    public void pop() {
+        this.r = tr;
+        this.g = tg;
+        this.b = tb;
+        this.mode = tMode;
+    }
+
     public void setColor(int r, int g, int b) {
         this.r = r;
         this.g = g;
         this.b = b;
     }
 
-    private enum modes {
+    public enum modes {
         RED_U,
         GREEN_U,
         BLUE_U,
