@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class HUDeditor extends GuiScreen {
     public float dragX, dragY;
@@ -35,15 +36,17 @@ public class HUDeditor extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         if(ClickGUI.background.getValue().equalsIgnoreCase("Darken") || ClickGUI.background.getValue().equalsIgnoreCase("Both")) this.drawDefaultBackground();
+        
+        final ScaledResolution sr = new ScaledResolution(mc);
+        final HashMap<Point, AnchorPoint> map = new HashMap<>();
+        //map.put(new Point(sr.getScaledWidth() / 2, sr.getScaledHeight() / 2), AnchorPoint.CENTER);
+        map.put(new Point(0, 0), AnchorPoint.TOPLEFT);
+        map.put(new Point(sr.getScaledWidth(), 0), AnchorPoint.TOPRIGHT);
+        map.put(new Point(0, sr.getScaledHeight()), AnchorPoint.BOTTOMLEFT);
+        map.put(new Point(sr.getScaledWidth(), sr.getScaledHeight()), AnchorPoint.BOTTOMRIGHT);
+        
         for(Component comp : Trinity.hudManager.comps) {
-            comp.res = new ScaledResolution(mc);
-
-            final Point[] anchorPoints = new Point[] {
-                    new Point(0, 0),
-                    new Point(comp.res.getScaledWidth(), 0),
-                    new Point(0, comp.res.getScaledHeight()),
-                    new Point(comp.res.getScaledWidth(), comp.res.getScaledHeight())
-            };
+            comp.res = sr;
 
             if(comp.visible) {
                 comp.render();
@@ -54,17 +57,38 @@ public class HUDeditor extends GuiScreen {
                 float y = mouseY - dragY;
 
                 if(me.leon.trinity.hacks.client.HUDeditor.anchor.getValue()) {
-                    for(Point p : anchorPoints) {
+                    boolean b = false;
+                    for(Point p : map.keySet()) {
                         if(intersects(p.x - 10, p.y - 10, p.x + 10, p.y + 10, x, y, comp.width(), comp.height())) { // with blood and tears ):
-                            x = p.x;
-                            y = p.y;
+                            final AnchorPoint a = map.get(p);
+                            if(a == AnchorPoint.BOTTOMLEFT) {
+                                y = p.y - comp.height();
+                                x = p.x;
+                            } else
+                            if(a == AnchorPoint.BOTTOMRIGHT){
+                                y = p.y - comp.height();
+                                x = p.x - comp.width();
+                            } else
+                            if(a == AnchorPoint.TOPRIGHT) {
+                                y = p.y;
+                                x = p.x - comp.width();
+                            } else {
+                                x = p.x;
+                                y = p.y;
+                            }
+                            b = true;
+                            comp.anchorPoint = map.get(p);
                         }
+                    }
+                    if(!b) {
+                        comp.anchorPoint = null;
                     }
                 }
                 if(me.leon.trinity.hacks.client.HUDeditor.clamp.getValue()) {
                     x = (float) MathUtils.clamp(0, comp.res.getScaledWidth(), x, comp.width());
                     y = (float) MathUtils.clamp(0, comp.res.getScaledHeight(), y, comp.height());
                 }
+
                 comp.x = x;
                 comp.y = y;
             }

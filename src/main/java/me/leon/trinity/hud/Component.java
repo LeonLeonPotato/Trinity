@@ -13,6 +13,7 @@ public abstract class Component {
     public boolean visible;
     protected Minecraft mc = Minecraft.getMinecraft();
     public ScaledResolution res = new ScaledResolution(mc);
+    public AnchorPoint anchorPoint = null;
 
     public abstract void render();
     public abstract float width();

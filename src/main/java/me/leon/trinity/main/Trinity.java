@@ -114,7 +114,7 @@ public class Trinity {
         if(Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
             if(Keyboard.isCreated()) {
                 if(Keyboard.getEventKeyState()) {
-                    if (Keyboard.getEventKey() == Keyboard.KEY_NONE || Keyboard.getEventCharacter() == Keyboard.CHAR_NONE) return;
+                    //if (Keyboard.getEventKey() == Keyboard.KEY_NONE || Keyboard.getEventCharacter() == Keyboard.CHAR_NONE) return;
                     for(Module mod : moduleManager.modules) {
                         if(mod.getKey() == Keyboard.getEventKey()) {
                             mod.toggle();
