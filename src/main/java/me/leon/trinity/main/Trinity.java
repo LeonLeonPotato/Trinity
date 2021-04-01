@@ -7,6 +7,7 @@ import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.hacks.client.Zihasz;
 import me.leon.trinity.hud.HUDeditor;
 import me.leon.trinity.managers.*;
 import me.leon.trinity.utils.misc.FontUtil;
@@ -114,8 +115,10 @@ public class Trinity {
         if(Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
             if(Keyboard.isCreated()) {
                 if(Keyboard.getEventKeyState()) {
-                    //if (Keyboard.getEventKey() == Keyboard.KEY_NONE || Keyboard.getEventCharacter() == Keyboard.CHAR_NONE) return;
-                    for(Module mod : moduleManager.modules) {
+                    if(ModuleManager.getMod(Zihasz.class).isEnabled())
+                        if (Keyboard.getEventKey() == Keyboard.KEY_NONE || Keyboard.getEventCharacter() == Keyboard.CHAR_NONE)
+                            return;
+                    for(Module mod : ModuleManager.modules) {
                         if(mod.getKey() == Keyboard.getEventKey()) {
                             mod.toggle();
                         }

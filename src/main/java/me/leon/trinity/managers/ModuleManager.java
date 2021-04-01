@@ -26,6 +26,7 @@ public class ModuleManager {
         addMod(new HUD());
         addMod(new HUDeditor());
         addMod(new ClickGUI());
+        addMod(new Zihasz());
         addMod(new ClientColor());
 
         // Combat
