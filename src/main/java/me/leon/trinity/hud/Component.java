@@ -1,7 +1,11 @@
 package me.leon.trinity.hud;
 
+import me.leon.trinity.hacks.client.HUDeditor;
+import me.leon.trinity.utils.rendering.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+
+import java.awt.*;
 
 public abstract class Component {
     public float x, y;
@@ -30,6 +34,17 @@ public abstract class Component {
     }
 
     public boolean ButtonCheck(float x, float y, float w, float h, int mX, int mY) {
-        return mX > x && mX < (x + w) && mY > y && mY < (y + h);
+        return mX >= x && mX <= (x + w) && mY >= y && mY <= (y + h);
+    }
+
+    public void drawBackground() {
+        if(HUDeditor.background.getValue())
+            drawBox((int) (this.x + width()) + 1, (int) (this.y + height() + 1), (int) this.x - 1, (int) this.y - 1, HUDeditor.color.getValue());
+    }
+
+    protected int getTextColor() { return HUDeditor.textColor.getValue().getRGB(); }
+
+    public void drawBox(int x, int y, int x1, int y1, Color color) {
+        RenderUtils.drawRect(x, y, x1, y1, color);
     }
 }

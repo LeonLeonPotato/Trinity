@@ -1,17 +1,13 @@
 package me.leon.trinity.hacks.combat;
 
-import com.mojang.authlib.GameProfile;
-import io.netty.util.internal.MathUtil;
+import io.netty.util.internal.ConcurrentSet;
 import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
-import me.leon.trinity.setting.settings.sub.SubBoolean;
-import me.leon.trinity.setting.settings.sub.SubKeyBinding;
-import me.leon.trinity.setting.settings.sub.SubMode;
-import me.leon.trinity.setting.settings.sub.SubSlider;
+import me.leon.trinity.setting.settings.Slider;
+import me.leon.trinity.setting.settings.sub.*;
 import me.leon.trinity.utils.entity.EntityUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
 import me.leon.trinity.utils.entity.PlayerUtils;
@@ -50,9 +46,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
@@ -114,6 +111,14 @@ public class AutoCrystal extends Module {
     public static SubSlider     facePlaceMinHealth = new SubSlider("Min Health", faceplace, 0, 8, 36, true);
     public static SubSlider     facePlaceMinDamage = new SubSlider("Min Damage", faceplace, 0, 2.4, 8, false);
 
+    public static SettingParent rendering = new SettingParent("Rendering", true, false);
+    public static SubMode renderMode = new SubMode("RenderMode", rendering, "Claw", "Claw", "Outline", "Fill", "Both", "Slab");
+    public static SubSlider renderWidth = new SubSlider("Width", rendering, 0.1, 1.5, 3, false);
+    public static SubSlider renderHeight = new SubSlider("Height", rendering, 0.1, 1.5, 0.5, false);
+    public static SubColor outlineColor = new SubColor("OutLine Color", rendering, 0, 255, 255, 255, false);
+    public static SubColor fillColor = new SubColor("Fill Color", rendering, 0, 255, 255, 0, false);
+    public static SubBoolean renderDamage = new SubBoolean("Render Damage", rendering, true);
+
     public static SettingParent targeting = new SettingParent("Targeting", true, false);
     public static SubMode targetingMode = new SubMode("Mode", targeting, "Closest", "Closest", "Lowest Health", "Highest Health");
     public static SubSlider targetRange = new SubSlider("Range", targeting, 0.5, 5, 10, false);
@@ -124,7 +129,7 @@ public class AutoCrystal extends Module {
     public static SubBoolean hostile = new SubBoolean("Hostile", targeting, true);
 
     // Variables
-    private static ConcurrentLinkedDeque<BlockPos> placedCrystals; // i just need the concurrency lol
+    private static Set<BlockPos> placedCrystals;
     private static CrystalPosition curPosPlace;
     private static EntityEnderCrystal curBreakCrystal;
     public static EntityLivingBase target;
@@ -134,7 +139,7 @@ public class AutoCrystal extends Module {
 
     public AutoCrystal() {
         super("AutoCrystal", "Nagasaki", Category.COMBAT);
-        placedCrystals = new ConcurrentLinkedDeque<>();
+        placedCrystals = new ConcurrentSet<>();
     }
 
     @SubscribeEvent public void onFast(TickEvent event) {
@@ -160,7 +165,7 @@ public class AutoCrystal extends Module {
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if(curPosPlace == null) return;
-        Tessellator.drawBBOutline(curPosPlace.base, 3, new Color(255, 255, 255, 255));
+        Tessellator.drawBBOutline(curPosPlace.base, (float) renderWidth.getValue(), outlineColor.getValue());
     }
 
     /**

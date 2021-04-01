@@ -29,7 +29,7 @@ public class Slider extends Component {
 
     @Override
     public void render() {
-        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, ClickGUI.backgroundColor.getValue());
         RenderUtils.drawRect((float) (this.parent.parent.x + renderWidth + 5), this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x + 5, this.parent.parent.y + this.parent.offset + this.offset + 14, ClickGUI.sliderColor.getValue());
         FontUtil.drawString(this.set.name + ": " + Coloring.getWHITE() + this.set.getValue(), this.parent.parent.x + 7, this.parent.parent.y + this.offset + this.parent.offset + 14 + ((14 - FontUtil.getFontHeight())) / 2f, ClickGUI.nameColorSetting.getValue().getRGB());
     }

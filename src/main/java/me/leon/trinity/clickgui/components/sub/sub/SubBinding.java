@@ -38,7 +38,7 @@ public class SubBinding extends Component {
         if(this.keyTimer >= 46) {
             this.keyTimer = 0;
         }
-        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14, this.parent.parent.parent.x, trueY, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14, this.parent.parent.parent.x, trueY, ClickGUI.backgroundColor.getValue());
         FontUtil.drawString(this.binding ? "Listening" + determineDots(keyTimer) : set.name + ": " + Coloring.getWHITE() + Keyboard.getKeyName(set.Char), this.parent.parent.parent.x + 13, this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + 14 + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
     }
 

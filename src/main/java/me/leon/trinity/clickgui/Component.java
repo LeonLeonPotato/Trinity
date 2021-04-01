@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 public abstract class Component {
-    protected final FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
     protected final Minecraft mc = Minecraft.getMinecraft();
 
     public abstract void render();

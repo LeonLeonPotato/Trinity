@@ -14,10 +14,10 @@ public class MathUtils implements Util {
     }
 
     public static double clamp(double min, double max, double val ,double height) {
-        if(val < min || max < min) {
+        if(val <= min || max <= min) {
             return min;
         }
-        if(val + height > max || min > max) {
+        if(val + height >= max || min >= max) {
             return max - height;
         }
         return val;

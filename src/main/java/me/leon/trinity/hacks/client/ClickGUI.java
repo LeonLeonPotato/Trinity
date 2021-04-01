@@ -33,6 +33,7 @@ public class ClickGUI extends Module {
     public static SubColor enabledColor = new SubColor("Enabled Color", button, 97, 97, 97, 200, true);
 
     public static SettingParent settings = new SettingParent("Settings", true, false);
+    public static SubColor backgroundColor = new SubColor("Background Color", settings, 43, 43, 43, 200, false);
     public static SubColor nameColorSetting = new SubColor("Setting Name", settings, 169, 183, 198, 255, false);
     public static SubColor disabledBooleanColor = new SubColor("Disabled Color", settings, 43, 43, 43, 200, false);
     public static SubColor enabledBooleanColor = new SubColor("Enabled Color", settings, 97, 97, 97, 200, true);

@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 
 public class RagDollComponent extends Component {
-
     public RagDollComponent() {
         visible = true;
         this.x = 0;
@@ -15,7 +14,7 @@ public class RagDollComponent extends Component {
 
     @Override
     public void render() {
-        if(nullCheck()) return;
+        drawBackground();
         GlStateManager.disableRescaleNormal();
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();

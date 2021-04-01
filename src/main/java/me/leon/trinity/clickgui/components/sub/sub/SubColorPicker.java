@@ -49,11 +49,11 @@ public class SubColorPicker extends Component {
     public void render() {
         int trueY = this.parent.parent.parent.y + this.parent.parent.offset + this.parent.offset + this.offset + 14;
         
-        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14, this.parent.parent.parent.x, trueY + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14, this.parent.parent.parent.x, trueY + 14, ClickGUI.backgroundColor.getValue());
         FontUtil.drawString(this.set.name, this.parent.parent.parent.x + 13, trueY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
         RenderUtils.drawRect(this.parent.parent.parent.x + (ClickGui.width - 5), trueY + 14 + 12, this.parent.parent.parent.x + (ClickGui.width - 15), trueY + 14 + 2, this.set.getValue());
         if(this.open) {
-            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14 + 130, this.parent.parent.parent.x, trueY + 14 + 14, new Color(0x2b2b2b));
+            RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14 + 130, this.parent.parent.parent.x, trueY + 14 + 14, ClickGUI.backgroundColor.getValue());
 
             RenderUtils.drawAlphaRect(this.parent.parent.parent.x + 8 + 7, trueY + 14 + 14 + 70, 67, 10, this.set.getValue());
             RenderUtils.drawRect(this.parent.parent.parent.x + 8 + renderAtAlpha + 1 + 7, trueY + 14 + 14 + 81, this.parent.parent.parent.x + 8 + renderAtAlpha - 1 + 7, trueY + 14 + 14 + 69, new Color(0xa9b7c6));

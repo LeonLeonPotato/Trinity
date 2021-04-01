@@ -86,7 +86,7 @@ public class ModuleManager {
             e.printStackTrace();
         }
 
-        this.modules.add(mod);
+        modules.add(mod);
     }
 
     public static Module getMod(String name) {

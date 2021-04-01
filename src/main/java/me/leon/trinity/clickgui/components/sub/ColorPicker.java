@@ -47,11 +47,11 @@ public class ColorPicker extends Component {
     public void render() {
         final int trueY = this.parent.parent.y + this.parent.offset + this.offset + 14 + 14;
         
-        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, new Color(0x2b2b2b));
+        RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, ClickGUI.backgroundColor.getValue());
         FontUtil.drawString(this.set.name, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + this.offset + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
         RenderUtils.drawRect((float) (this.parent.parent.x + (ClickGUI.width.getValue() - 5)), this.parent.parent.y + this.parent.offset + this.offset + 14 + 12, (float) (this.parent.parent.x + (ClickGUI.width.getValue() - 15)), this.parent.parent.y + this.parent.offset + this.offset + 14 + 2, this.set.getValue());
         if(this.open) {
-            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY + 135, this.parent.parent.x, trueY, new Color(0x2b2b2b));
+            RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY + 135, this.parent.parent.x, trueY, ClickGUI.backgroundColor.getValue());
 
             RenderUtils.drawAlphaRect(this.parent.parent.x + 8, trueY + 70, 67, 10, this.set.getValue());
             RenderUtils.drawRect(this.parent.parent.x + 8 + renderAtAlpha + 1, trueY + 81, this.parent.parent.x + 8 + renderAtAlpha - 1, trueY + 69, new Color(0xa9b7c6));
@@ -99,7 +99,7 @@ public class ColorPicker extends Component {
             this.circlePos[1] = (float) y;
         }
         if(draggingAlpha) {
-            this.renderAtAlpha = Math.min(60, Math.max(7, mouseX - (this.parent.parent.x + 15)));
+            this.renderAtAlpha = Math.min(67, Math.max(7, mouseX - (this.parent.parent.x + 7)));
             this.set.a = ((int) ((renderAtAlpha / 67) * 255));
         }
         if(draggingColor || draggingHue || saveRainbow) {

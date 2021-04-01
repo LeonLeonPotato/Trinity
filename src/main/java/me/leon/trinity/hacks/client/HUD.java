@@ -23,9 +23,7 @@ public class HUD extends Module {
         for(Component c : Trinity.hudManager.comps) {
             c.res = new ScaledResolution(mc);
             if(c.visible) {
-                //GlStateManager.pushMatrix();
                 c.render();
-                //GlStateManager.popMatrix();
             }
         }
     }
