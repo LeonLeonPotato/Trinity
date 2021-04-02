@@ -50,7 +50,7 @@ public abstract class Component {
 
     protected int getTextColor() { return HUDeditor.textColor.getValue().getRGB(); }
 
-    public void drawBox(int x, int y, int x1, int y1, Color color) {
+    public void drawBox(float x, float y, float x1, float y1, Color color) {
         RenderUtils.drawRect(x, y, x1, y1, color);
     }
 }

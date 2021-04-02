@@ -8,6 +8,7 @@ import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.Color;
 import me.leon.trinity.setting.settings.SettingParent;
+import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubColor;
 import me.leon.trinity.setting.settings.sub.SubMode;
 import me.zero.alpine.fork.listener.EventHandler;
@@ -22,7 +23,10 @@ public class HUDeditor extends Module {
 
     public static SettingParent MLC = new SettingParent("ModuleList", true, true);
     public static SubMode MLCMode = new SubMode("Mode", MLC, "AlphaPulse", "Rainbow", "AlphaPulse", "AlphaPulseStatic", "RainbowStatic", "Static");
+    public static SubMode MLCBackground = new SubMode("MLCBackground", MLC, "Lines", "Lines", "None", "Fill");
+    public static SubBoolean MLCLine = new SubBoolean("Line", MLC, true);
     public static SubColor MLCcolor = new SubColor("Color", MLC, 255, 255, 0, 255, true);
+    public static SubColor MLCBackgroundColor = new SubColor("Background", MLC, 97, 97, 97, 97, false);
 
     public HUDeditor() {
         super("HUDeditor", "Edit the HUD", Category.CLIENT);

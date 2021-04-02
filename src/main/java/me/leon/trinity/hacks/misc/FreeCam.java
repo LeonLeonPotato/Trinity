@@ -247,7 +247,13 @@ public class FreeCam extends Module {
         @Override
         public boolean isInvisibleToPlayer(@NotNull EntityPlayer player)
         {
-            return player != mc.player || !mode.getValue().equalsIgnoreCase("Camera");
+            if(mode.getValue().equalsIgnoreCase("Camera")) {
+                return true;
+            }
+            if(mode.getValue().equalsIgnoreCase("Normal")) {
+                return player != mc.player;
+            }
+            return false;
         }
 
         @Override

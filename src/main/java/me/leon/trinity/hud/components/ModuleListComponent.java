@@ -1,7 +1,9 @@
 package me.leon.trinity.hud.components;
 
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.hacks.client.HUD;
 import me.leon.trinity.hacks.client.HUDeditor;
+import me.leon.trinity.hud.AnchorPoint;
 import me.leon.trinity.hud.Component;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.ModuleManager;
@@ -18,8 +20,9 @@ public class ModuleListComponent extends Component {
     public ModuleListComponent() {
         super("ModuleListComponent");
         this.visible = true;
-        this.x = 400;
-        this.y = 400;
+        this.x = res.getScaledWidth();
+        this.y = 0;
+        this.anchorPoint = AnchorPoint.TOPRIGHT;
     }
 
     private HashMap<Module, Float> map = new HashMap<>();
@@ -27,11 +30,11 @@ public class ModuleListComponent extends Component {
     private final Alpha alpha = new Alpha();
     private boolean updated = false;
     private final Rainbow rainbow = new Rainbow();
-    private final Rainbow rainbow0 = new Rainbow();
 
     @Override
     public void render() {
-        this.drawBackground();
+        if(HUDeditor.MLCBackground.getValue().equalsIgnoreCase("Fill"))
+            this.drawBackground();
         yL = 0;
         map.clear();
         int alphaBefore = this.alpha.alpha;
@@ -46,7 +49,15 @@ public class ModuleListComponent extends Component {
             case TOPRIGHT: {
                 map = sortByValue(map, false);
                 for(Module mod : map.keySet()) {
-                    FontUtil.drawString(mod.getName(), (this.x + this.width()) - FontUtil.getStringWidth(mod.getName()), this.y + yL + 1, getColor().getRGB());
+                    final Color color = getColor();
+                    final float a = (this.x + this.width()) - FontUtil.getStringWidth(mod.getName());
+                    if(HUDeditor.MLCLine.getValue()) {
+                        drawBox(a - 1, this.y + yL + FontUtil.getFontHeight(), a - 3, this.y + yL, color);
+                    }
+                    if(HUDeditor.MLCBackground.getValue().equalsIgnoreCase("Lines")) {
+                        drawBox((this.x + this.width()), this.y + yL + FontUtil.getFontHeight(), a - 1, this.y + yL, HUDeditor.MLCBackgroundColor.getValue());
+                    }
+                    FontUtil.drawString(mod.getName(), a, this.y + yL + 1, color.getRGB());
                     yL += FontUtil.getFontHeight();
                 }
                 break;
@@ -54,7 +65,15 @@ public class ModuleListComponent extends Component {
             case TOPLEFT: {
                 map = sortByValue(map, false);
                 for(Module mod : map.keySet()) {
-                    FontUtil.drawString(mod.getName(), this.x, this.y + yL + 1, getColor().getRGB());
+                    final Color color = getColor();
+                    final float a = this.x + FontUtil.getStringWidth(mod.getName());
+                    if(HUDeditor.MLCLine.getValue()) {
+                        drawBox(a + 3, this.y + yL + FontUtil.getFontHeight(), a + 1, this.y + yL, color);
+                    }
+                    if(HUDeditor.MLCBackground.getValue().equalsIgnoreCase("Lines")) {
+                        drawBox(a + 1, this.y + yL + FontUtil.getFontHeight(), this.x, this.y + yL, HUDeditor.MLCBackgroundColor.getValue());
+                    }
+                    FontUtil.drawString(mod.getName(), this.x, this.y + yL + 1, color.getRGB());
                     yL += FontUtil.getFontHeight();
                 }
                 break;
@@ -62,6 +81,14 @@ public class ModuleListComponent extends Component {
             case BOTTOMRIGHT: {
                 map = sortByValue(map, true);
                 for(Module mod : map.keySet()) {
+                    final Color color = getColor();
+                    final float a = (this.x + this.width()) - FontUtil.getStringWidth(mod.getName());
+                    if(HUDeditor.MLCLine.getValue()) {
+                        drawBox(a - 1, this.y + yL + FontUtil.getFontHeight(), a - 3, this.y + yL, color);
+                    }
+                    if(HUDeditor.MLCBackground.getValue().equalsIgnoreCase("Lines")) {
+                        drawBox((this.x + this.width()), this.y + yL + FontUtil.getFontHeight(), a - 1, this.y + yL, HUDeditor.MLCBackgroundColor.getValue());
+                    }
                     FontUtil.drawString(mod.getName(), (this.x + this.width()) - FontUtil.getStringWidth(mod.getName()), this.y + yL + 1, getColor().getRGB());
                     yL += FontUtil.getFontHeight();
                 }
@@ -70,6 +97,14 @@ public class ModuleListComponent extends Component {
             case BOTTOMLEFT: {
                 map = sortByValue(map, true);
                 for(Module mod : map.keySet()) {
+                    final Color color = getColor();
+                    final float a = this.x + FontUtil.getStringWidth(mod.getName());
+                    if(HUDeditor.MLCLine.getValue()) {
+                        drawBox(a + 3, this.y + yL + FontUtil.getFontHeight(), a + 1, this.y + yL, color);
+                    }
+                    if(HUDeditor.MLCBackground.getValue().equalsIgnoreCase("Lines")) {
+                        drawBox(a + 1, this.y + yL + FontUtil.getFontHeight(), this.x, this.y + yL, HUDeditor.MLCBackgroundColor.getValue());
+                    }
                     FontUtil.drawString(mod.getName(), this.x, this.y + yL + 1, getColor().getRGB());
                     yL += FontUtil.getFontHeight();
                 }
@@ -131,7 +166,7 @@ public class ModuleListComponent extends Component {
                 max = a;
             }
         }
-        return max;
+        return max + (HUDeditor.MLCLine.getValue() ? 3 : 0);
     }
 
     private Color getColor() {
