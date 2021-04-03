@@ -28,6 +28,10 @@ public class FastUse extends Module {
     public void onUpdate() {
         if(nullCheck()) return;
 
+        if(everything.getValue()) {
+            mc.rightClickDelayTimer = 0;
+        }
+        
         if(exp.getValue()) {
             if(mc.player.getHeldItemMainhand().getItem() instanceof ItemExpBottle || mc.player.getHeldItemOffhand().getItem() instanceof ItemExpBottle) {
                 mc.rightClickDelayTimer = 0;
@@ -56,10 +60,6 @@ public class FastUse extends Module {
             if((Block.getBlockFromItem(mc.player.getHeldItemMainhand().getItem()) == Blocks.ENDER_CHEST || Block.getBlockFromItem(mc.player.getHeldItemOffhand().getItem()) == Blocks.ENDER_CHEST)) {
                 mc.rightClickDelayTimer = 0;
             }
-        }
-
-        if(everything.getValue()) {
-            mc.rightClickDelayTimer = 0;
         }
     }
 }
