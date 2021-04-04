@@ -28,6 +28,9 @@ public class HUDeditor extends Module {
     public static SubColor MLCcolor = new SubColor("Color", MLC, 255, 255, 0, 255, true);
     public static SubColor MLCBackgroundColor = new SubColor("Background", MLC, 97, 97, 97, 97, false);
 
+    public static SettingParent Coords = new SettingParent("Coords", true, true);
+    public static SubBoolean netherCoords = new SubBoolean("Nether", MLC, true);
+
     public HUDeditor() {
         super("HUDeditor", "Edit the HUD", Category.CLIENT);
     }

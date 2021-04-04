@@ -36,6 +36,10 @@ public class Velocity extends Module {
         }
 
         if(event.getPacket() instanceof SPacketEntityVelocity) {
+            if(x.getValue() == 0 && z.getValue() == 0 && y.getValue() == 0) {
+                event.cancel();
+                return;
+            }
             SPacketEntityVelocity packet = (SPacketEntityVelocity) event.getPacket();
             if(packet.entityID == mc.player.entityId)
             {

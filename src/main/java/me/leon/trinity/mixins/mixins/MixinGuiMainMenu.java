@@ -17,6 +17,6 @@ public class MixinGuiMainMenu extends GuiScreen {
 
     @Inject(method = "drawScreen", at = @At("TAIL"), cancellable = true)
     public void drawText(int mouseX, int mouseY, float partialTicks, CallbackInfo info) {
-        FontUtil.drawString(Trinity.CLIENTNAME + Coloring.getWHITE() + Trinity.VERSION, 2, 2, new Color(139, 48, 171).getRGB());
+        FontUtil.drawString(Trinity.CLIENTNAME + Coloring.getWHITE() + " " + Trinity.VERSION, 2, 2, new Color(139, 48, 171).getRGB());
     }
 }

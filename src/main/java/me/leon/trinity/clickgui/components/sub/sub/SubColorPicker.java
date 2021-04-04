@@ -56,7 +56,7 @@ public class SubColorPicker extends Component {
             RenderUtils.drawRect(this.parent.parent.parent.x + ClickGui.width, trueY + 14 + 14 + 130, this.parent.parent.parent.x, trueY + 14 + 14, ClickGUI.backgroundColor.getValue());
 
             RenderUtils.drawAlphaRect(this.parent.parent.parent.x + 8 + 7, trueY + 14 + 14 + 70, 67, 10, this.set.getValue());
-            RenderUtils.drawRect(this.parent.parent.parent.x + 8 + renderAtAlpha + 1 + 7, trueY + 14 + 14 + 81, this.parent.parent.parent.x + 8 + renderAtAlpha - 1 + 7, trueY + 14 + 14 + 69, new Color(0xa9b7c6));
+            RenderUtils.drawRect(this.parent.parent.parent.x + 8 + renderAtAlpha + 1 + 7 + 7, trueY + 14 + 14 + 81, this.parent.parent.parent.x + 8 + renderAtAlpha - 1 + 7 + 7, trueY + 14 + 14 + 69, new Color(0xa9b7c6));
 
             RenderUtils.drawRect(this.parent.parent.parent.x + 75 + 7, trueY + 14 + 14 + 110, this.parent.parent.parent.x + 7 + 15, trueY + 14 + 14 + 100, new Color(0x454545));
             RenderUtils.drawRect(this.parent.parent.parent.x + 15 + renderAtSpeed + 7, trueY + 14 + 14 + 110, this.parent.parent.parent.x + 7 + 15, trueY + 14 + 14 + 100, ClickGUI.sliderColor.getValue());
@@ -101,10 +101,9 @@ public class SubColorPicker extends Component {
             this.circlePos[1] = (float) y;
         }
         if(draggingAlpha) {
-            this.renderAtAlpha = Math.min(67, Math.max(7, mouseX - (this.parent.parent.parent.x + 8 + 7)));
+            this.renderAtAlpha = Math.min(60, Math.max(0, (mouseX) - (this.parent.parent.parent.x + 15 + 7)));
+            this.set.a = (int) (((renderAtAlpha) / 60) * 255);
         }
-
-        if(draggingAlpha) this.set.a = ((int) ((renderAtAlpha / 67) * 255));
 
         if(draggingSpeed) {
             this.renderAtSpeed = Math.min(60, Math.max(0, mouseX - (this.parent.parent.parent.x + 15 + 7)));
@@ -112,12 +111,12 @@ public class SubColorPicker extends Component {
         }
 
         if(draggingColor || draggingHue || saveRainbow) {
-            final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / ClickGui.width, (circlePos[1] * (10 / 6f)) / ClickGui.width));
+            final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] / 60), (circlePos[1] / 60)));
 
             this.set.r = (color.getRed());
             this.set.g = (color.getGreen());
             this.set.b = (color.getBlue());
-            this.set.a = ((int) ((renderAtAlpha / 67) * 255));
+            this.set.a = ((int) ((renderAtAlpha / 60) * 255));
             this.saveRainbow = false;
         }
     }

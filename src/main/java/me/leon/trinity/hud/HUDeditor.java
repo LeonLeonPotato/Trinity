@@ -48,9 +48,7 @@ public class HUDeditor extends GuiScreen {
         for(Component comp : Trinity.hudManager.comps) {
             comp.res = sr;
 
-            if(comp.visible) {
-                comp.render();
-            }
+            comp.render();
 
             if(comp.dragging) {
                 float x = mouseX - dragX;

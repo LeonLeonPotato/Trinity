@@ -40,7 +40,7 @@ public class saveConfig extends Thread {
         //if(panic.paniked) return;
         ArrayList<String> enabledMods = new ArrayList<>();
 
-        Trinity.moduleManager.modules.forEach(mod -> {
+        ModuleManager.modules.forEach(mod -> {
             if(mod.isEnabled() && mod.shouldSave()) {
                 enabledMods.add(mod.getName());
             }
@@ -58,7 +58,7 @@ public class saveConfig extends Thread {
     public static void saveBinds() {
         ArrayList<String> binds = new ArrayList<>();
 
-        Trinity.moduleManager.modules.forEach(mod -> {
+        ModuleManager.modules.forEach(mod -> {
            binds.add(mod.getName() + ":" + mod.getKey());
         });
 
@@ -137,8 +137,9 @@ public class saveConfig extends Thread {
 
     public static void saveHud() {
         try {
+            ArrayList<Component> comps = new ArrayList<>(Trinity.hudManager.comps);
             PrintWriter writer = new PrintWriter(new FileOutputStream(Trinity.curPreset.HUD, false), true);
-            for(Component c : Trinity.hudManager.comps) {
+            for(Component c : comps) {
                 writer.write(c.name + ":" + c.x + ":" + c.y + ":" + c.visible + ":" + c.anchorPoint.name() + "\n");
             }
             writer.close();

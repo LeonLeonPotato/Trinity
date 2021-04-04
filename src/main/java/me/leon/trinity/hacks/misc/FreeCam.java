@@ -11,6 +11,7 @@ import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.Slider;
 import me.leon.trinity.utils.entity.PlayerUtils;
@@ -169,7 +170,7 @@ public class FreeCam extends Module {
 
     private void setRender(Entity entity) {
         mc.renderViewEntity = entity;
-        if (Trinity.moduleManager.getMod(ClickGUI.class).isEnabled()) {
+        if (ModuleManager.getMod(ClickGUI.class).isEnabled()) {
             if(ClickGUI.background.getValue().equalsIgnoreCase("Blur") || ClickGUI.background.getValue().equalsIgnoreCase("Both")) {
                 mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
             }
@@ -231,7 +232,7 @@ public class FreeCam extends Module {
         }
     }
 
-    private class EntityPlayerCamera extends EntityOtherPlayerMP
+    private static class EntityPlayerCamera extends EntityOtherPlayerMP
     {
         public EntityPlayerCamera(World worldIn, GameProfile gameProfileIn)
         {

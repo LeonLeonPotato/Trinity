@@ -37,9 +37,6 @@ public abstract class MixinRenderLivingBase<T extends EntityLivingBase> extends 
         }
     }
 
-    @Shadow
-    protected ModelBase mainModel;
-
     @Inject(method = "renderModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/ModelBase;render(Lnet/minecraft/entity/Entity;FFFFFF)V"))
     private void renderModelWrapper(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, CallbackInfo info) {
         if (ModuleManager.getMod("NoRender").isEnabled() && NoRender.noCluster.getValue() && entitylivingbaseIn != mc.player && mc.player.getDistance(entitylivingbaseIn) < 1)

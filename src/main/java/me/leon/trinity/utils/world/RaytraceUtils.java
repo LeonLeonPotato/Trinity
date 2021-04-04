@@ -84,6 +84,10 @@ public class RaytraceUtils implements Util {
         return mc.world.rayTraceBlocks(new Vec3d(pos.x + 0.5, pos.y + 0.5, pos.z + 0.5), mc.player.getPositionVector().add(0, mc.player.getEyeHeight(), 0), false, true, false) == null;
     }
 
+    public static boolean rayTraceSimple(Vec3d pos) {
+        return mc.world.rayTraceBlocks(pos, mc.player.getPositionVector().add(0, mc.player.getEyeHeight(), 0), false, true, false) == null;
+    }
+
     public static boolean rayTraceSimple(BlockPos pos, double off) {
         return mc.world.rayTraceBlocks(new Vec3d(pos.x + 0.5, pos.y + off, pos.z + 0.5), mc.player.getPositionVector().add(0, mc.player.getEyeHeight(), 0), false, true, false) == null;
     }

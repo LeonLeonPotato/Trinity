@@ -4,6 +4,7 @@ import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.Button;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
 import me.leon.trinity.utils.rendering.RenderUtils;
@@ -54,7 +55,7 @@ public class ColorPicker extends Component {
             RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, trueY + 135, this.parent.parent.x, trueY, ClickGUI.backgroundColor.getValue());
 
             RenderUtils.drawAlphaRect(this.parent.parent.x + 8, trueY + 70, 67, 10, this.set.getValue());
-            RenderUtils.drawRect(this.parent.parent.x + 8 + renderAtAlpha + 1, trueY + 81, this.parent.parent.x + 8 + renderAtAlpha - 1, trueY + 69, new Color(0xa9b7c6));
+            RenderUtils.drawRect(this.parent.parent.x + 15 + renderAtAlpha + 1, trueY + 81, this.parent.parent.x + 15 + renderAtAlpha - 1, trueY + 69, new Color(0xa9b7c6));
 
             RenderUtils.drawRect(this.parent.parent.x + 75, trueY + 110, this.parent.parent.x + 15, trueY + 100, new Color(0x454545));
             RenderUtils.drawRect(this.parent.parent.x + 15 + renderAtSpeed, trueY + 110, this.parent.parent.x + 15, trueY + 100, ClickGUI.sliderColor.getValue());
@@ -99,11 +100,11 @@ public class ColorPicker extends Component {
             this.circlePos[1] = (float) y;
         }
         if(draggingAlpha) {
-            this.renderAtAlpha = Math.min(67, Math.max(7, mouseX - (this.parent.parent.x + 7)));
-            this.set.a = ((int) ((renderAtAlpha / 67) * 255));
+            this.renderAtAlpha = Math.min(60, Math.max(0, mouseX - (this.parent.parent.x + 15)));
+            this.set.a = ((int) (((renderAtAlpha) / 60) * 255));
         }
         if(draggingColor || draggingHue || saveRainbow) {
-            final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] * (10 / 6f)) / ClickGui.width, (circlePos[1] * (10 / 6f)) / ClickGui.width));
+            final Color color = new Color(Color.HSBtoRGB((renderAtHue * 6) / 360, (circlePos[0] / 60), (circlePos[1] / 60)));
 
             this.set.r = (color.getRed());
             this.set.g = (color.getGreen());

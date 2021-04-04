@@ -9,6 +9,9 @@ import net.minecraft.client.Minecraft;
 public class TPSComponent extends Component {
     public TPSComponent() {
         super("TPSComponent");
+        this.visible = true;
+        this.x = 0;
+        this.y = res.getScaledHeight() / 2f - 10;
     }
 
     @Override

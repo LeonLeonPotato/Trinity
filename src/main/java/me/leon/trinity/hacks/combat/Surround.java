@@ -49,7 +49,7 @@ public class Surround extends Module {
         if(draw != null) {
             Tessellator.drawGradientAlphaCubeOutline(draw, 3, new Color(255, 0, 255, 255));
         }
-        Tessellator.draw();
+        //Tessellator.draw();
     }
 
     @Override

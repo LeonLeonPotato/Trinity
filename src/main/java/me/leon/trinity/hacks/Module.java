@@ -116,6 +116,10 @@ public abstract class Module implements Listenable {
         return true;
     }
 
+    public String getHudInfo() {
+        return null;
+    }
+
     public void addSetting(Setting set) {
         Trinity.settingManager.addSets(set);
     }

@@ -7,7 +7,6 @@ import me.leon.trinity.config.loadConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.hacks.client.Zihasz;
 import me.leon.trinity.hud.HUDeditor;
 import me.leon.trinity.managers.*;
 import me.leon.trinity.utils.misc.FontUtil;
@@ -90,18 +89,19 @@ public class Trinity {
         tickrateManager = new TickrateManager();
         hudManager = new HudManager();
 
-        // init gui(s)
-        clickGui = new ClickGui();
-        hudEditor = new HUDeditor();
-
         Runtime.getRuntime().addShutdownHook(new saveConfig());
         loadConfig.LoadConfig.loadBinds();
         loadConfig.LoadConfig.loadFriends();
-        loadConfig.LoadConfig.loadGUI();
         loadConfig.LoadConfig.loadHud();
         loadConfig.LoadConfig.loadModules(false);
         loadConfig.LoadConfig.loadSearch();
         loadConfig.LoadConfig.loadSettings();
+
+        // init gui(s)
+        clickGui = new ClickGui();
+        hudEditor = new HUDeditor();
+
+        loadConfig.LoadConfig.loadGUI();
 
         if(ModuleManager.getMod(ClickGUI.class).getKey() == 0) {
             ModuleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
@@ -115,9 +115,6 @@ public class Trinity {
         if(Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
             if(Keyboard.isCreated()) {
                 if(Keyboard.getEventKeyState()) {
-                    if(ModuleManager.getMod(Zihasz.class).isEnabled())
-                        if (Keyboard.getEventKey() == Keyboard.KEY_NONE || Keyboard.getEventCharacter() == Keyboard.CHAR_NONE)
-                            return;
                     for(Module mod : ModuleManager.modules) {
                         if(mod.getKey() == Keyboard.getEventKey()) {
                             mod.toggle();

@@ -5,8 +5,10 @@ import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.*;
+import me.leon.trinity.utils.entity.BlockUtils;
 import me.leon.trinity.utils.entity.EntityUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
 import me.leon.trinity.utils.entity.PlayerUtils;
@@ -52,7 +54,6 @@ import java.util.stream.Collectors;
 public class AutoCrystal extends Module {
     // Settings
     public static SettingParent main = new SettingParent("Main", true, false);
-    public static SubBoolean    limit = new SubBoolean("Limit", main, false);
     public static SubSlider     iterations = new SubSlider("Iterations", main, 1, 1, 3, true);
     public static SubMode       nosuicide = new SubMode("NoSuicide", main, "Both", "Place", "Destroy", "None", "Both");
     public static SubSlider     minHealth = new SubSlider("Pause Health", main, 0, 6, 20, true);
@@ -64,17 +65,20 @@ public class AutoCrystal extends Module {
     public static SubSlider     placeRangeWalls = new SubSlider("Walls Range", Place, 0, 3.5, 6, false);
     public static SubSlider     minTargetDamagePlace = new SubSlider("Min Target Damage", Place, 0, 6, 20, false);
     public static SubSlider     maxSelfDamagePlace = new SubSlider("Max Self Damage", Place, 0, 8, 20, false);
-    public static SubMode       rayTracePlaceMode = new SubMode("RayTrace Mode", Place, "Simple", "Leon", "Simple", "Simple-Offset");
+    public static SubMode       rayTracePlaceMode = new SubMode("RayTrace Mode", Place, "Simple", "Leon", "Simple", "Offset");
+    public static SubSlider     offsetPlace = new SubSlider("Offset", Place, 0, 1, 3, false);
     public static SubBoolean    packetPlace = new SubBoolean("Packet Place", Place, true);
     public static SubMode       swingArmPlace = new SubMode("Swing Arm", Place, "Offhand", "Mainhand", "Offhand", "Both", "None");
     public static SubBoolean    packetSwingPlace = new SubBoolean("Packet Swing", Place, false);
-    public static SubSlider     offsetPlace = new SubSlider("Offset", Place, 0, 1, 3, false);
     public static SubMode       switchPlace = new SubMode("Switch", Place, "None", "None", "Packet", "Normal");
     public static SubBoolean    multiPlace = new SubBoolean("Multiplace", Place, false);
     public static SubBoolean    bounds = new SubBoolean("Bounds", Place, true);
     public static SubBoolean    extraCalc = new SubBoolean("Extra Calc", Place, true);
     public static SubBoolean    predict = new SubBoolean("Predict", Place, true);
     public static SubSlider     predictTicks = new SubSlider("Predict Ticks", Place, 0, 3, 10, true);
+    public static SubBoolean    selfPredict = new SubBoolean("Self Predict", Place, true);
+    public static SubSlider     selfPredictTicks = new SubSlider("Self Ticks", Place, 0, 3, 10, true);
+    public static SubBoolean    limit = new SubBoolean("Limit", Place, false);
 
     public static SettingParent Break = new SettingParent("Break", true, true);
     public static SubMode       breakMode = new SubMode("Break Mode", Break, "Smart", "Smart", "All", "Only Own");
@@ -111,14 +115,15 @@ public class AutoCrystal extends Module {
     public static SettingParent rendering = new SettingParent("Rendering", true, false);
     public static SubMode       renderMode = new SubMode("RenderMode", rendering, "Claw", "Claw", "Outline", "Fill", "Both", "Slab");
     public static SubSlider     renderWidth = new SubSlider("Width", rendering, 0.1, 1.5, 3, false);
-    public static SubSlider     renderHeight = new SubSlider("Height", rendering, 0.1, 1.5, 0.5, false);
+    public static SubSlider     renderHeight = new SubSlider("Height", rendering, -1, 0.3, 1, false);
     public static SubColor      outlineColor = new SubColor("OutLine Color", rendering, 0, 255, 255, 255, false);
-    public static SubColor      fillColor = new SubColor("Fill Color", rendering, 0, 255, 255, 0, false);
+    public static SubColor      fillColor = new SubColor("Fill Color", rendering, 0, 255, 255, 255, false);
     public static SubBoolean    renderDamage = new SubBoolean("Render Damage", rendering, true);
+    public static SubColor      renderDamageColor = new SubColor("Render Color", rendering, 255, 255, 255, 255, false);
 
     public static SettingParent targeting = new SettingParent("Targeting", true, false);
     public static SubMode       targetingMode = new SubMode("Mode", targeting, "Closest", "Closest", "Lowest Health", "Highest Health");
-    public static SubSlider     targetRange = new SubSlider("Range", targeting, 0.5, 5, 10, false);
+    public static SubSlider     targetRange = new SubSlider("Range", targeting, 0.5, 5, 15, false);
     public static SubBoolean    players = new SubBoolean("Players", targeting, true);
     public static SubBoolean    friends = new SubBoolean("Friends", targeting, true);
     public static SubBoolean    neutral = new SubBoolean("Neutral", targeting, true);
@@ -160,7 +165,25 @@ public class AutoCrystal extends Module {
     }
     @SubscribeEvent public void onRender(RenderWorldLastEvent event) {
         if (curPosPlace == null) return;
-        Tessellator.drawBBOutline(curPosPlace.base, (float) renderWidth.getValue(), outlineColor.getValue());
+        if(renderMode.getValue().equalsIgnoreCase("Outline") || renderMode.getValue().equalsIgnoreCase("Both"))
+        {
+            Tessellator.drawBBOutline(curPosPlace.base, (float) renderWidth.getValue(), outlineColor.getValue());
+        }
+        if(renderMode.getValue().equalsIgnoreCase("Fill") || renderMode.getValue().equalsIgnoreCase("Both"))
+        {
+            Tessellator.drawBBFill(curPosPlace.base, fillColor.getValue());
+        }
+        if(renderMode.getValue().equalsIgnoreCase("Claw"))
+        {
+            Tessellator.drawBBClaw(curPosPlace.base, (float) renderWidth.getValue(), (float) renderHeight.getValue(), outlineColor.getValue());
+        }
+        if(renderMode.getValue().equalsIgnoreCase("Slab")) {
+            Tessellator.drawBBSlabDown(curPosPlace.base, (float) renderHeight.getValue(), outlineColor.getValue());
+        }
+        if(renderDamage.getValue())
+        {
+            Tessellator.drawTextFromBlock(curPosPlace.base, String.valueOf(curPosPlace.damage), renderDamageColor.getValue().getRGB(), 1.0f);
+        }
     }
 
     /** The part that goes kaboom and makes totem go *boom boom* **/
@@ -198,7 +221,7 @@ public class AutoCrystal extends Module {
         final boolean oneThirteen = version.getValue().equals("1.13+");
         List<CrystalPosition> poss = WorldUtils.getSphere(PlayerUtils.getPlayerPosFloored(), (float) placeRange.getValue(), (int) placeRange.getValue(), false, true, 0).stream()
                 .filter(pos -> checkPlace(pos, oneThirteen))
-                .map(pos -> new CrystalPosition(WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, mc.player), WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, getPredict()), pos))
+                .map(pos -> new CrystalPosition(WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, getPredictSelf()), WorldUtils.calculateDamage(pos.x + 0.5, pos.y + 1, pos.z + 0.5, getPredict()), pos))
                 .collect(Collectors.toList());
 
         if (!EntityUtils.isInHole(target)) {
@@ -419,7 +442,7 @@ public class AutoCrystal extends Module {
         }
         if (!Place.getValue()) return;
         if (!placeTimer.hasPassed((int) (placeDelay.getValue() * 50))) return;
-        if (EntityUtils.isInHole(target) && limit.getValue() && !placeTimer.hasPassed(700)) return;
+        if (EntityUtils.isInHole(target) && limit.getValue() && !placeTimer.hasPassed(500)) return;
         if (mc.player.getHealth() <= minHealth.getValue()) return;
 
         placeTimer.reset();
@@ -438,7 +461,9 @@ public class AutoCrystal extends Module {
         }
 
         if (curPosPlace != null)
+        {
             place(curPosPlace.base, getCrystalHand(), packetPlace.getValue());
+        }
 
         swingHand();
 
@@ -582,15 +607,12 @@ public class AutoCrystal extends Module {
         }
 
         EnumFacing side = getEnumFacing(bounds.getValue(), pos);
-
-        float f = (float)(pos.x + 0.5);
-        float f1 = (float)(pos.y + 0.5);
-        float f2 = (float)(pos.z + 0.5);
+        Vec3d vec = new Vec3d(pos.getX() + 0.5D + (double) side.getXOffset() * 0.50D, pos.getY() + 0.5D + (double) side.getYOffset() * 0.50D, pos.getZ() + 0.5D + (double) side.getZOffset() * 0.50D);
 
         if (packet) {
-            mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, side, hand, f, f1, f2));
+            mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, side, hand, (float) vec.x, (float) vec.y, (float) vec.z));
         } else {
-            mc.playerController.processRightClickBlock(mc.player, mc.world, pos, side, new Vec3d(f, f1, f2), hand);
+            mc.playerController.processRightClickBlock(mc.player, mc.world, pos, side, vec, hand);
         }
         return true;
     }
@@ -657,20 +679,27 @@ public class AutoCrystal extends Module {
     }
     private boolean checkPlace(BlockPos pos, boolean oneThirteen) {
         if (!canPlaceCrystal(pos, oneThirteen)) return false;
-        if (rayTracePlaceMode.getValue().equalsIgnoreCase("Leon")) {
-            Vec3d vec = RaytraceUtils.rayTraceLeon(pos);
-            if (vec == null) {
-                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1, pos.z + 0.5)) < placeRangeWalls.getValue());
+        switch (rayTracePlaceMode.getValue()) {
+            case "Leon": {
+                Vec3d vec = RaytraceUtils.rayTraceLeon(pos);
+                if (vec == null) {
+                    return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1, pos.z + 0.5)) < placeRangeWalls.getValue());
+                }
+                break;
             }
-        } else
-        if (rayTracePlaceMode.getValue().equalsIgnoreCase("Simple")) {
-            if (!RaytraceUtils.rayTraceSimple(pos)) {
-                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + 1, pos.z + 0.5)) < placeRangeWalls.getValue());
+            case "Simple": {
+                EnumFacing side = getEnumFacing(true, pos);
+                Vec3d vec0 = new Vec3d(pos.getX() + 0.5D + (double) side.getXOffset() * 0.51D, pos.getY() + 0.5D + (double) side.getYOffset() * 0.51D, pos.getZ() + 0.5D + (double) side.getZOffset() * 0.51D);
+                if (!RaytraceUtils.rayTraceSimple(vec0)) {
+                    return (WorldUtils.getRange(vec0) < placeRangeWalls.getValue());
+                }
+                break;
             }
-        } else
-        if (rayTracePlaceMode.getValue().equalsIgnoreCase("Simple-Offset")) {
-            if (!RaytraceUtils.rayTraceSimple(target, offsetPlace.getValue())) {
-                return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + offsetPlace.getValue(), pos.z + 0.5)) < placeRangeWalls.getValue());
+            case "Offset": {
+                if (!RaytraceUtils.rayTraceSimple(target, offsetPlace.getValue())) {
+                    return (WorldUtils.getRange(new Vec3d(pos.x + 0.5, pos.y + offsetPlace.getValue(), pos.z + 0.5)) < placeRangeWalls.getValue());
+                }
+                break;
             }
         }
         return true;
@@ -698,7 +727,7 @@ public class AutoCrystal extends Module {
     // More helpers
     private EnumHand getCrystalHand() { return mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND; }
     private EnumFacing getEnumFacing(boolean rayTrace, BlockPos placePosition) {
-        RayTraceResult result = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(placePosition.getX() + 0.5, placePosition.getY() - 0.5, placePosition.getZ() + 0.5));
+        RayTraceResult result = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + mc.player.getEyeHeight(), mc.player.posZ), new Vec3d(placePosition.getX() + 0.5, placePosition.getY() + 0.5, placePosition.getZ() + 0.5));
 
         if (placePosition.getY() == 255)
             return EnumFacing.DOWN;
@@ -720,9 +749,21 @@ public class AutoCrystal extends Module {
         EntityOtherPlayerMP pre = new EntityOtherPlayerMP(target0.getEntityWorld(), target0.gameProfile);
         pre.setHealth(target0.getHealth());
         pre.inventory.copyInventory(target0.inventory);
-        pre.posX = vec.x;
-        pre.posY = vec.y;
-        pre.posZ = vec.z;
+        pre.setPosition(vec.x, vec.y, vec.z);
+        return pre;
+    }
+    private EntityLivingBase getPredictSelf() {
+        if (!selfPredict.getValue())
+        {
+            return mc.player;
+        }
+
+        final EntityPlayer self = mc.player;
+        final Vec3d vec = MathUtils.extrapolatePlayerPosition(self, (int) selfPredictTicks.getValue());
+        EntityOtherPlayerMP pre = new EntityOtherPlayerMP(self.getEntityWorld(), self.gameProfile);
+        pre.setHealth(self.getHealth());
+        pre.inventory.copyInventory(self.inventory);
+        pre.setPosition(vec.x, vec.y, vec.z);
         return pre;
     }
 
