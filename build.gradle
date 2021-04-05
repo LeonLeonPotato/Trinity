@@ -64,6 +64,7 @@ dependencies {
 
     compile "com.github.ionar2:Alpine:1.9f"
     compile group: 'net.jodah', name: 'typetools', version: '0.5.0'
+    compile group: "com.googlecode.json-simple", name: "json-simple", version: "1.1.1"
 
     //Mixin
     compile('org.spongepowered:mixin:0.7.4-SNAPSHOT') {
@@ -106,6 +107,7 @@ shadowJar {
         include(dependency("com.github.ionar2:Alpine:1.9f"))
         include(dependency('club.minnced:java-discord-rpc:2.0.1'))
         include(dependency('net.jodah:typetools'))
+        include(dependency('com.googlecode.json-simple:json-simple:1.1.1'))
     }
 
     exclude 'dummyThing'

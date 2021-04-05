@@ -1,7 +1,8 @@
-package me.leon.trinity.config;
+/**package me.leon.trinity.config;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.components.Frame;
+import me.leon.trinity.config.Preset;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hud.AnchorPoint;
@@ -89,16 +90,16 @@ public class loadConfig {
                             if(set instanceof SettingParent && set.name.equals(setting[1])) {
                                 ((SettingParent) set).setEnabled(java.lang.Boolean.parseBoolean(setting[2]));
                             }
-                            if(set instanceof SubMode && set.name.equals(setting[1]) && ((SubMode) set).getParent().name.equals(setting[2])) {
+                            if(set instanceof SubMode && set.name.equals(setting[2]) && ((SubMode) set).getParent().name.equals(setting[1])) {
                                 ((SubMode) set).setValue(setting[3]);
                             }
-                            if(set instanceof SubSlider && set.name.equals(setting[1]) && ((SubSlider) set).getParent().name.equals(setting[2])) {
+                            if(set instanceof SubSlider && set.name.equals(setting[2]) && ((SubSlider) set).getParent().name.equals(setting[1])) {
                                 ((SubSlider) set).setValue(Double.parseDouble(setting[3]));
                             }
-                            if(set instanceof SubBoolean && set.name.equals(setting[1]) && ((SubBoolean) set).getParent().name.equals(setting[2])) {
+                            if(set instanceof SubBoolean && set.name.equals(setting[2]) && ((SubBoolean) set).getParent().name.equals(setting[1])) {
                                 ((SubBoolean) set).setEnabled(java.lang.Boolean.parseBoolean(setting[3]));
                             }
-                            if(set instanceof SubColor && set.name.equals(setting[1]) && ((SubColor) set).getParent().name.equals(setting[2])) {
+                            if(set instanceof SubColor && set.name.equals(setting[2]) && ((SubColor) set).getParent().name.equals(setting[1])) {
                                 ((SubColor) set).r = (Integer.parseInt(setting[3]));
                                 ((SubColor) set).g = (Integer.parseInt(setting[4]));
                                 ((SubColor) set).b = (Integer.parseInt(setting[5]));
@@ -122,7 +123,7 @@ public class loadConfig {
                     Search.blocks.add(Block.getBlockFromName(setting[1]));
                 }
             } catch (Exception e) {Trinity.LOGGER.info("could not find file to load Search settings from! \n" + "error code: \n" + e);
-             */
+
         }
 
         public static void loadHud() {
@@ -153,7 +154,7 @@ public class loadConfig {
                 e.printStackTrace();
             }
 
-             */
+
         }
 
         public static void loadGUI() {
@@ -194,5 +195,5 @@ public class loadConfig {
             }
         }
     }
-}
+}**/
 

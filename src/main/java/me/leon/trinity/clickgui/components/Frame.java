@@ -1,6 +1,8 @@
 package me.leon.trinity.clickgui.components;
 
 import me.leon.trinity.clickgui.ClickGui;
+import me.leon.trinity.config.rewrite.PresetManager;
+import me.leon.trinity.config.rewrite.PresetObj;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
@@ -40,7 +42,7 @@ public class Frame extends me.leon.trinity.clickgui.Component {
         if(this.c == Category.PRESETS)
         {
             this.presetButtons.clear();
-            for(me.leon.trinity.config.Preset p : Trinity.presetManager.presets) {
+            for(PresetObj p : PresetManager.presets) {
                 me.leon.trinity.clickgui.components.PresetButton presetButton = new me.leon.trinity.clickgui.components.PresetButton(p, this, modY);
                 this.presetButtons.add(presetButton);
                 this.modY += 14;
@@ -159,7 +161,7 @@ public class Frame extends me.leon.trinity.clickgui.Component {
 
     private void update(int tY) {
         this.presetButtons.clear();
-        for(me.leon.trinity.config.Preset p : Trinity.presetManager.presets) {
+        for(PresetObj p : PresetManager.presets) {
             me.leon.trinity.clickgui.components.PresetButton presetButton = new me.leon.trinity.clickgui.components.PresetButton(p, this, tY);
             this.presetButtons.add(presetButton);
             tY += 14;

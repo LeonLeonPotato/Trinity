@@ -26,6 +26,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import static me.leon.trinity.utils.world.WorldUtils.empty;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,15 +43,13 @@ public class Surround extends Module {
         super("Surround", "Surrounds your feet in obsidian", Category.COMBAT);
     }
 
-    private final ArrayList<Block> empty = new ArrayList<>(Arrays.asList(Blocks.AIR, Blocks.VINE, Blocks.SNOW_LAYER, Blocks.TALLGRASS, Blocks.FIRE, Blocks.LAVA, Blocks.FLOWING_LAVA, Blocks.FLOWING_WATER, Blocks.WATER));
     private BlockPos draw;
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {
         if(draw != null) {
-            Tessellator.drawGradientAlphaCubeOutline(draw, 3, new Color(255, 0, 255, 255));
+            Tessellator.drawGradientAlphaCubeOutline(new AxisAlignedBB(draw), 3, new Color(255, 0, 255, 255));
         }
-        //Tessellator.draw();
     }
 
     @Override

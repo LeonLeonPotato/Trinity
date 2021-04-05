@@ -98,13 +98,22 @@ public abstract class Module implements Listenable {
     }
 
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        if(this.enabled) {
-            onEnable0();
-            onEnable();
+        if(enabled != this.enabled) {
+            this.enabled = enabled;
+            if(this.enabled) {
+                onEnable0();
+                onEnable();
+            } else {
+                onDisable0();
+                onDisable();
+            }
         } else {
-            onDisable0();
-            onDisable();
+            this.enabled = enabled;
+            if(this.enabled) {
+                onEnable0();
+            } else {
+                onDisable0();
+            }
         }
     }
 

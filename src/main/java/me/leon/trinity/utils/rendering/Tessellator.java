@@ -21,13 +21,11 @@ public class Tessellator implements Util {
 
     /**
      * skidded from momentum lololol
-     * @param pos
      * @param width
      * @param height
      * @param color
      */
-    public static void drawBBClaw(BlockPos pos, float width, float height, Color color) {
-        AxisAlignedBB bb = new AxisAlignedBB(pos);
+    public static void drawBBClaw(AxisAlignedBB bb, float width, float height, Color color) {
         pushMatrix();
         start1();
         width(width);
@@ -41,21 +39,21 @@ public class Tessellator implements Util {
 
         builder.begin(GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
         vertex(minX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX, minY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX, minY, minZ + height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX, minY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX, minY, maxZ - height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX, minY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX, minY, minZ + height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX, minY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX, minY, maxZ - height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX - (1 - height), minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX + height, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX - (1 - height), minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX + height, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX + (1 - height), minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX - height, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX + (1 - height), minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX - height, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
         vertex(minX, minY + height, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
@@ -65,21 +63,21 @@ public class Tessellator implements Util {
         vertex(maxX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
         vertex(maxX, minY + height, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX, maxY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX, maxY, minZ + height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX, maxY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX, maxY, maxZ - height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX, maxY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX, maxY, minZ + height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX, maxY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX, maxY, maxZ - height).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX - (1 - height), maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX + height, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(maxX - (1 - height), maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(minX + height, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX + (1 - height), maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX - height, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(maxX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
-        vertex(minX + (1 - height), maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+        vertex(maxX - height, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
         vertex(minX, maxY - height, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         vertex(minX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
@@ -89,13 +87,63 @@ public class Tessellator implements Util {
         vertex(maxX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
         vertex(maxX, maxY - height, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
         tessellator.draw();
-        
+
+        /**
+         *         vertex(minX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, minY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, minY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, minY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, minY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX - (1 - height), minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX - (1 - height), minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX + (1 - height), minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX + (1 - height), minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, minY + height, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, minY + height, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, minY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, minY + height, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, minY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, minY + height, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, maxY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, maxY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, maxY, maxZ - (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, maxY, minZ + (1 - height)).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX - (1 - height), maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX - (1 - height), maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX + (1 - height), maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX + (1 - height), maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, maxY - height, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(minX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(minX, maxY - height, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, maxY, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, maxY - height, minZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         *         vertex(maxX, maxY, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), 0.0F).endVertex();
+         *         vertex(maxX, maxY - height, maxZ).color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()).endVertex();
+         */
+
         end1();
         popMatrix();
     }
 
-    public static void drawBBFill(BlockPos pos, Color color) {
-        AxisAlignedBB bb = new AxisAlignedBB(pos);
+    public static void drawBBFill(AxisAlignedBB bb, Color color) {
         pushMatrix();
         start1();
         width(1);
@@ -148,8 +196,7 @@ public class Tessellator implements Util {
         popMatrix();
     }
 
-    public static void drawBBSlabDown(BlockPos pos, float height, Color color) {
-        AxisAlignedBB bb = new AxisAlignedBB(pos);
+    public static void drawBBSlabDown(AxisAlignedBB bb, float height, Color color) {
         final int r = color.getRed();
         final int g = color.getGreen();
         final int b = color.getBlue();
@@ -206,8 +253,7 @@ public class Tessellator implements Util {
         popMatrix();
     }
 
-    public static void drawBBOutline(BlockPos pos, float width, Color color) {
-        AxisAlignedBB bb = new AxisAlignedBB(pos);
+    public static void drawBBOutline(AxisAlignedBB bb, float width, Color color) {
         start(width);
 
         final int r = color.getRed();
@@ -237,9 +283,7 @@ public class Tessellator implements Util {
         end();
     }
 
-    public static void drawGradientAlphaCubeOutline(BlockPos pos, float width, Color start) {
-        AxisAlignedBB bb = new AxisAlignedBB(pos);
-
+    public static void drawGradientAlphaCubeOutline(AxisAlignedBB bb, float width, Color start) {
         disableTexture2D();
         enableBlend();
         disableAlpha();

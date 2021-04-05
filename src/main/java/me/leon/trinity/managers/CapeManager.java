@@ -17,7 +17,7 @@ public class CapeManager {
 
     public CapeManager() {
         try { capes = CapeUtil.getCapes(capeURL); }
-        catch (IOException e) { e.printStackTrace(); }
+        catch (IOException e) {}
     }
 
     public boolean hasCape(UUID uuid) {

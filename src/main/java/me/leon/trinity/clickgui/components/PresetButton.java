@@ -3,7 +3,9 @@ package me.leon.trinity.clickgui.components;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.config.Preset;
-import me.leon.trinity.config.loadConfig;
+import me.leon.trinity.config.rewrite.LoadConfig;
+import me.leon.trinity.config.rewrite.PresetObj;
+import me.leon.trinity.config.rewrite.SaveConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
@@ -11,7 +13,7 @@ import me.leon.trinity.utils.misc.FontUtil;
 import net.minecraft.client.gui.Gui;
 
 public class PresetButton extends Component {
-    public Preset preset;
+    public PresetObj preset;
     public Frame parent;
     public int offset;
     private boolean isHovered;
@@ -19,7 +21,7 @@ public class PresetButton extends Component {
 
     int x, y;
 
-    public PresetButton(Preset preset, Frame parent, int offset) {
+    public PresetButton(PresetObj preset, Frame parent, int offset) {
         this.preset = preset;
         this.parent = parent;
         this.offset = offset;
@@ -28,7 +30,7 @@ public class PresetButton extends Component {
 
     @Override
     public void render() {
-        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + ClickGui.width, this.parent.y + 14 + this.offset, getColor(this.isHovered, Trinity.curPreset == this.preset).getRGB());
+        Gui.drawRect(parent.x, this.parent.y + this.offset, parent.x + ClickGui.width, this.parent.y + 14 + this.offset, getColor(this.isHovered, Trinity.currentPreset.equals(this.preset)).getRGB());
         FontUtil.drawString(preset.name, this.parent.x + 5, this.parent.y + offset + ((14 - FontUtil.getFontHeight()) / 2f) + 1, ClickGUI.nameColorButton.getValue().getRGB());
     }
 
@@ -63,25 +65,11 @@ public class PresetButton extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if(isMouseOnButton(mouseX, mouseY) && button == 0) {
+            SaveConfig.runStatic();
 
-            saveConfig.saveModules();
-            saveConfig.saveBinds();
-            saveConfig.saveSettings();
-            saveConfig.saveSearch();
-            saveConfig.saveHud();
-            saveConfig.saveFriends();
-            saveConfig.saveGui();
+            Trinity.currentPreset = this.preset;
 
-            Trinity.curPreset = this.preset;
-
-            loadConfig.LoadConfig.loadGUI();
-            loadConfig.LoadConfig.loadFriends();
-            loadConfig.LoadConfig.loadHud();
-            loadConfig.LoadConfig.loadSearch();
-            loadConfig.LoadConfig.loadBinds();
-            loadConfig.LoadConfig.loadModules(true);
-            loadConfig.LoadConfig.loadSettings();
-
+            LoadConfig.load();
         }
     }
 

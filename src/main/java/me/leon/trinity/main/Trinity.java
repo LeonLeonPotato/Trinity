@@ -2,8 +2,10 @@ package me.leon.trinity.main;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.config.Preset;
-import me.leon.trinity.config.PresetManager;
-import me.leon.trinity.config.loadConfig;
+import me.leon.trinity.config.rewrite.LoadConfig;
+import me.leon.trinity.config.rewrite.PresetManager;
+import me.leon.trinity.config.rewrite.PresetObj;
+import me.leon.trinity.config.rewrite.SaveConfig;
 import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
@@ -21,11 +23,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.lwjgl.input.Keyboard;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 
 /**
  * my second mod, please work!
@@ -59,6 +60,7 @@ public class Trinity {
     public static HudManager hudManager;
 
     public static Preset curPreset;
+    public static PresetObj currentPreset;
 
     @Mod.Instance
     private static Trinity INSTANCE;
@@ -80,7 +82,6 @@ public class Trinity {
         // init managers
         settingManager = new SettingManager();
         moduleManager = new ModuleManager();
-        doPresetThing(); // im a lazy boi
         fontManager = new FontUtil();
         fontManager.load();
         capeManager = new CapeManager();
@@ -88,20 +89,18 @@ public class Trinity {
         rotationManager = new RotationManager();
         tickrateManager = new TickrateManager();
         hudManager = new HudManager();
-
-        Runtime.getRuntime().addShutdownHook(new saveConfig());
-        loadConfig.LoadConfig.loadBinds();
-        loadConfig.LoadConfig.loadFriends();
-        loadConfig.LoadConfig.loadHud();
-        loadConfig.LoadConfig.loadModules(false);
-        loadConfig.LoadConfig.loadSearch();
-        loadConfig.LoadConfig.loadSettings();
+        presetManager = new PresetManager();
 
         // init gui(s)
         clickGui = new ClickGui();
         hudEditor = new HUDeditor();
 
-        loadConfig.LoadConfig.loadGUI();
+        Runtime.getRuntime().addShutdownHook(new SaveConfig());
+
+        LoadConfig.loadPreset();
+        LoadConfig.load();
+
+        //loadConfig.LoadConfig.loadGUI();
 
         if(ModuleManager.getMod(ClickGUI.class).getKey() == 0) {
             ModuleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);
@@ -149,7 +148,7 @@ public class Trinity {
         LOGGER.info("PresetManager initiated!");
 
         //curPreset must be loaded first
-        loadConfig.LoadConfig.loadPreset();
+        //loadConfig.LoadConfig.loadPreset();
 
         try {
             if(!curPreset.file.exists()) {

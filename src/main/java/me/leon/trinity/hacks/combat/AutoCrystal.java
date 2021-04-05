@@ -5,10 +5,8 @@ import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.sub.*;
-import me.leon.trinity.utils.entity.BlockUtils;
 import me.leon.trinity.utils.entity.EntityUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
 import me.leon.trinity.utils.entity.PlayerUtils;
@@ -112,7 +110,7 @@ public class AutoCrystal extends Module {
     public static SubSlider     facePlaceMinHealth = new SubSlider("Min Health", facePlace, 0, 8, 36, true);
     public static SubSlider     facePlaceMinDamage = new SubSlider("Min Damage", facePlace, 0, 2.4, 8, false);
 
-    public static SettingParent rendering = new SettingParent("Rendering", true, false);
+    public static SettingParent rendering = new SettingParent("Rendering", true, true);
     public static SubMode       renderMode = new SubMode("RenderMode", rendering, "Claw", "Claw", "Outline", "Fill", "Both", "Slab");
     public static SubSlider     renderWidth = new SubSlider("Width", rendering, 0.1, 1.5, 3, false);
     public static SubSlider     renderHeight = new SubSlider("Height", rendering, -1, 0.3, 1, false);
@@ -154,7 +152,6 @@ public class AutoCrystal extends Module {
     }
     @SubscribeEvent public void onFastTick(TickEvent.ClientTickEvent event) {
         try {
-
             if (nullCheck()) return;
             if (!timingMode.getValue().equalsIgnoreCase("Fast")) return;
 
@@ -165,20 +162,22 @@ public class AutoCrystal extends Module {
     }
     @SubscribeEvent public void onRender(RenderWorldLastEvent event) {
         if (curPosPlace == null) return;
+        if(!rendering.getValue()) return;
+        AxisAlignedBB pos = new AxisAlignedBB(curPosPlace.base);
         if(renderMode.getValue().equalsIgnoreCase("Outline") || renderMode.getValue().equalsIgnoreCase("Both"))
         {
-            Tessellator.drawBBOutline(curPosPlace.base, (float) renderWidth.getValue(), outlineColor.getValue());
+            Tessellator.drawBBOutline(pos, (float) renderWidth.getValue(), outlineColor.getValue());
         }
         if(renderMode.getValue().equalsIgnoreCase("Fill") || renderMode.getValue().equalsIgnoreCase("Both"))
         {
-            Tessellator.drawBBFill(curPosPlace.base, fillColor.getValue());
+            Tessellator.drawBBFill(pos, fillColor.getValue());
         }
         if(renderMode.getValue().equalsIgnoreCase("Claw"))
         {
-            Tessellator.drawBBClaw(curPosPlace.base, (float) renderWidth.getValue(), (float) renderHeight.getValue(), outlineColor.getValue());
+            Tessellator.drawBBClaw(pos, (float) renderWidth.getValue(), (float) renderHeight.getValue(), outlineColor.getValue());
         }
         if(renderMode.getValue().equalsIgnoreCase("Slab")) {
-            Tessellator.drawBBSlabDown(curPosPlace.base, (float) renderHeight.getValue(), outlineColor.getValue());
+            Tessellator.drawBBSlabDown(pos, (float) renderHeight.getValue(), outlineColor.getValue());
         }
         if(renderDamage.getValue())
         {
@@ -345,8 +344,8 @@ public class AutoCrystal extends Module {
             }
 
             for(Entity entity : entities) {
-                if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY + 1, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
-                    if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY + 1, entity.posZ + 0.5, target) > minTargetDamageBreak.getValue()) {
+                if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
+                    if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY, entity.posZ + 0.5, target) > minTargetDamageBreak.getValue()) {
                         curBreakCrystal = (EntityEnderCrystal) entity;
                         for(int a = 0; a < breakAttempts.getValue(); a++) {
                             if (packetBreak.getValue())

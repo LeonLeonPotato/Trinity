@@ -66,7 +66,7 @@ public class SubSetting extends Component {
                 c.render();
             }
             if(ClickGUI.barMode.getValue().equals("Rainbow")) {
-                RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 31, this.parent.parent.x + 8, getHeight() - 2, 3, 6, 200);
+                RenderUtils.drawRainbowRectVertical(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + 31, this.parent.parent.x + 8, getHeight() - 2 - 14, 3, 6, 200);
             } else if(ClickGUI.barMode.getValue().equals("Static")) {
                 RenderUtils.drawRect(this.parent.parent.x + 10, this.parent.parent.y + this.parent.offset + this.offset + getHeight() + 14, this.parent.parent.x + 8, this.parent.parent.y + this.parent.offset + this.offset + 28, ClickGUI.barColor.getValue());
             }

@@ -33,6 +33,7 @@ public class ModuleManager {
         addMod(new AutoCrystal());
         addMod(new Surround());
         addMod(new InstantBurrow());
+
         // Misc
         addMod(new NoRotate());
         addMod(new DiscordRPC());
@@ -56,6 +57,7 @@ public class ModuleManager {
         addMod(new FullBright());
         addMod(new FreeLook());
         addMod(new NoRender());
+        addMod(new HoleESP());
 
         // Exploits
         addMod(new PacketFly());
