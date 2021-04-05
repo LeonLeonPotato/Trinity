@@ -7,6 +7,8 @@ import me.leon.trinity.config.rewrite.LoadConfig;
 import me.leon.trinity.config.rewrite.PresetObj;
 import me.leon.trinity.config.rewrite.SaveConfig;
 import me.leon.trinity.config.saveConfig;
+import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.settings.EventLoadPreset;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
@@ -65,11 +67,15 @@ public class PresetButton extends Component {
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if(isMouseOnButton(mouseX, mouseY) && button == 0) {
+            Trinity.settingsDispatcher.post(new EventLoadPreset(EventStage.PRE, this.preset));
+
             SaveConfig.runStatic();
 
             Trinity.currentPreset = this.preset;
 
             LoadConfig.load();
+
+            Trinity.settingsDispatcher.post(new EventLoadPreset(EventStage.POST, this.preset));
         }
     }
 

@@ -1,6 +1,7 @@
 package me.leon.trinity.utils.rendering;
 
 import me.leon.trinity.utils.Util;
+import me.leon.trinity.utils.math.MathUtils;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -24,6 +25,28 @@ public class RenderUtils implements Util {
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        bufferbuilder.pos(x, h, 0.0D).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(w, h, 0.0D).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(w, y, 0.0D).color(red, green, blue, alpha).endVertex();
+        bufferbuilder.pos(x, y, 0.0D).color(red, green, blue, alpha).endVertex();
+        tessellator.draw();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+    }
+
+    public static void drawBorder(float x, float y, float w, float h, float width, Color color)
+    {
+        float alpha = (float) color.getAlpha() / 255;
+        float red = (float) color.getRed() / 255;
+        float green = (float) color.getGreen() / 255;
+        float blue = (float) color.getBlue() / 255;
+        final net.minecraft.client.renderer.Tessellator tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
+        final BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.glLineWidth(width);
+        bufferbuilder.begin(GL_LINE_LOOP, DefaultVertexFormats.POSITION_COLOR);
         bufferbuilder.pos(x, h, 0.0D).color(red, green, blue, alpha).endVertex();
         bufferbuilder.pos(w, h, 0.0D).color(red, green, blue, alpha).endVertex();
         bufferbuilder.pos(w, y, 0.0D).color(red, green, blue, alpha).endVertex();
@@ -226,5 +249,9 @@ public class RenderUtils implements Util {
         glDisable(GL_LINE_SMOOTH);
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+    }
+
+    public static Color lower(Color color, int alpha) {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) MathUtils.clamp(0, 255, color.getAlpha() - alpha));
     }
 }

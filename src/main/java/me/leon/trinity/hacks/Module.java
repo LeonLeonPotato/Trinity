@@ -108,7 +108,6 @@ public abstract class Module implements Listenable {
                 onDisable();
             }
         } else {
-            this.enabled = enabled;
             if(this.enabled) {
                 onEnable0();
             } else {

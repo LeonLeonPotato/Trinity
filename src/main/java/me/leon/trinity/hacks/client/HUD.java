@@ -1,12 +1,14 @@
 package me.leon.trinity.hacks.client;
 
 import me.leon.trinity.clickgui.ClickGui;
+import me.leon.trinity.clickgui.components.sub.String;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hud.AnchorPoint;
 import me.leon.trinity.hud.Component;
 import me.leon.trinity.hud.HUDeditor;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.setting.settings.StringInput;
 import me.leon.trinity.utils.math.MathUtils;
 import net.minecraft.client.gui.GuiOverlayDebug;
 import net.minecraft.client.gui.ScaledResolution;
@@ -19,6 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HUD extends Module {
+    public static StringInput input = new StringInput("aaa", "aaa");
+
     public HUD() {
         super("HUD", "On screen overlay", Category.CLIENT);
     }

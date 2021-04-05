@@ -102,7 +102,7 @@ public class FontUtil implements Util {
         if (Trinity.moduleManager.getMod("Font").isEnabled())
             return Trinity.fontManager.getCustomFont().getStringWidth(text);
         else
-            return mc.fontRenderer.getStringWidth(text) + 4;
+            return mc.fontRenderer.getStringWidth(text);
     }
 
     public static float getFontHeight() {

@@ -15,6 +15,7 @@ import me.leon.trinity.utils.rendering.Tessellator;
 import me.leon.trinity.utils.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockObsidian;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -25,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 
 import static me.leon.trinity.utils.world.WorldUtils.empty;
 

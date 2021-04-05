@@ -3,7 +3,10 @@ package me.leon.trinity.clickgui.components.sub;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.Button;
+import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.settings.EventBooleanToggle;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -38,7 +41,11 @@ public class Boolean extends Component {
     public void mouseClicked(int mouseX, int mouseY, int button) {
         if(isWithinButton(mouseX, mouseY) && this.parent.open) {
             if(button == 0) {
-                this.set.setEnabled(!this.set.getValue());
+                final EventBooleanToggle event = new EventBooleanToggle(EventStage.PRE, this.set, !this.set.getValue());
+                Trinity.settingsDispatcher.post(event);
+
+                if(!event.isCancelled())
+                    this.set.setEnabled(!this.set.getValue());
             }
         }
     }

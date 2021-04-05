@@ -9,6 +9,7 @@ import me.leon.trinity.events.settings.EventInputEnter;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.StringInput;
+import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -30,8 +31,8 @@ public class String extends Component {
     @Override
     public void render() {
         RenderUtils.drawRect(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, ClickGUI.backgroundColor.getValue());
+        RenderUtils.drawBorder(this.parent.parent.x + ClickGui.width, this.parent.parent.y + this.parent.offset + this.offset + 14 + 14, this.parent.parent.x, this.parent.parent.y + this.parent.offset + this.offset + 14, 2, new Color(ClickGUI.backgroundColor.r, ClickGUI.backgroundColor.g, ClickGUI.backgroundColor.b, (int) MathUtils.clamp(0, 255, ClickGUI.backgroundColor.a + 70)));
         FontUtil.drawString(this.set.val, this.parent.parent.x + 7, this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), 0xa9b7c6);
-        FontUtil.drawString(this.set.name, this.parent.parent.x + (ClickGui.width - FontUtil.getStringWidth(this.set.name)), this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorSetting.getValue().getRGB());
         if(this.typing) {
             this.timer++;
             if(timer > 20 && timer <= 40) {
@@ -45,7 +46,12 @@ public class String extends Component {
 
     @Override
     public void updateComponent(int mouseX, int mouseY) {
-
+        if(isMouseOnButton(mouseX, mouseY) && this.parent.open && this.parent.parent.open) {
+            FontUtil.drawString(this.set.name, this.parent.parent.x + (ClickGui.width - FontUtil.getStringWidth(this.set.name)), this.parent.parent.y + this.parent.offset + 14 + this.offset + ((14 - FontUtil.getFontHeight()) / 2f), RenderUtils.lower(ClickGUI.nameColorSetting.getValue(), 70).getRGB());
+        }
+        if(!this.parent.open || !this.parent.parent.open) {
+            this.typing = false;
+        }
     }
 
     @Override
@@ -90,7 +96,9 @@ public class String extends Component {
 
             if(isntTypable) {
                 if((int) typedChar == 8) {
-                    this.set.val = this.set.val.substring(0, this.set.val.length() - 1);
+                    if(this.set.val.length() >= 1) {
+                        this.set.val = this.set.val.substring(0, this.set.val.length() - 1);
+                    }
                 }
             } else {
                 this.set.val = (this.set.val.concat(charString));

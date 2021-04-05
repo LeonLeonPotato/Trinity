@@ -1,6 +1,7 @@
 package me.leon.trinity.hacks.client;
 
 import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.settings.EventLoadPreset;
 import me.leon.trinity.events.settings.EventModeChange;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
@@ -60,6 +61,15 @@ public class ClickGUI extends Module {
     @EventHandler
     private final Listener<EventModeChange> toggleListener = new Listener<>(event -> {
         updateShader(event);
+    });
+
+    @EventHandler
+    private final Listener<EventLoadPreset> loadPresetListener = new Listener<>(event -> {
+        if(event.getStage() == EventStage.PRE)
+            stopShader();
+        else if (event.getStage() == EventStage.POST) {
+            loadShader();
+        }
     });
 
     @Override

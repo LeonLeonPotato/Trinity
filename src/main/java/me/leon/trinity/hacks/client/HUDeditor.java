@@ -21,15 +21,15 @@ public class HUDeditor extends Module {
     public static SubColor color = new SubColor("Color", background, 97, 97, 97, 97, false);
     public static Color textColor = new Color("TextColor", 255, 255, 255, 255, false);
 
-    public static SettingParent MLC = new SettingParent("ModuleList", true, true);
+    public static SettingParent MLC = new SettingParent("ModuleList", true, false);
     public static SubMode MLCMode = new SubMode("Mode", MLC, "AlphaPulse", "Rainbow", "AlphaPulse", "AlphaPulseStatic", "RainbowStatic", "Static");
     public static SubMode MLCBackground = new SubMode("MLCBackground", MLC, "Lines", "Lines", "None", "Fill");
     public static SubBoolean MLCLine = new SubBoolean("Line", MLC, true);
     public static SubColor MLCcolor = new SubColor("Color", MLC, 255, 255, 0, 255, true);
     public static SubColor MLCBackgroundColor = new SubColor("Background", MLC, 97, 97, 97, 97, false);
 
-    public static SettingParent Coords = new SettingParent("Coords", true, true);
-    public static SubBoolean netherCoords = new SubBoolean("Nether", MLC, true);
+    public static SettingParent Coords = new SettingParent("Coords", true, false);
+    public static SubBoolean netherCoords = new SubBoolean("Nether", Coords, true);
 
     public HUDeditor() {
         super("HUDeditor", "Edit the HUD", Category.CLIENT);

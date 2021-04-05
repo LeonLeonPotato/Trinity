@@ -3,17 +3,23 @@ package me.leon.trinity.clickgui.components.sub.sub;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.sub.SubSetting;
+import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.settings.EventLoadPreset;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
 import me.leon.trinity.utils.rendering.RenderUtils;
+import me.zero.alpine.fork.listener.EventHandler;
+import me.zero.alpine.fork.listener.Listenable;
+import me.zero.alpine.fork.listener.Listener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.awt.*;
 
-public class SubColorPicker extends Component {
+public class SubColorPicker extends Component implements Listenable {
     public me.leon.trinity.setting.settings.sub.SubColor set;
     public SubSetting parent;
     public int offset;
@@ -34,6 +40,7 @@ public class SubColorPicker extends Component {
 
     public SubColorPicker(me.leon.trinity.setting.settings.sub.SubColor set, SubSetting parent, int offset) {
         MinecraftForge.EVENT_BUS.register(this);
+        Trinity.settingsDispatcher.subscribe(this);
         this.set = set;
         this.parent = parent;
         this.offset = offset;
@@ -87,6 +94,15 @@ public class SubColorPicker extends Component {
             }
         }
     }
+
+    @EventHandler
+    private final Listener<EventLoadPreset> loadPresetListener = new Listener<>(event -> {
+        if(event.getStage() != EventStage.POST) return;
+        this.renderAtSpeed = (this.set.speed / 5f) * 60f;
+        this.renderAtHue = Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[] {0, 0, 0})[0] * 60;
+        this.circlePos = new float[] {Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[] {0, 0, 0})[1] * 60, Color.RGBtoHSB(this.set.r, this.set.g, this.set.b, new float[] {0, 0, 0})[2] * 60};
+        this.renderAtAlpha = (this.set.a / 255f) * 60;
+    });
 
     @Override
     public void updateComponent(int mouseX, int mouseY) {

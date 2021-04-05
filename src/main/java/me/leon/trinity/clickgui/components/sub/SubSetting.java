@@ -3,6 +3,8 @@ package me.leon.trinity.clickgui.components.sub;
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
 import me.leon.trinity.clickgui.components.Button;
+import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.settings.EventBooleanToggle;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.main.Trinity;
@@ -91,7 +93,11 @@ public class SubSetting extends Component {
             parent.parent.refresh();
         }
         if(set.canEnable() && isWithinButton(mouseX, mouseY) && button == 0) {
-            this.set.setEnabled(!set.getValue());
+            final EventBooleanToggle event = new EventBooleanToggle(EventStage.PRE, this.set, !this.set.getValue());
+            Trinity.settingsDispatcher.post(event);
+
+            if(!event.isCancelled())
+                this.set.setEnabled(!set.getValue());
         }
         if(open && parent.open && parent.parent.open) {
             for(Component c : this.comps) {

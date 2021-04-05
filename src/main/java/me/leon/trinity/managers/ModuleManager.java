@@ -8,6 +8,7 @@ import me.leon.trinity.hacks.exploits.*;
 import me.leon.trinity.hacks.misc.*;
 import me.leon.trinity.hacks.movement.*;
 import me.leon.trinity.hacks.player.*;
+import me.leon.trinity.hacks.preset.PresetManager;
 import me.leon.trinity.hacks.render.*;
 import me.leon.trinity.setting.Setting;
 import me.leon.trinity.hacks.render.NoRender;
@@ -20,6 +21,9 @@ public class ModuleManager {
 
     public ModuleManager() {
         modules = new ArrayList<>();
+
+        // Preset
+        addMod(new PresetManager());
 
         // Client
         addMod(new Font());
