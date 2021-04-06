@@ -1,11 +1,9 @@
 package me.leon.trinity.config.rewrite;
 
-import me.leon.trinity.config.Preset;
 import me.leon.trinity.utils.misc.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class PresetManager {
     public static ArrayList<PresetObj> presets = new ArrayList<>();

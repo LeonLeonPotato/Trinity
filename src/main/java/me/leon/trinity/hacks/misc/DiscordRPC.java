@@ -19,7 +19,8 @@ public class DiscordRPC extends Module {
 
     @Override
     public void onDisable() {
-        MessageBus.sendClientMessage("Discord Rich Presence shutdown!", true);
+        if(!nullCheck())
+            MessageBus.sendClientMessage("Discord Rich Presence shutdown!", true);
         RPCHandler.shutdown();
     }
 }

@@ -45,7 +45,6 @@ public class HoleESP extends Module {
 
     public HoleESP() {
         super("HoleESP", "Highlights holes", Category.RENDER);
-
     }
 
     @SubscribeEvent

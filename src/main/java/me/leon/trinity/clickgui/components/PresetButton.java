@@ -2,11 +2,9 @@ package me.leon.trinity.clickgui.components;
 
 import me.leon.trinity.clickgui.ClickGui;
 import me.leon.trinity.clickgui.Component;
-import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.rewrite.LoadConfig;
 import me.leon.trinity.config.rewrite.PresetObj;
 import me.leon.trinity.config.rewrite.SaveConfig;
-import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventLoadPreset;
 import me.leon.trinity.hacks.client.ClickGUI;

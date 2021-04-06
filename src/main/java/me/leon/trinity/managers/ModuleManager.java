@@ -37,6 +37,7 @@ public class ModuleManager {
         addMod(new AutoCrystal());
         addMod(new Surround());
         addMod(new InstantBurrow());
+        addMod(new Offhand());
 
         // Misc
         addMod(new NoRotate());

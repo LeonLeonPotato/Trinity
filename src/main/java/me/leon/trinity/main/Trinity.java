@@ -1,12 +1,10 @@
 package me.leon.trinity.main;
 
 import me.leon.trinity.clickgui.ClickGui;
-import me.leon.trinity.config.Preset;
 import me.leon.trinity.config.rewrite.LoadConfig;
 import me.leon.trinity.config.rewrite.PresetManager;
 import me.leon.trinity.config.rewrite.PresetObj;
 import me.leon.trinity.config.rewrite.SaveConfig;
-import me.leon.trinity.config.saveConfig;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.hud.HUDeditor;
@@ -23,10 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONObject;
 import org.lwjgl.input.Keyboard;
-
-import java.io.*;
 
 /**
  * my second mod, please work!
@@ -59,7 +54,6 @@ public class Trinity {
     public static TickrateManager tickrateManager;
     public static HudManager hudManager;
 
-    public static Preset curPreset;
     public static PresetObj currentPreset;
 
     @Mod.Instance
@@ -126,41 +120,5 @@ public class Trinity {
 
     public static boolean isObfEnv() {
         return obfEnv;
-    }
-
-    private void doPresetThing() {
-        //see if essentials exists, if it doesnt, make it, and write default in it
-        if(!saveConfig.presetDir.exists()) {
-            try {
-                if(!saveConfig.confDir.exists()) saveConfig.confDir.mkdirs();
-                PrintWriter writer = new PrintWriter(new FileOutputStream(saveConfig.presetDir), true);
-                writer.write("Default");
-                writer.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        if(!saveConfig.confDir.exists()) {
-            saveConfig.confDir.mkdirs();
-        }
-
-        presetManager = new PresetManager();
-        LOGGER.info("PresetManager initiated!");
-
-        //curPreset must be loaded first
-        //loadConfig.LoadConfig.loadPreset();
-
-        try {
-            if(!curPreset.file.exists()) {
-                curPreset.file.mkdirs();
-                curPreset.GUI.createNewFile();
-                curPreset.settings.createNewFile();
-                curPreset.search.createNewFile();
-                curPreset.Friends.createNewFile();
-                curPreset.enabledModules.createNewFile();
-                curPreset.binds.createNewFile();
-                curPreset.HUD.createNewFile();
-            }
-        } catch (Exception ignored) {}
     }
 }

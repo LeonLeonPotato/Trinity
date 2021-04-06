@@ -344,8 +344,8 @@ public class AutoCrystal extends Module {
             }
 
             for(Entity entity : entities) {
-                if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
-                    if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY, entity.posZ + 0.5, target) > minTargetDamageBreak.getValue()) {
+                if (WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
+                    if (WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, target) > minTargetDamageBreak.getValue()) {
                         curBreakCrystal = (EntityEnderCrystal) entity;
                         for(int a = 0; a < breakAttempts.getValue(); a++) {
                             if (packetBreak.getValue())
@@ -378,8 +378,8 @@ public class AutoCrystal extends Module {
                 return;
             }
             for(Entity entity : entities) {
-                if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY + 1, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
-                    if (WorldUtils.calculateDamage(entity.posX + 0.5, entity.posY + 1, entity.posZ + 0.5, target) > minTargetDamageBreak.getValue()) {
+                if (WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, mc.player) <= maxSelfDamageBreak.getValue()) {
+                    if (WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, target) > minTargetDamageBreak.getValue()) {
                         if (!placedCrystals.contains(entity.getPosition().down())) {
                             continue;
                         }
