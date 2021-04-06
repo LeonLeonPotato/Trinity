@@ -16,6 +16,8 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -158,14 +160,23 @@ public class LoadConfig {
 
     public static void loadPreset() {
         FileUtils.makeIfDoesntExist("Trinity/");
+        final File main = new File("Trinity/Main.txt");
+        if(!main.exists()) {
+            PrintWriter writer = FileUtils.writer("Trinity", "Main.txt");
+            writer.write("None");
+            writer.close();
+        }
         try {
             Scanner scanner = new Scanner(new File("Trinity/Main.txt"));
             while(scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 final PresetObj obj = PresetManager.find(line);
                 if(obj == null) {
-                    Trinity.currentPreset = new PresetObj("Default");
-                    PresetManager.presets.add(Trinity.currentPreset);
+                    PresetObj obj1 = new PresetObj("Default");
+                    Trinity.currentPreset = obj1;
+                    PresetManager.presets.add(obj1);
+                    ClickGui.getFrameFromCategory("PRESETS").refresh();
+                    SaveConfig.runStatic();
                 } else {
                     Trinity.currentPreset = obj;
                 }
