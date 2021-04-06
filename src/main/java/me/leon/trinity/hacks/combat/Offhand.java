@@ -91,6 +91,7 @@ public class Offhand extends Module {
             } else {
                 if (mc.gameSettings.keyBindUseItem.isKeyDown()) {
                     if (onlySword.getValue() && !(mc.player.getHeldItemMainhand().getItem() instanceof ItemSword)) {
+                        switchTo(toMode(offhand.getValue()));
                         clean();
                         return;
                     }

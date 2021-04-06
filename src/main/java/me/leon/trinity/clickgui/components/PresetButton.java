@@ -16,7 +16,7 @@ public class PresetButton extends Component {
     public PresetObj preset;
     public Frame parent;
     public int offset;
-    private boolean isHovered;
+    private boolean isHovered = false;
     private final int height;
 
     int x, y;
@@ -25,7 +25,7 @@ public class PresetButton extends Component {
         this.preset = preset;
         this.parent = parent;
         this.offset = offset;
-        this.height = 12;
+        this.height = 14;
     }
 
     @Override

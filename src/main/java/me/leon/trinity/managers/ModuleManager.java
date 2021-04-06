@@ -56,6 +56,7 @@ public class ModuleManager {
         addMod(new NoSlow());
         addMod(new Parkour());
         addMod(new ReverseStep());
+        addMod(new Step());
         addMod(new Yaw());
 
         // Render
