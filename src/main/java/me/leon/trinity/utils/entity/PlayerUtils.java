@@ -18,24 +18,4 @@ public class PlayerUtils implements Util {
     public static double getReach() {
         return Minecraft.getMinecraft().player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
     }
-
-    public static void doStrafe(final float speed) {
-        final float moveForward = mc.player.movementInput.moveForward;
-        final float moveStrafe = mc.player.movementInput.moveStrafe;
-        final float rotationYaw = mc.player.rotationYaw;
-
-        mc.player.motionX = ((moveForward * speed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))) + (moveStrafe * speed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))));
-        mc.player.motionZ = ((moveForward * speed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))) - (moveStrafe * speed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))));
-    }
-
-    public static double[] motion(final float speed) {
-        final float moveForward = mc.player.movementInput.moveForward;
-        final float moveStrafe = mc.player.movementInput.moveStrafe;
-        final float rotationYaw = mc.player.rotationYaw;
-
-        double x = ((moveForward * speed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))) + (moveStrafe * speed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))));
-        double z = ((moveForward * speed) * Math.sin(Math.toRadians((rotationYaw + 90.0f))) - (moveStrafe * speed) * Math.cos(Math.toRadians((rotationYaw + 90.0f))));
-
-        return new double[] {x, z};
-    }
 }

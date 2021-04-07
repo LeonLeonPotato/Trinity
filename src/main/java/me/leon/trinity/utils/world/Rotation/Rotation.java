@@ -8,7 +8,6 @@ public class Rotation implements Util {
     public boolean packet, stay;
     public Timer rotationStay = new Timer();
     public int time;
-    public RotationMode rotationMode;
     public RotationPriority priority;
 
     public Rotation(float pitch, float yaw) {
@@ -17,6 +16,8 @@ public class Rotation implements Util {
         this.packet = true;
         this.stay = true;
         this.priority = RotationPriority.Normal;
+
+        rotationStay.reset();
     }
 
     public Rotation(float pitch, float yaw, boolean packet) {
@@ -25,6 +26,8 @@ public class Rotation implements Util {
         this.packet = packet;
         this.stay = true;
         this.priority = RotationPriority.Normal;
+
+        rotationStay.reset();
     }
 
     public Rotation(float pitch, float yaw, boolean packet, RotationPriority priority) {
@@ -33,6 +36,8 @@ public class Rotation implements Util {
         this.packet = packet;
         this.stay = true;
         this.priority = priority;
+
+        rotationStay.reset();
     }
 
     public Rotation(float pitch, float yaw, boolean packet, boolean stay, int time, RotationPriority priority) {
@@ -42,13 +47,6 @@ public class Rotation implements Util {
         this.stay = stay;
         this.time = time;
         this.priority = priority;
-    }
-
-    public Rotation(float yaw, float pitch, RotationMode mode, RotationPriority rotationPriority) {
-        this.yaw = yaw;
-        this.pitch = pitch;
-        this.rotationMode = mode;
-        this.priority = rotationPriority;
 
         rotationStay.reset();
     }
@@ -73,10 +71,5 @@ public class Rotation implements Util {
         this.pitch = mc.player.rotationPitch;
 
         this.rotationStay.reset();
-    }
-
-    public enum RotationMode {
-        Packet,
-        Legit
     }
 }

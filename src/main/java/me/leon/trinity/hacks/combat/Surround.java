@@ -60,6 +60,9 @@ public class Surround extends Module {
         if(shift.getValue() && !mc.gameSettings.keyBindSneak.isKeyDown()) {
             this.draw = null;
             return;
+        } else if (shift.getValue() && mc.gameSettings.keyBindSneak.isKeyDown() && (mc.player.isElytraFlying() || mc.player.capabilities.isFlying)) {
+            this.draw = null;
+            return;
         }
         if(ModuleManager.getMod(PacketFly.class).isEnabled()) {
             this.draw = null;

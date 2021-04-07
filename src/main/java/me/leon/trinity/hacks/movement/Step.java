@@ -1,5 +1,6 @@
 package me.leon.trinity.hacks.movement;
 
+import me.leon.trinity.events.settings.EventModeChange;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.setting.settings.Boolean;
@@ -8,7 +9,10 @@ import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.Slider;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
 import me.leon.trinity.setting.settings.sub.SubSlider;
+import me.leon.trinity.utils.entity.MotionUtils;
 import me.leon.trinity.utils.entity.PlayerUtils;
+import me.zero.alpine.fork.listener.EventHandler;
+import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 import java.awt.*;
@@ -48,7 +52,25 @@ public class Step extends Module {
             return;
 
         originalHeight = mc.player.posY;
+
+        if(mode.getValue().equalsIgnoreCase("Vanilla")) {
+            mc.player.stepHeight = (float) height.getValue();
+        }
     }
+
+    @Override
+    public void onDisable() {
+        mc.player.stepHeight = 0.5f;
+    }
+
+    @EventHandler
+    private final Listener<EventModeChange> changeListener = new Listener<>(event -> {
+        if(event.getSet() == mode) {
+            if(!mode.getValue().equalsIgnoreCase("Vanilla")) {
+                mc.player.stepHeight = 0.5f;
+            }
+        }
+    });
 
     @Override
     public void onUpdate() {
@@ -73,7 +95,7 @@ public class Step extends Module {
         if (mc.player.isSneaking() && sneakPause.getValue())
             return;
 
-        forwardStep = PlayerUtils.motion(0.1f);
+        forwardStep = MotionUtils.getMotion(0.1f);
 
         if (getStepHeight().equals(StepHeight.Unsafe)) {
             if (disable.getValue().equalsIgnoreCase("Unsafe"))
@@ -111,7 +133,7 @@ public class Step extends Module {
     }
 
     public void stepVanilla() {
-        mc.player.setPosition(mc.player.posX, mc.player.posY + getStepHeight().height, mc.player.posZ);
+        mc.player.stepHeight = (float) height.getValue();
     }
 
     public void updateStepPackets(double[] stepArray) {

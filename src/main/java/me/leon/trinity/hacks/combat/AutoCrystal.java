@@ -129,6 +129,7 @@ public class AutoCrystal extends Module {
     public static SubBoolean    hostile = new SubBoolean("Hostile", targeting, true);
 
     // Variables
+    public static boolean pause;
     private static Set<BlockPos> placedCrystals;
     private static CrystalPosition curPosPlace;
     private static EntityEnderCrystal curBreakCrystal;
@@ -144,16 +145,22 @@ public class AutoCrystal extends Module {
 
     // Main events
     @Override public void onUpdate() {
-        if (nullCheck()) return;
-        if (!timingMode.getValue().equalsIgnoreCase("Tick")) return;
+        try {
+            if (nullCheck()) return;
+            if (!timingMode.getValue().equalsIgnoreCase("Tick")) return;
+            if(pause) return;
 
-        target = EntityUtils.getTarget(players.getValue(), neutral.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
-        autoCrystal();
+            target = EntityUtils.getTarget(players.getValue(), neutral.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
+            autoCrystal();
+        } catch (Exception e) {
+
+        }
     }
     @SubscribeEvent public void onFastTick(TickEvent.ClientTickEvent event) {
         try {
             if (nullCheck()) return;
             if (!timingMode.getValue().equalsIgnoreCase("Fast")) return;
+            if(pause) return;
 
             target = EntityUtils.getTarget(players.getValue(), neutral.getValue(), friends.getValue(), hostile.getValue(), passive.getValue(), targetRange.getValue(), EntityUtils.toMode(targetingMode.getValue()));
             autoCrystal();
@@ -493,6 +500,7 @@ public class AutoCrystal extends Module {
     });
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive0 = new Listener<>(event -> {
         if (wCheck()) return;
+        if(pause) return;
         if (event.getPacket() instanceof SPacketSpawnObject && ((SPacketSpawnObject) event.getPacket()).getType() == 51 && sequential.getValue() && Break.getValue()) {
             if (mc.player.getDistance(((SPacketSpawnObject) event.getPacket()).getX(), ((SPacketSpawnObject) event.getPacket()).getY(), ((SPacketSpawnObject) event.getPacket()).getZ()) > breakRange.getValue())
                 return;
@@ -502,6 +510,7 @@ public class AutoCrystal extends Module {
     });
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive1 = new Listener<>(event -> {
         if (wCheck()) return;
+        if(pause) return;
         if (event.getPacket() instanceof SPacketDestroyEntities && sequential.getValue() && Place.getValue()) {
             SPacketDestroyEntities packet = (SPacketDestroyEntities) event.getPacket();
             boolean found = false;

@@ -36,6 +36,7 @@ public class ModuleManager {
         addMod(new KillAura());
         addMod(new AutoCrystal());
         addMod(new Surround());
+        addMod(new AutoTrap());
         addMod(new InstantBurrow());
         addMod(new Offhand());
 
@@ -57,6 +58,7 @@ public class ModuleManager {
         addMod(new Parkour());
         addMod(new ReverseStep());
         addMod(new Step());
+        addMod(new Speed());
         addMod(new Yaw());
 
         // Render

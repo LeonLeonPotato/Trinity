@@ -4,7 +4,10 @@ import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
 import me.leon.trinity.utils.world.WorldUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockObsidian;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -308,6 +311,38 @@ public class EntityUtils implements Util {
                 return true;
         }
 
+        return false;
+    }
+
+    public static void setTimer(float speed) {
+        mc.timer.tickLength = 50.0f / speed;
+    }
+
+    public static void resetTimer() {
+        mc.timer.tickLength = 50;
+    }
+
+    public static boolean isInLiquid() {
+        if (mc.player != null) {
+            if (mc.player.fallDistance >= 3.0f) {
+                return false;
+            }
+            boolean inLiquid = false;
+            final AxisAlignedBB bb = mc.player.getRidingEntity() != null ? mc.player.getRidingEntity().getEntityBoundingBox() : mc.player.getEntityBoundingBox();
+            int y = (int) bb.minY;
+            for (int x = MathHelper.floor(bb.minX); x < MathHelper.floor(bb.maxX) + 1; x++) {
+                for (int z = MathHelper.floor(bb.minZ); z < MathHelper.floor(bb.maxZ) + 1; z++) {
+                    final Block block = mc.world.getBlockState(new BlockPos(x, y, z)).getBlock();
+                    if (!(block instanceof BlockAir)) {
+                        if (!(block instanceof BlockLiquid)) {
+                            return false;
+                        }
+                        inLiquid = true;
+                    }
+                }
+            }
+            return inLiquid;
+        }
         return false;
     }
 }
