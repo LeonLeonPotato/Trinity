@@ -8,12 +8,14 @@ import me.leon.trinity.setting.settings.Mode;
 import me.leon.trinity.setting.settings.SettingParent;
 import me.leon.trinity.setting.settings.Slider;
 import me.leon.trinity.setting.settings.sub.SubBoolean;
+import me.leon.trinity.setting.settings.sub.SubColor;
 import me.leon.trinity.setting.settings.sub.SubMode;
 import me.leon.trinity.setting.settings.sub.SubSlider;
 import me.leon.trinity.utils.entity.BlockUtils;
 import me.leon.trinity.utils.entity.EntityUtils;
 import me.leon.trinity.utils.entity.InventoryUtil;
 import me.leon.trinity.utils.misc.MessageBus;
+import me.leon.trinity.utils.rendering.Tessellator;
 import me.leon.trinity.utils.world.HoleUtils;
 import me.leon.trinity.utils.world.WorldUtils;
 import net.minecraft.block.BlockEnderChest;
@@ -23,7 +25,10 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 
@@ -37,6 +42,13 @@ public class AutoTrap extends Module {
     public static Boolean       strict = new Boolean("Strict", false);
     public static Boolean       onlyInHole = new Boolean("OnlyInHole", true);
     public static Boolean       toggle = new Boolean("Toggle", false);
+
+    public static SettingParent draw = new SettingParent("Draw", true, true);
+    public static SubMode       drawMode = new SubMode("Mode", draw, "Fill", "Fill", "Outline", "Both", "Claw");
+    public static SubSlider     drawWidth = new SubSlider("Width", draw, 0.1, 2, 5, false);
+    public static SubSlider     length = new SubSlider("Length", draw, 0.1, 0.3, 0.5, false);
+    public static SubColor      fillColor = new SubColor("FillColor", draw, 255, 0, 255, 200, false);
+    public static SubColor      outlineColor = new SubColor("OutlineColor", draw, 255, 0, 255, 200, false);
 
     public static SettingParent targeting = new SettingParent("Targeting", true, false);
     public static SubMode       targetingMode = new SubMode("Mode", targeting, "Closest", "Closest", "Lowest Health", "Highest Health");
@@ -52,6 +64,27 @@ public class AutoTrap extends Module {
     }
 
     public static EntityLivingBase target;
+    private final ArrayList<BlockPos> placed = new ArrayList<>();
+
+    @SubscribeEvent
+    public void onRender(RenderWorldLastEvent event) {
+        if(!draw.getValue()) return;
+        for(BlockPos pos : this.placed) {
+            final AxisAlignedBB bb = new AxisAlignedBB(pos);
+            if(drawMode.getValue().equalsIgnoreCase("Outline") || drawMode.getValue().equalsIgnoreCase("Both"))
+            {
+                Tessellator.drawBBOutline(bb, (float) drawWidth.getValue(), outlineColor.getValue());
+            }
+            if(drawMode.getValue().equalsIgnoreCase("Fill") || drawMode.getValue().equalsIgnoreCase("Both"))
+            {
+                Tessellator.drawBBFill(bb, fillColor.getValue());
+            }
+            if(drawMode.getValue().equalsIgnoreCase("Claw"))
+            {
+                Tessellator.drawBBClaw(bb, (float) drawWidth.getValue(), (float) length.getValue(), outlineColor.getValue());
+            }
+        }
+    }
 
     @Override
     public void onUpdate() {
@@ -62,6 +95,7 @@ public class AutoTrap extends Module {
             if(toggle.getValue()) toggle0("Target not found!");
             return;
         }
+        this.placed.clear();
         autoTrap();
     }
 
@@ -120,6 +154,7 @@ public class AutoTrap extends Module {
                 }
                 if(pos0.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) > Math.pow(placeRange.getValue(), 2)) continue;
                 BlockUtils.placeBlock(pos0, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                this.placed.add(pos0);
                 placed++;
             }
 
@@ -142,6 +177,7 @@ public class AutoTrap extends Module {
                 }
                 if(pos0.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) > Math.pow(placeRange.getValue(), 2)) continue;
                 BlockUtils.placeBlock(pos0, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                this.placed.add(pos0);
                 placed++;
             }
 
@@ -167,6 +203,7 @@ public class AutoTrap extends Module {
             if(need && medPos != null && WorldUtils.empty.contains(WorldUtils.getBlock(pos3)) && WorldUtils.empty.contains(WorldUtils.getBlock(pos4))) {
                 if(medPos.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
                     BlockUtils.placeBlock(medPos, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(medPos);
                     placed++;
                 }
             }
@@ -176,6 +213,7 @@ public class AutoTrap extends Module {
             if(!(WorldUtils.getBlock(pos3) instanceof BlockEnderChest) && !(WorldUtils.getBlock(pos3) instanceof BlockObsidian)) {
                 if(pos3.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
                     BlockUtils.placeBlock(pos3, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(pos3);
                     placed++;
                 }
             }
@@ -185,6 +223,7 @@ public class AutoTrap extends Module {
             if(!(WorldUtils.getBlock(pos4) instanceof BlockEnderChest) && !(WorldUtils.getBlock(pos4) instanceof BlockObsidian)) {
                 if(pos4.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
                     BlockUtils.placeBlock(pos4, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(pos4);
                     placed++;
                 }
             }
@@ -195,15 +234,19 @@ public class AutoTrap extends Module {
             if(!(WorldUtils.getBlock(pos3.add(0, 1, 0)) instanceof BlockEnderChest) && !(WorldUtils.getBlock(pos3.add(0, 1, 0)) instanceof BlockObsidian)) {
                 if(pos3.add(0, 1, 0).distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
                     BlockUtils.placeBlock(pos3.add(0, 1, 0), rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(pos3.add(0, 1, 0));
                     placed++;
                 }
             }
 
             if(placed >= bps.getValue()) return;
 
-            if(!(WorldUtils.getBlock(pos4.add(0, 1, 0)) instanceof BlockEnderChest) && !(WorldUtils.getBlock(pos4.add(0, 1, 1)) instanceof BlockObsidian)) {
+            if(!(WorldUtils.getBlock(pos4.add(0, 1, 0)) instanceof BlockEnderChest) && !(WorldUtils.getBlock(pos4.add(0, 1, 0)) instanceof BlockObsidian)) {
                 if(pos4.add(0, 1, 0).distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2))
+                {
                     BlockUtils.placeBlock(pos4.add(0, 1, 0), rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(pos4.add(0, 1, 0));
+                }
             }
 
         } else if(hole instanceof HoleUtils.SingleHole || !onlyInHole.getValue() && EntityUtils.getPos(0, 0, 0, target).size() == 1) {
@@ -223,6 +266,7 @@ public class AutoTrap extends Module {
                 }
                 if(pos0.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) > Math.pow(placeRange.getValue(), 2)) continue;
                 BlockUtils.placeBlock(pos0, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                this.placed.add(pos0);
                 placed++;
             }
 
@@ -236,6 +280,7 @@ public class AutoTrap extends Module {
                 }
                 if(pos0.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) > Math.pow(placeRange.getValue(), 2)) continue;
                 BlockUtils.placeBlock(pos0, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                this.placed.add(pos0);
                 placed++;
             }
 
@@ -259,6 +304,7 @@ public class AutoTrap extends Module {
             if(need && medPos != null && WorldUtils.empty.contains(WorldUtils.getBlock(pos.add(0, 2, 0)))) {
                 if(medPos.distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
                     BlockUtils.placeBlock(medPos, rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(medPos);
                     placed++;
                 }
             }
@@ -268,6 +314,17 @@ public class AutoTrap extends Module {
             if(WorldUtils.empty.contains(WorldUtils.getBlock(pos.add(0, 2, 0)))) {
                 if(pos.add(0, 2, 0).distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
                     BlockUtils.placeBlock(pos.add(0, 2, 0), rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(pos.add(0, 2, 0));
+                    placed++;
+                }
+            }
+
+            if(placed >= bps.getValue()) return;
+
+            if(WorldUtils.empty.contains(WorldUtils.getBlock(pos.add(0, 3, 0))) && antiStep.getValue()) {
+                if(pos.add(0, 3, 0).distanceSq(mc.player.posX, mc.player.posY + mc.player.eyeHeight, mc.player.posZ) <= Math.pow(placeRange.getValue(), 2)) {
+                    BlockUtils.placeBlock(pos.add(0, 3, 0), rotate.getValue(), strict.getValue(), true, packet.getValue(), true, antiGlitch.getValue());
+                    this.placed.add(pos.add(0, 3, 0));
                 }
             }
         }
