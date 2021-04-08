@@ -1,6 +1,7 @@
 package me.leon.trinity.utils.world;
 
 import me.leon.trinity.utils.Util;
+import me.leon.trinity.utils.entity.EntityUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockFire;
@@ -10,8 +11,10 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityEnderCrystal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.CombatRules;
@@ -23,6 +26,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,49 +141,82 @@ public class WorldUtils implements Util {
         return true;
     }
 
-    public static float calculateDamage(double posX, double posY, double posZ, Entity entity) {
+    public static float calculateDamage(double posX, double posY, double posZ, Entity entity,
+                                        int p_InterlopedAmount)
+    {
+        /// hack
+        if (entity == mc.player)
+        {
+            if (mc.player.capabilities.isCreativeMode)
+                return 0.0f;
+        }
+
+        float doubleExplosionSize = 12.0F;
+
+        double l_Distance = entity.getDistance(posX, posY, posZ);
+
+        if (l_Distance > doubleExplosionSize)
+            return 0f;
+
+        if (p_InterlopedAmount > 0)
+        {
+            Vec3d l_Interloped = EntityUtils.getInterpolatedAmount(entity, p_InterlopedAmount);
+            l_Distance = EntityUtils.GetDistance(l_Interloped.x, l_Interloped.y, l_Interloped.z, posX, posY, posZ);
+        }
+
+        double distancedsize = l_Distance / (double) doubleExplosionSize;
+        Vec3d vec3d = new Vec3d(posX, posY, posZ);
+        double blockDensity = entity.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+        double v = (1.0D - distancedsize) * blockDensity;
+        float damage = (int) ((v * v + v) / 2.0D * 7.0D * doubleExplosionSize + 1.0D);
         double finald = 1.0D;
-
-        try {
-            float doubleExplosionSize = 12.0F;
-            double distancedsize = entity.getDistance(posX, posY, posZ) / (double) doubleExplosionSize;
-            Vec3d vec3d = new Vec3d(posX, posY, posZ);
-            double blockDensity = entity.world.getBlockDensity(vec3d, entity.getEntityBoundingBox());
-            double v = (1.0D - distancedsize) * blockDensity;
-            float damage = (float) ((int) ((v * v + v) / 2.0D * 7.0D * (double) doubleExplosionSize + 1.0D));
-
-
-            if (entity instanceof EntityLivingBase) {
-                finald = getBlastReduction((EntityLivingBase) entity, getDamageMultiplied(damage), new Explosion(mc.world, null, posX, posY, posZ, 6F, false, true));
-            }
-        }catch (NullPointerException e){
-            e.printStackTrace();
+        if (entity instanceof EntityLivingBase)
+        {
+            finald = getBlastReduction((EntityLivingBase) entity, getDamageMultiplied(mc.world, damage),
+                    new Explosion(mc.world, null, posX, posY, posZ, 6F, false, true));
         }
         return (float) finald;
     }
 
-    public static float getBlastReduction(EntityLivingBase entity, float damage, Explosion explosion) {
-        if (entity instanceof EntityPlayer) {
+    public static float getBlastReduction(EntityLivingBase entity, float damage, Explosion explosion)
+    {
+        if (entity instanceof EntityPlayer)
+        {
             EntityPlayer ep = (EntityPlayer) entity;
             DamageSource ds = DamageSource.causeExplosionDamage(explosion);
-            damage = CombatRules.getDamageAfterAbsorb(damage, (float) ep.getTotalArmorValue(), (float) ep.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+            damage = CombatRules.getDamageAfterAbsorb(damage, (float) ep.getTotalArmorValue(),
+                    (float) ep.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
 
             int k = EnchantmentHelper.getEnchantmentModifierDamage(ep.getArmorInventoryList(), ds);
             float f = MathHelper.clamp(k, 0.0F, 20.0F);
             damage *= 1.0F - f / 25.0F;
 
-            if (entity.isPotionActive(Potion.getPotionById(11))) {
-                damage = damage - (damage / 4);
+            if (entity.isPotionActive(MobEffects.RESISTANCE))
+            {
+                damage -= damage / 4;
             }
-            damage = Math.max(damage, 0.0F);
+            // damage = Math.max(damage - ep.getAbsorptionAmount(), 0.0F);
             return damage;
         }
-        damage = CombatRules.getDamageAfterAbsorb(damage, (float) entity.getTotalArmorValue(), (float) entity.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
+
+        damage = CombatRules.getDamageAfterAbsorb(damage, (float) entity.getTotalArmorValue(),
+                (float) entity.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).getAttributeValue());
         return damage;
     }
 
-    private static float getDamageMultiplied(float damage) {
-        int diff = mc.world.getDifficulty().getId();
+    private static float getDamageMultiplied(final World p_World, float damage)
+    {
+        int diff = p_World.getDifficulty().getId();
         return damage * (diff == 0 ? 0 : (diff == 2 ? 1 : (diff == 1 ? 0.5f : 1.5f)));
+    }
+
+    public static float calculateDamage(EntityEnderCrystal crystal, Entity entity)
+    {
+        return calculateDamage(crystal.posX, crystal.posY, crystal.posZ, entity, 0);
+    }
+
+    public static float calculateDamage(final double posX, final double posY, final double posZ, Entity entity)
+    {
+        return calculateDamage(posX, posY, posZ, entity, 0);
     }
 }

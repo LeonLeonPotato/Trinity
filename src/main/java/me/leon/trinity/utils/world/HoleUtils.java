@@ -1,10 +1,13 @@
 package me.leon.trinity.utils.world;
 
 import me.leon.trinity.utils.Util;
+import me.leon.trinity.utils.entity.PlayerUtils;
 import net.minecraft.block.BlockObsidian;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
 
 public class HoleUtils implements Util {
     public static HoleUtils.Hole getHole(BlockPos pos, int height) {
@@ -135,6 +138,18 @@ public class HoleUtils implements Util {
             return false;
         }
     }
+
+    public static ArrayList<Hole> holes(float r, int height) {
+        ArrayList<Hole> holes = new ArrayList<>();
+        for(BlockPos pos : WorldUtils.getSphere(PlayerUtils.getPlayerPosFloored(), r, (int) r, false, true, 0)) {
+            final Hole hole = getHole(pos, height);
+            if(hole != null) {
+                holes.add(hole);
+            }
+        }
+        return holes;
+    }
+
 
     public enum type {
         DOUBLE, SINGLE

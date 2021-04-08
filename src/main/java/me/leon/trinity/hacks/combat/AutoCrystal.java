@@ -44,6 +44,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -188,7 +189,9 @@ public class AutoCrystal extends Module {
         }
         if(renderDamage.getValue())
         {
-            Tessellator.drawTextFromBlock(curPosPlace.base, String.valueOf(curPosPlace.damage), renderDamageColor.getValue().getRGB(), 1.0f);
+            DecimalFormat format = new DecimalFormat("##.#");
+            String formatted = format.format(curPosPlace.damage);
+            Tessellator.drawTextFromBlock(curPosPlace.base, formatted, renderDamageColor.getValue().getRGB(), 1.0f);
         }
     }
 
@@ -237,7 +240,7 @@ public class AutoCrystal extends Module {
                     if (pos.self <= maxSelfDamagePlace.getValue()) {
                         if (pos.damage > minTargetDamagePlace.getValue()) {
                             if (nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Place")) {
-                                if (pos.self >= mc.player.getHealth() + 1) continue;
+                                if (pos.self >= getSelfHealth() + 1) continue;
                             }
 
                             if (pos0 == null) {
@@ -256,7 +259,7 @@ public class AutoCrystal extends Module {
                     if (pos.self <= maxSelfDamagePlace.getValue()) {
                         if (pos.damage > minTargetDamagePlace.getValue()) {
                             if (nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Place")) {
-                                if (pos.self >= mc.player.getHealth() + 1) continue;
+                                if (pos.self >= getSelfHealth() + 1) continue;
                             }
 
                             if (pos0 == null) {
@@ -298,7 +301,7 @@ public class AutoCrystal extends Module {
                     if (pos.self <= maxSelfDamagePlace.getValue()) {
                         if (pos.damage > facePlaceMinDamage.getValue()) {
                             if (nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Place")) {
-                                if (pos.self >= mc.player.getHealth() + 1) continue;
+                                if (pos.self >= getSelfHealth() + 1) continue;
                             }
 
                             if (pos0 == null) {
@@ -317,7 +320,7 @@ public class AutoCrystal extends Module {
                     if (pos.self <= maxSelfDamagePlace.getValue()) {
                         if (pos.damage > facePlaceMinDamage.getValue()) {
                             if (nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Place")) {
-                                if (pos.self >= mc.player.getHealth() + 1) continue;
+                                if (pos.self >= getSelfHealth() + 1) continue;
                             }
 
                             if (pos0 == null) {
@@ -336,7 +339,7 @@ public class AutoCrystal extends Module {
     private void breakCrystals() {
         if (!Break.getValue()) return;
         if (!breakTimer.hasPassed((int) (breakDelay.getValue() * 50))) return;
-        if (mc.player.getHealth() <= minHealth.getValue()) return;
+        if (getSelfHealth() <= minHealth.getValue()) return;
 
         breakTimer.reset();
 
@@ -449,7 +452,7 @@ public class AutoCrystal extends Module {
         if (!Place.getValue()) return;
         if (!placeTimer.hasPassed((int) (placeDelay.getValue() * 50))) return;
         if (EntityUtils.isInHole(target) && limit.getValue() && !placeTimer.hasPassed(500)) return;
-        if (mc.player.getHealth() <= minHealth.getValue()) return;
+        if (getSelfHealth() <= minHealth.getValue()) return;
 
         placeTimer.reset();
 
@@ -469,6 +472,7 @@ public class AutoCrystal extends Module {
         if (curPosPlace != null)
         {
             place(curPosPlace.base, getCrystalHand(), packetPlace.getValue());
+            placedCrystals.add(curPosPlace.base);
         }
 
         swingHand();
@@ -505,6 +509,7 @@ public class AutoCrystal extends Module {
             if (mc.player.getDistance(((SPacketSpawnObject) event.getPacket()).getX(), ((SPacketSpawnObject) event.getPacket()).getY(), ((SPacketSpawnObject) event.getPacket()).getZ()) > breakRange.getValue())
                 return;
 
+            placedCrystals.remove(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
             attackByID(((SPacketSpawnObject) event.getPacket()).getEntityID());
         }
     });
@@ -554,8 +559,10 @@ public class AutoCrystal extends Module {
     });
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive3 = new Listener<>(event -> {
         if (event.getPacket() instanceof SPacketSpawnObject) {
-            if (mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID()) instanceof EntityEnderCrystal && curPosPlace != null && target != null)
+            /*if (mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID()) instanceof EntityEnderCrystal && curPosPlace != null && target != null)
                 placedCrystals.add(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
+
+             */
             this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
         } else if (event.getPacket() instanceof SPacketSpawnExperienceOrb) {
             this.checkID(((SPacketSpawnExperienceOrb)event.getPacket()).getEntityID());
@@ -631,7 +638,7 @@ public class AutoCrystal extends Module {
         if (entity.isDead) return false;
         if (EntityUtils.getRange(entity) > breakRange.getValue()) return false;
         if (nosuicide.getValue().equalsIgnoreCase("Both") || nosuicide.getValue().equalsIgnoreCase("Destroy")) {
-            if (mc.player.getHealth() <= WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, mc.player) + 1) return false;
+            if (getSelfHealth() <= WorldUtils.calculateDamage(entity.posX, entity.posY, entity.posZ, mc.player) + 1) return false;
         }
         switch (rayTraceBreakMode.getValue()) {
             case "Leon":
@@ -756,6 +763,7 @@ public class AutoCrystal extends Module {
         final Vec3d vec = MathUtils.extrapolatePlayerPosition(target0, (int) predictTicks.getValue());
         EntityOtherPlayerMP pre = new EntityOtherPlayerMP(target0.getEntityWorld(), target0.gameProfile);
         pre.setHealth(target0.getHealth());
+        pre.setAbsorptionAmount(target0.getAbsorptionAmount());
         pre.inventory.copyInventory(target0.inventory);
         pre.setPosition(vec.x, vec.y, vec.z);
         return pre;
@@ -771,8 +779,13 @@ public class AutoCrystal extends Module {
         EntityOtherPlayerMP pre = new EntityOtherPlayerMP(self.getEntityWorld(), self.gameProfile);
         pre.setHealth(self.getHealth());
         pre.inventory.copyInventory(self.inventory);
+        pre.setAbsorptionAmount(self.getAbsorptionAmount());
         pre.setPosition(vec.x, vec.y, vec.z);
         return pre;
+    }
+    
+    private float getSelfHealth() {
+        return mc.player.getHealth() + mc.player.getAbsorptionAmount();
     }
 
     private static class CrystalPosition {
@@ -781,8 +794,8 @@ public class AutoCrystal extends Module {
         private BlockPos base;
 
         private CrystalPosition(float self, float target, BlockPos base) {
-            this.self = self;
-            this.damage = target;
+            this.self = self - 4; // quick fix, damage calcs seem to be broken
+            this.damage = target - 4;
             this.base = base;
         }
 

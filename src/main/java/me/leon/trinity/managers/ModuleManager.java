@@ -39,6 +39,7 @@ public class ModuleManager {
         addMod(new AutoTrap());
         addMod(new InstantBurrow());
         addMod(new Offhand());
+        addMod(new HoleFill());
 
         // Misc
         addMod(new NoRotate());

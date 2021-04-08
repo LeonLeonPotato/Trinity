@@ -35,6 +35,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class EntityUtils implements Util {
+    public static double GetDistance(double p_X, double p_Y, double p_Z, double x, double y, double z)
+    {
+        double d0 = p_X - x;
+        double d1 = p_Y - y;
+        double d2 = p_Z - z;
+        return (double)MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+    }
+
     public static EntityLivingBase getTarget(boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range, int mode) {
         EntityLivingBase entity = null;
 

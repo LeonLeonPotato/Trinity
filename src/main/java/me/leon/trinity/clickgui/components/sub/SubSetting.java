@@ -86,24 +86,26 @@ public class SubSetting extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(isWithinButton(mouseX, mouseY) && button == 1) {
-            this.open = !open;
-            refresh();
-            parent.refresh();
-            parent.parent.refresh();
-        }
-        if(set.canEnable() && isWithinButton(mouseX, mouseY) && button == 0) {
-            final EventBooleanToggle event = new EventBooleanToggle(EventStage.PRE, this.set, !this.set.getValue());
-            Trinity.settingsDispatcher.post(event);
+        if(parent.open && parent.parent.open)
+        {
+            if(isWithinButton(mouseX, mouseY) && button == 1) {
+                this.open = !open;
+                refresh();
+                parent.refresh();
+                parent.parent.refresh();
+            }
+            if(set.canEnable() && isWithinButton(mouseX, mouseY) && button == 0) {
+                final EventBooleanToggle event = new EventBooleanToggle(EventStage.PRE, this.set, !this.set.getValue());
+                Trinity.settingsDispatcher.post(event);
 
-            if(!event.isCancelled())
-                this.set.setEnabled(!set.getValue());
-        }
-        if(open && parent.open && parent.parent.open) {
+                if(!event.isCancelled())
+                    this.set.setEnabled(!set.getValue());
+            }
             for(Component c : this.comps) {
                 c.mouseClicked(mouseX, mouseY, button);
             }
         }
+
     }
 
     @Override
