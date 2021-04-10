@@ -15,7 +15,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
 
@@ -51,7 +50,7 @@ public class HoleFill extends Module {
             }
             if(placed >= bps.getValue()) continue;
 
-            if(hole instanceof HoleUtils.DoubleHole) {
+            if(hole instanceof HoleUtils.DoubleHole && doubleHoles.getValue()) {
                 if(placed >= bps.getValue()) continue;
 
                 final HoleUtils.DoubleHole doubleH = ((HoleUtils.DoubleHole) hole);

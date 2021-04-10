@@ -329,6 +329,10 @@ public class AutoTrap extends Module {
             }
         }
 
+        if(EntityUtils.isTrapped(target, antiStep.getValue()) && toggle.getValue()) {
+            toggle0("Trapped Target! Toggling!");
+        }
+
         InventoryUtil.switchToSlot(old);
     }
 

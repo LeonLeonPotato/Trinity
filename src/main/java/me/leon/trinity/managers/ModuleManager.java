@@ -40,6 +40,8 @@ public class ModuleManager {
         addMod(new InstantBurrow());
         addMod(new Offhand());
         addMod(new HoleFill());
+        addMod(new AutoMend());
+        addMod(new AutoArmor());
 
         // Misc
         addMod(new NoRotate());

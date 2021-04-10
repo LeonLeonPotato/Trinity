@@ -44,7 +44,7 @@ public class Keybind extends Component {
 
     @Override
     public void mouseClicked(int mouseX, int mouseY, int button) {
-        if(isMouseOnButton(mouseX, mouseY) && this.parent.open) {
+        if(isMouseOnButton(mouseX, mouseY) && this.parent.open && this.parent.parent.open) {
             if(button == 0) {
                 this.binding = !binding;
             }

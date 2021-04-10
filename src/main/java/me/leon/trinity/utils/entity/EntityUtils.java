@@ -2,12 +2,11 @@ package me.leon.trinity.utils.entity;
 
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
+import me.leon.trinity.utils.world.HoleUtils;
 import me.leon.trinity.utils.world.WorldUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockObsidian;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -124,6 +123,85 @@ public class EntityUtils implements Util {
         return block;
     }
 
+    public static boolean isTrapped(EntityLivingBase entity, boolean antiStep) {
+        HoleUtils.Hole hole = HoleUtils.getHole(getEntityPosFloored(entity), -1);
+        boolean isInHole = isInHole(entity);
+        BlockPos entityPos = getEntityPosFloored(entity);
+        if(isInHole && hole != null) {
+            if(hole instanceof HoleUtils.DoubleHole) {
+                final HoleUtils.DoubleHole dHole = (HoleUtils.DoubleHole) hole;
+                final int[][] offsets = {
+                        {1, 0, 0},
+                        {0, 0, -1},
+                        {0, 0, 1},
+                        {-1, 0, 0}
+                };
+
+                int checked = 0;
+
+                for(int[] off : offsets) {
+                    final BlockPos pos = dHole.pos.add(off[0], off[1], off[2]);
+                    if(pos.equals(dHole.pos1)) continue;
+
+                    final Block block = WorldUtils.getBlock(pos);
+                    if(!WorldUtils.empty.contains(block)) checked++;
+
+                    final BlockPos pos0 = dHole.pos.add(off[0], off[1] + 1, off[2]);
+                    if(pos0.equals(dHole.pos1.add(0, off[1] + 1, 0))) continue;
+
+                    final Block block0 = WorldUtils.getBlock(pos0);
+                    if(!WorldUtils.empty.contains(block0)) checked++;
+                }
+
+                for(int[] off : offsets) {
+                    final BlockPos pos = dHole.pos1.add(off[0], off[1], off[2]);
+                    if(pos.equals(dHole.pos)) continue;
+
+                    final Block block = WorldUtils.getBlock(pos);
+                    if(!WorldUtils.empty.contains(block)) checked++;
+
+                    final BlockPos pos0 = dHole.pos1.add(off[0], off[1] + 1, off[2]);
+                    if(pos0.equals(dHole.pos.add(0, off[1] + 1, 0))) continue;
+
+                    final Block block0 = WorldUtils.getBlock(pos0);
+                    if(!WorldUtils.empty.contains(block0)) checked++;
+                }
+
+                if(!WorldUtils.empty.contains(WorldUtils.getBlock(dHole.pos.add(0, 2, 0)))) checked++;
+                if(!WorldUtils.empty.contains(WorldUtils.getBlock(dHole.pos1.add(0, 2, 0)))) checked++;
+                if(antiStep) {
+                    if(!WorldUtils.empty.contains(WorldUtils.getBlock(dHole.pos.add(0, 3, 0)))) checked++;
+                    if(!WorldUtils.empty.contains(WorldUtils.getBlock(dHole.pos1.add(0, 3, 0)))) checked++;
+                }
+                if(checked == (antiStep ? 16 : 14)) return true;
+            }
+            if(hole instanceof HoleUtils.SingleHole) {
+                int checked = 0;
+                final int[][] offsets = {
+                        {1, 0, 0},
+                        {0, 0, -1},
+                        {0, 0, 1},
+                        {-1, 0, 0},
+                        {1, 1, 0},
+                        {0, 1, -1},
+                        {0, 1, 1},
+                        {-1, 1, 0},
+                        {0, 2, 0}
+                };
+
+                for(int[] off : offsets) {
+                    if(!WorldUtils.empty.contains(WorldUtils.getBlock(((HoleUtils.SingleHole) hole).pos.add(off[0], off[1], off[2])))) checked++;
+                }
+
+                if(antiStep) {
+                    if (!WorldUtils.empty.contains(WorldUtils.getBlock(((HoleUtils.SingleHole) hole).pos.add(0, 3, 0)))) checked++;
+                }
+                return checked == (antiStep ? 10 : 9);
+            }
+        }
+        return false;
+    }
+
     public static boolean isBurrowed(EntityLivingBase entity) {
         return WorldUtils.getBlock(getEntityPosFloored(entity)) == Blocks.OBSIDIAN
                 || WorldUtils.getBlock(getEntityPosFloored(entity)) == Blocks.BEDROCK
@@ -210,6 +288,18 @@ public class EntityUtils implements Util {
         }
 
         return false;
+    }
+
+    public static int getTotalArmor(EntityPlayer target) {
+        int damage = 0;
+        for (ItemStack stack : target.getArmorInventoryList()) {
+            if (stack == null || stack.getItem() == Items.AIR)
+                continue;
+
+            damage += stack.getItemDamage();
+        }
+
+        return damage;
     }
 
     private static boolean isValid(Entity entity, boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range) {
