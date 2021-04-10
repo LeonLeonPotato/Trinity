@@ -505,16 +505,16 @@ public class AutoCrystal extends Module {
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive0 = new Listener<>(event -> {
         if (wCheck()) return;
         if(pause) return;
-        this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
-
-        if (event.getPacket() instanceof SPacketSpawnObject && ((SPacketSpawnObject) event.getPacket()).getType() == 51 && sequential.getValue() && Break.getValue()) {
-
-            if (mc.player.getDistance(((SPacketSpawnObject) event.getPacket()).getX(), ((SPacketSpawnObject) event.getPacket()).getY(), ((SPacketSpawnObject) event.getPacket()).getZ()) > breakRange.getValue())
-                return;
-
-            placedCrystals.remove(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
-            attackByID(((SPacketSpawnObject) event.getPacket()).getEntityID());
+        if (event.getPacket() instanceof SPacketSpawnObject) {
             this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
+
+            if(((SPacketSpawnObject) event.getPacket()).getType() == 51 && sequential.getValue() && Break.getValue()) {
+                if (mc.player.getDistance(((SPacketSpawnObject) event.getPacket()).getX(), ((SPacketSpawnObject) event.getPacket()).getY(), ((SPacketSpawnObject) event.getPacket()).getZ()) > breakRange.getValue())
+                    return;
+
+                placedCrystals.remove(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
+                attackByID(((SPacketSpawnObject) event.getPacket()).getEntityID());
+            }
         }
     });
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive1 = new Listener<>(event -> {
