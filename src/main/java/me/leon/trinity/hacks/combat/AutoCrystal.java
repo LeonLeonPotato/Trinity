@@ -505,12 +505,16 @@ public class AutoCrystal extends Module {
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive0 = new Listener<>(event -> {
         if (wCheck()) return;
         if(pause) return;
+        this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
+
         if (event.getPacket() instanceof SPacketSpawnObject && ((SPacketSpawnObject) event.getPacket()).getType() == 51 && sequential.getValue() && Break.getValue()) {
+
             if (mc.player.getDistance(((SPacketSpawnObject) event.getPacket()).getX(), ((SPacketSpawnObject) event.getPacket()).getY(), ((SPacketSpawnObject) event.getPacket()).getZ()) > breakRange.getValue())
                 return;
 
             placedCrystals.remove(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
             attackByID(((SPacketSpawnObject) event.getPacket()).getEntityID());
+            this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
         }
     });
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive1 = new Listener<>(event -> {
@@ -558,13 +562,7 @@ public class AutoCrystal extends Module {
         }
     });
     @EventHandler private final Listener<EventPacketRecieve> onPacketReceive3 = new Listener<>(event -> {
-        if (event.getPacket() instanceof SPacketSpawnObject) {
-            /*if (mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID()) instanceof EntityEnderCrystal && curPosPlace != null && target != null)
-                placedCrystals.add(Objects.requireNonNull(mc.world.getEntityByID(((SPacketSpawnObject) event.getPacket()).getEntityID())).getPosition().down());
-
-             */
-            this.checkID(((SPacketSpawnObject)event.getPacket()).getEntityID());
-        } else if (event.getPacket() instanceof SPacketSpawnExperienceOrb) {
+        if (event.getPacket() instanceof SPacketSpawnExperienceOrb) {
             this.checkID(((SPacketSpawnExperienceOrb)event.getPacket()).getEntityID());
         } else if (event.getPacket() instanceof SPacketSpawnPlayer) {
             this.checkID(((SPacketSpawnPlayer)event.getPacket()).getEntityID());
@@ -794,7 +792,7 @@ public class AutoCrystal extends Module {
         private BlockPos base;
 
         private CrystalPosition(float self, float target, BlockPos base) {
-            this.self = self - 4; // quick fix, damage calcs seem to be broken
+            this.self = self + 4; // quick fix, damage calcs seem to be broken
             this.damage = target - 4;
             this.base = base;
         }

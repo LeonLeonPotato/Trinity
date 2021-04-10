@@ -2,10 +2,17 @@ package me.leon.trinity.hacks.movement;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
+import net.minecraft.util.EnumHand;
 
 public class AutoSprint extends Module {
     public AutoSprint() {
         super("Sprint", "Automatically sprints", Category.MOVEMENT);
+    }
+
+    @Override
+    public void onEnable() {
+        if(nullCheck()) return;
     }
 
     @Override

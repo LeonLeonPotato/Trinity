@@ -42,6 +42,7 @@ public class ModuleManager {
         addMod(new HoleFill());
         addMod(new AutoMend());
         addMod(new AutoArmor());
+        addMod(new Quiver());
 
         // Misc
         addMod(new NoRotate());

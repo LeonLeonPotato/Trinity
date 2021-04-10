@@ -2,6 +2,7 @@ package me.leon.trinity.mixins.mixins;
 
 import com.mojang.authlib.GameProfile;
 import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.main.EventStopHandActive;
 import me.leon.trinity.events.main.MoveEvent;
 import me.leon.trinity.events.main.RotationEvent;
 import me.leon.trinity.hacks.misc.FreeCam;
@@ -10,6 +11,7 @@ import me.leon.trinity.utils.world.Rotation.RotationUtils;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.MoverType;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,6 +34,16 @@ public class MixinEntityPlayerSP extends AbstractClientPlayer {
             info.cancel();
 
             RotationUtils.updateRotationPackets(event);
+        }
+    }
+
+    @Inject(method = "resetActiveHand", at = @At("HEAD"), cancellable = true)
+    public void resetActiveHand(CallbackInfo info) {
+        EventStopHandActive event = new EventStopHandActive(EventStage.PRE);
+        Trinity.dispatcher.post(event);
+
+        if (event.isCancelled()) {
+            info.cancel();
         }
     }
 

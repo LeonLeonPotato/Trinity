@@ -2,6 +2,7 @@ package me.leon.trinity.hacks;
 
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.Setting;
+import me.leon.trinity.utils.misc.MessageBus;
 import me.zero.alpine.fork.listener.Listenable;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
@@ -142,5 +143,10 @@ public abstract class Module implements Listenable {
 
     protected boolean nullCheck() {
         return (mc.world == null || mc.player == null);
+    }
+
+    protected void toggleWithMessage(String message) {
+        this.setEnabled(false);
+        MessageBus.sendClientMessage(message, true);
     }
 }
