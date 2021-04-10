@@ -2,6 +2,7 @@ package me.leon.trinity.mixins.mixins;
 
 import com.mojang.authlib.GameProfile;
 import me.leon.trinity.events.EventStage;
+import me.leon.trinity.events.main.BlockPushEvent;
 import me.leon.trinity.events.main.EventStopHandActive;
 import me.leon.trinity.events.main.MoveEvent;
 import me.leon.trinity.events.main.RotationEvent;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityPlayerSP.class)
 public class MixinEntityPlayerSP extends AbstractClientPlayer {
@@ -57,5 +59,15 @@ public class MixinEntityPlayerSP extends AbstractClientPlayer {
         } else {
             super.move(type, event.x, event.y, event.z);
         }
+    }
+
+    @Inject(method = "pushOutOfBlocks", at = @At("HEAD"), cancellable = true)
+    public void pushOutOfBlocks(double var1, double var2, double var3, CallbackInfoReturnable ci) {
+
+        BlockPushEvent blockPushEvent = new BlockPushEvent(var1,var2,var3,EventStage.PRE);
+        Trinity.dispatcher.post(blockPushEvent);
+
+        if ((blockPushEvent).isCancelled())
+            ci.cancel();
     }
 }

@@ -79,6 +79,7 @@ public class ModuleManager {
 
         // Player
         addMod(new InventoryMove());
+        addMod(new NoPush());
     }
 
     private void addMod(Module mod) {

@@ -109,4 +109,18 @@ public class InventoryUtil implements Util {
 
     }
 
+    public static int amountInHotbar(Item item) {
+        int quantity = 0;
+
+        for(int i = 44; i > 35; i--) {
+            ItemStack stackInSlot = mc.player.inventoryContainer.getSlot(i).getStack();
+            if(stackInSlot.getItem() == item) quantity += stackInSlot.getCount();
+        }
+        if(mc.player.getHeldItemOffhand().getItem() == item) quantity += mc.player.getHeldItemOffhand().getCount();
+
+        return quantity;
+    }
+
+    public static int amountBlockInHotbar(Block block) {return amountInHotbar(new ItemStack(block).getItem());}
+
 }
