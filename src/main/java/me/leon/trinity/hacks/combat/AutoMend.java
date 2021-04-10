@@ -2,7 +2,6 @@ package me.leon.trinity.hacks.combat;
 
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.RotationManager;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.KeyBinding;
@@ -17,12 +16,9 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
 import net.minecraft.util.EnumHand;
-import net.minecraft.world.gen.structure.template.BlockRotationProcessor;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.input.Keyboard;
 
 public class AutoMend extends Module {
@@ -46,11 +42,13 @@ public class AutoMend extends Module {
 
     @Override
     public void onEnable() {
+        if(nullCheck()) return;
         start();
     }
 
     @Override
     public void onDisable() {
+        if(nullCheck()) return;
         end();
     }
 

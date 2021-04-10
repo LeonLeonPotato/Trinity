@@ -1,9 +1,7 @@
 package me.leon.trinity.hacks.combat;
 
-import com.sun.javafx.collections.ImmutableObservableList;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.settings.Boolean;
 import me.leon.trinity.setting.settings.Slider;
 import me.leon.trinity.utils.world.Timer;
@@ -11,7 +9,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemElytra;
@@ -19,8 +16,6 @@ import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
 public class AutoArmor extends Module {
     public static Slider delay = new Slider("Delay", 0, 200, 1000, true);
@@ -32,7 +27,7 @@ public class AutoArmor extends Module {
         super("AutoArmor", "Replaces armor", Category.COMBAT);
     }
 
-    private Timer timer = new Timer();
+    private final Timer timer = new Timer();
     private final ArrayList<Item> leggings = new ArrayList<>(Arrays.asList(Items.LEATHER_LEGGINGS, Items.IRON_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.CHAINMAIL_LEGGINGS, Items.DIAMOND_LEGGINGS));
     private final ArrayList<Item> helmets = new ArrayList<>(Arrays.asList(Items.LEATHER_HELMET, Items.IRON_HELMET, Items.GOLDEN_HELMET, Items.CHAINMAIL_HELMET, Items.DIAMOND_HELMET));
     private final ArrayList<Item> chestplates = new ArrayList<>(Arrays.asList(Items.LEATHER_CHESTPLATE, Items.IRON_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.ELYTRA));
