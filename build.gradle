@@ -1,0 +1,144 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = 'forge'
+            url = 'https://files.minecraftforge.net/maven'
+        }
+        maven {
+            name = 'SpongePowered'
+            url = 'https://repo.spongepowered.org/repository/maven-public/'
+        }
+        maven {
+            url = 'https://plugins.gradle.org/m2'
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'me.leon.trinity'
+version = '0.2-beta'
+archivesBaseName = 'Trinity'
+
+compileJava {
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+minecraft {
+    version = '1.12.2-14.23.5.2768'
+    runDir = 'run'
+    mappings = 'snapshot_20180814'
+    coreMod = 'me.leon.trinity.mixins.MixinLoaderForge'
+    makeObfSourceJar = false
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+
+    maven {
+        name = 'spongepowered-repo'
+        url = 'https://repo.spongepowered.org/repository/maven-public/'
+    }
+    maven {
+        name = 'impactdevelopment-repo'
+        url = 'https://impactdevelopment.github.io/maven/'
+    }
+    maven {
+        name = 'jitpack.io'
+        url = "https://jitpack.io"
+    }
+}
+
+dependencies {
+    implementation 'org.jetbrains:annotations:19.0.0'
+
+    compile "com.github.ionar2:Alpine:1.9f"
+    compile group: 'net.jodah', name: 'typetools', version: '0.5.0'
+    compile group: "com.googlecode.json-simple", name: "json-simple", version: "1.1.1"
+
+    //Mixin
+    compile('org.spongepowered:mixin:0.7.4-SNAPSHOT') {
+        exclude module: 'launchwrapper'
+        exclude module: 'guava'
+        exclude module: 'gson'
+        exclude module: 'commons-io'
+    }
+
+    //Baritone
+    compile 'com.github.cabaletta:baritone:1.2.14'
+    compile 'cabaletta:baritone-api:1.2'
+
+    //Minn RPC
+    compile group: 'club.minnced', name: 'java-discord-rpc', version: '2.0.1'
+
+    compile group: 'net.jodah', name: 'typetools', version: '0.5.0'
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': project.minecraft.version
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('org.spongepowered:mixin'))
+        include(dependency('cabaletta:baritone-api'))
+        include(dependency("com.github.ionar2:Alpine:1.9f"))
+        include(dependency('club.minnced:java-discord-rpc:2.0.1'))
+        include(dependency('net.jodah:typetools'))
+        include(dependency('com.googlecode.json-simple:json-simple:1.1.1'))
+    }
+
+    exclude 'dummyThing'
+    exclude 'LICENSE.txt'
+    classifier = ''
+}
+
+mixin {
+    defaultObfuscationEnv searge
+    add sourceSets.main, 'mixins.trinity.refmap.json'
+}
+
+jar.manifest.attributes(
+        'MixinConfigs': 'mixins.trinity.json',
+        'TweakClass': 'org.spongepowered.asm.launch.MixinTweaker',
+        'TweakOrder': 0,
+        'FMLCorePluginContainsFMLMod': true,
+        'FMLCorePlugin': 'me.leon.trinity.mixins.MixinLoaderForge',
+        'ForceLoadAsMod': true,
+        'FMLAT': 'trinity_at.cfg'
+)
+
+reobf {
+    shadowJar {
+        mappingType = 'SEARGE'
+        classpath = sourceSets.main.compileClasspath
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+build.dependsOn(shadowJar)

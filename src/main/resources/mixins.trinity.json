@@ -1,0 +1,28 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "me.leon.trinity.mixins.mixins",
+  "refmap": "mixins.trinity.refmap.json",
+  "mixins": [
+    "MixinEntityPlayerSP",
+    "MixinGuiMainMenu",
+    "MixinNetworkManager",
+    "MixinRenderLivingBase",
+    "MixinEntity",
+    "MixinMovementInputFromOptions",
+    "MixinTileSignRenderer",
+    "MixinLayerArmorBase",
+    "MixinEntityRenderer",
+    "MixinTileEntityEnderChestRenderer",
+    "MixinTileEntityChestRenderer",
+    "MixinTileEntityShulkerBoxRenderer",
+    "MixinRenderEntityItem",
+    "MixinWorld",
+    "MixinGuiBossOverlay",
+    "MixinPlayerControllerMP",
+    "MixinVisGraph",
+    "MixinRenderEntityCrystal",
+    "MixinNetHandlerPlayClient",
+    "MixinFontRenderer"
+  ]
+}
