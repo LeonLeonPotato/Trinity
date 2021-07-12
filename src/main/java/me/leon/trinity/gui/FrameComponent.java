@@ -26,7 +26,7 @@ public class FrameComponent implements IComponent {
 
         this.buttons = new ArrayList<>();
 
-        int offset = 0;
+        int offset = 15;
         for(Module e : ModuleManager.getMods(category)) {
             buttons.add(new ButtonComponent(this, e, offset));
             offset += 14;

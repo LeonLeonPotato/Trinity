@@ -3,8 +3,10 @@ package me.leon.trinity.gui;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.BezierCurve;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.world.Timer;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.input.Mouse;
 
@@ -16,10 +18,9 @@ public class ClickGui extends GuiScreen {
     private static ArrayList<IComponent> totalComponents;
     private static ArrayList<FrameComponent> frames;
     private static IComponent hovered; // setting descriptions later?
-    private static long startTime = 0;
-    private static int todo;
-    private static float current;
-    private static final BezierCurve curve = new BezierCurve(0, 200, 200, 200);
+    private static long startTime = System.currentTimeMillis();
+    private static float todo = 0;
+    private static final BezierCurve curve = new BezierCurve(0, 120, 120, 0);
 
     public ClickGui() {
         totalComponents = new ArrayList<>();
@@ -90,29 +91,40 @@ public class ClickGui extends GuiScreen {
     }
 
     private void scroll() {
-        Trinity.LOGGER.info(curve.get((System.currentTimeMillis() % 500) / 500f) / 200f);
-        if(1==1) return;
-
         if(ClickGUI.scroll.getValue()) {
-            todo += Mouse.getDWheel();
-            current = (float) (curve.get((System.currentTimeMillis() - startTime) / 500f) / 200f);
-            final float left = todo - current;
+            switch (ClickGUI.scrollAnimations.getValue()){
+                case "Bezier": {
+                    todo += Mouse.getDWheel();
 
-            if(todo != 0) {
-                if(todo > 0) {
-                    frames.forEach(e -> e.setY(e.getY() + current));
-                } else if (todo < 0) {
-                    frames.forEach(e -> e.setY(e.getY() - current));
+                    if (todo != 0) {
+                        float plus = Math.abs(todo) * 100f;
+
+                        final double t = (System.currentTimeMillis() - startTime) / plus;
+
+                        final float cur_c = (float) ((curve.get(t)) / 120f);
+                        final float cur = cur_c * todo;
+
+                        frames.forEach(e -> e.setY(e.getY() + cur));
+                        todo -= cur;
+
+                        if (t >= 1) {
+                            startTime = System.currentTimeMillis();
+                        }
+                    } else {
+                        startTime = System.currentTimeMillis();
+                    }
                 }
-
-                if(curve.isFinished()) {
-                    todo = 0;
-                    startTime = System.currentTimeMillis();
-                    curve.setFinished(false);
+                case "Half": {
+                    todo += Mouse.getDWheel();
+                    final float cur = todo * 0.6f;
+                    if(Math.abs(todo) <= 0.5) {
+                        todo = 0;
+                    }
+                    frames.forEach(e -> e.setY(e.getY() + cur));
                 }
-
-            } else {
-                startTime = System.currentTimeMillis();
+                case "None": {
+                    frames.forEach(e -> e.setY(e.getY() + Mouse.getDWheel()));
+                }
             }
         }
     }

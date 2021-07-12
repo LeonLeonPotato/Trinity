@@ -19,7 +19,7 @@ public class ClickGUI extends Module {
 	public static ModeSetting background = new ModeSetting("Background", main, "Blur", "None", "Blur", "Darken", "Both");
 	public static BooleanSetting scroll = new BooleanSetting("Scroll", main, true);
 	public static SliderSetting scrollSpeed = new SliderSetting("Speed", scroll, 0, 10, 50, true);
-	public static BooleanSetting scrollAnimations = new BooleanSetting("Animate", scroll, true);
+	public static ModeSetting scrollAnimations = new ModeSetting("Animation", scroll, "Bezier", "Bezier", "Half", "None");
 	public static BooleanSetting pause = new BooleanSetting("Pause Game", main, false);
 
 	public static BooleanSetting frame = new BooleanSetting("Frame", true, false);
