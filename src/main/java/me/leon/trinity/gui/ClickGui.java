@@ -97,7 +97,7 @@ public class ClickGui extends GuiScreen {
                 case "Bezier": {
                     final int dWheel = Mouse.getDWheel();
                     todo += dWheel * 0.1;
-                    if(dWheel == 0 && timer.hasPassed(100)) {
+                    if(dWheel == 0 && timer.hasPassed(100)) { // find your own value dummy
                         todo = 0;
                     } else timer.reset();
 
