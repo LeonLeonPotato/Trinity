@@ -20,6 +20,7 @@ public class ClickGui extends GuiScreen {
     private static IComponent hovered; // setting descriptions later?
     private static long startTime = System.currentTimeMillis();
     private static float todo = 0;
+    private static final Timer timer = new Timer();
     private static final BezierCurve curve = new BezierCurve(0, 120, 120, 0);
 
     public ClickGui() {
@@ -94,7 +95,11 @@ public class ClickGui extends GuiScreen {
         if(ClickGUI.scroll.getValue()) {
             switch (ClickGUI.scrollAnimations.getValue()){
                 case "Bezier": {
-                    todo += Mouse.getDWheel();
+                    final int dWheel = Mouse.getDWheel();
+                    todo += dWheel * 0.1;
+                    if(dWheel == 0 && timer.hasPassed(100)) {
+                        todo = 0;
+                    } else timer.reset();
 
                     if (todo != 0) {
                         float plus = Math.abs(todo) * 100f;
@@ -108,6 +113,7 @@ public class ClickGui extends GuiScreen {
                         todo -= cur;
 
                         if (t >= 1) {
+                            todo = 0;
                             startTime = System.currentTimeMillis();
                         }
                     } else {

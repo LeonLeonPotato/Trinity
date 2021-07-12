@@ -17,7 +17,7 @@ public class SettingManager {
 	}
 
 	public static void addSets(Setting set) {
-		hudSets.add(set);
+		sets.add(set);
 	}
 
 	public static Setting getSetting(String name) {
@@ -71,7 +71,7 @@ public class SettingManager {
 
 	// hud settings below
 
-	public static void addSetsHud(Setting set) {
+	public static void addHudSets(Setting set) {
 		hudSets.add(set);
 	}
 

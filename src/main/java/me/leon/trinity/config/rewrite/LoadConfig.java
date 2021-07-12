@@ -57,7 +57,7 @@ public class LoadConfig {
 		FileUtils.makeIfDoesntExist(Trinity.currentPreset.getModsFile());
 		for (File file : Trinity.currentPreset.getModsFile().listFiles()) {
 			try {
-				Module mod = ModuleManager.getMod(file.getName());
+				Module mod = ModuleManager.getMod(file.getName().replace(".json", ""));
 				JSONParser p = new JSONParser();
 				FileReader f = new FileReader(file);
 				JSONObject main = (JSONObject) p.parse(f);
