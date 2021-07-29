@@ -9,10 +9,10 @@ import me.leon.trinity.hacks.exploits.*;
 import me.leon.trinity.hacks.movement.*;
 import me.leon.trinity.hacks.render.*;
 import me.leon.trinity.hacks.player.*;
-import me.leon.trinity.setting.rewrite.Setting;
+import me.leon.trinity.utils.client.SettingUtil;
 
+import static me.leon.trinity.utils.client.SettingUtil.*;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +23,7 @@ public class ModuleManager {
 	public ModuleManager() {
 		modules = new ArrayList<>();
 
+		list = modules;
 		// Client
 		addMod(new Font());
 		addMod(new HUD());
@@ -100,26 +101,6 @@ public class ModuleManager {
 
 	public static List<Module> getMods(Category c) {
 		return modules.stream().filter(mod -> mod.getCategory() == c).collect(Collectors.toList());
-	}
-
-	private void addMod(Module mod) {
-		try {
-			for (Field field : mod.getClass().getDeclaredFields()) {
-				if (Setting.class.isAssignableFrom(field.getType())) {
-					if (!field.isAccessible()) {
-						field.setAccessible(true);
-					}
-					final Setting val = (Setting) field.get(mod);
-					if(val.getParent() == null) val.setParent(mod);
-					val.setSuperParent(mod);
-					mod.addSetting(val);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		modules.add(mod);
 	}
 
 	public ArrayList<Module> getModulesByCategory(Category cat) {

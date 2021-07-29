@@ -2,13 +2,11 @@ package me.leon.trinity.config.rewrite;
 
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventLoadConfig;
-import me.leon.trinity.gui.ClickGui;
-import me.leon.trinity.gui.FrameComponent;
+import me.leon.trinity.gui.frame.IFrame;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hud.AnchorPoint;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.ModuleManager;
-import me.leon.trinity.managers.SettingManager;
 import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.utils.misc.FileUtils;
 import me.leon.trinity.utils.rendering.GuiUtils;
@@ -43,7 +41,7 @@ public class LoadConfig {
 			if(!editor.exists()) {
 				return;
 			}
-			final JSONObject object = (JSONObject) new JSONParser().parse(new FileReader(editor));
+			final JSONObject object = (JSONObject) new JSONParser().parse(new FileReaders(editor));
 			HUDeditor.frame.y = ((Long) object.get("y")).intValue();
 			HUDeditor.frame.open = (Boolean) object.get("open");
 		} catch (Exception e) {
@@ -65,10 +63,12 @@ public class LoadConfig {
 				mod.setEnabled((Boolean) main.get("enabled"));
 				mod.setVisible((Boolean) main.get("visible"));
 				mod.setKey(((Long) main.get("bind")).intValue());
+				JSONObject settings = (JSONObject) main.get("settings");
 
-				for(String key : (Set<String>) main.keySet()) {
-					Setting s = SettingManager.getSetting(key);
-					Object val = main.get(key);
+				for(String key : (Set<String>) settings.keySet()) {
+					Setting s = mod.getSetting(key);
+					Object val = settings.get(key);
+					Trinity.LOGGER.info(s.getName() + " " + key + " " + val);
 
 					s.parseJson(main, key, val);
 				}
@@ -84,14 +84,14 @@ public class LoadConfig {
 		FileUtils.makeIfDoesntExist(Trinity.currentPreset.getGuiFile());
 		for (File file : Trinity.currentPreset.getGuiFile().listFiles()) {
 			try {
-				FrameComponent c = GuiUtils.findFrame(file.getName().replaceAll(".json", ""));
+				IFrame c = GuiUtils.findFrame(file.getName().replaceAll(".json", ""));
 				JSONParser parser = new JSONParser();
 				FileReader reader = new FileReader(file);
 				JSONObject obj = (JSONObject) parser.parse(reader);
 				reader.close();
 				assert c != null;
-				c.setX(((Long) obj.get("x")).intValue());
-				c.setY(((Long) obj.get("y")).intValue());
+				c.setX(((Double) obj.get("x")).floatValue());
+				c.setY(((Double) obj.get("y")).floatValue());
 				c.setOpen((Boolean) obj.get("open"));
 			} catch (Exception e) {
 				e.printStackTrace();

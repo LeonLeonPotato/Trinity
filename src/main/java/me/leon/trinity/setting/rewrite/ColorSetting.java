@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.utils.rendering.Rainbow;
+import net.minecraft.client.Minecraft;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
@@ -90,7 +91,7 @@ public class ColorSetting extends Setting {
     @Override
     public Object getJsonString() {
         JSONObject s = new JSONObject();
-        if(getParent() == getSuperParent()) {
+        if(getSubSettings().isEmpty()) {
             putValues(s);
         } else {
             JSONObject val = new JSONObject();

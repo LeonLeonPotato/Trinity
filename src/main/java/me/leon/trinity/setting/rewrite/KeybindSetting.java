@@ -42,7 +42,7 @@ public class KeybindSetting extends Setting {
     @SuppressWarnings("unchecked")
     @Override
     public Object getJsonString() {
-        if(getParent() == getSuperParent()) {
+        if(getSubSettings().isEmpty()) {
             return keycode;
         } else {
             JSONObject s = new JSONObject();
@@ -74,7 +74,7 @@ public class KeybindSetting extends Setting {
                 });
             }
         } else {
-            this.keycode = ((Long) main.get("value")).intValue();
+            this.keycode = ((Long) val).intValue();
         }
     }
 }

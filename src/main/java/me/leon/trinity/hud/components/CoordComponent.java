@@ -1,11 +1,11 @@
 package me.leon.trinity.hud.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.hacks.client.HUDeditor;
 import me.leon.trinity.hud.AnchorPoint;
 import me.leon.trinity.hud.Component;
 import me.leon.trinity.setting.rewrite.BooleanSetting;
 import me.leon.trinity.utils.misc.FontUtil;
-import me.leon.trinity.utils.rendering.Coloring;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -51,8 +51,8 @@ public class CoordComponent extends Component {
 					String.format("X: %d | Y: %d | Z: %d", x, y, z);
 		} else {
 			this.coords = simple.getValue() ?
-					String.format("XYZ: %d, %d, %d   " + Coloring.getGREY() + "[" + Coloring.getRESET() + " XZ: %s, %s" + Coloring.getGREY() + " ]" + Coloring.getRESET(), x, y, z, nx, nz) :
-					String.format("X: %d | Y: %d | Z: %d   " + Coloring.getGREY() + "[" + Coloring.getRESET() + " X: %s | Z: %s" + Coloring.getGREY() + " ]" + Coloring.getRESET(), x, y, z, nx, nz);
+					String.format("XYZ: %d, %d, %d   " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + " XZ: %s, %s" + ChatFormatting.GRAY + " ]" + ChatFormatting.RESET, x, y, z, nx, nz) :
+					String.format("X: %d | Y: %d | Z: %d   " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + " X: %s | Z: %s" + ChatFormatting.GRAY + " ]" + ChatFormatting.RESET, x, y, z, nx, nz);
 		}
 		FontUtil.drawString(coords, this.x + 1, this.y, HUDeditor.textColor.getValue().getRGB());
 	}

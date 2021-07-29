@@ -29,4 +29,7 @@ public interface IComponent {
     default void drawRect(int x, int y, int x1, int y1, Color color) {
         RenderUtils.drawRect(Math.min(x, x1), Math.min(y, y1), Math.max(x, x1), Math.max(y, y1), color);
     }
+    default void drawRect(float x, float y, float x1, float y1, Color color) {
+        RenderUtils.drawRect(Math.min(x, x1), Math.min(y, y1), Math.max(x, x1), Math.max(y, y1), color);
+    }
 }

@@ -1,9 +1,9 @@
 package me.leon.trinity.gui;
 
+import me.leon.trinity.gui.frame.FrameComponent;
+import me.leon.trinity.gui.frame.IFrame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.main.Trinity;
-import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.BezierCurve;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.world.Timer;
@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ClickGui extends GuiScreen {
-    private static ArrayList<IComponent> totalComponents;
-    private static ArrayList<FrameComponent> frames;
+    private static ArrayList<IComponent> totalComponents; // not implimented yet
+    private static ArrayList<IFrame> frames;
     private static IComponent hovered; // setting descriptions later?
     private static long startTime = System.currentTimeMillis();
     private static float todo = 0;
@@ -45,7 +45,7 @@ public class ClickGui extends GuiScreen {
 
         scroll();
 
-        for(FrameComponent c : frames) {
+        for(IFrame c : frames) {
             Point p = new Point(mouseX, mouseY);
             c.update(p);
             c.render(p);
@@ -57,7 +57,7 @@ public class ClickGui extends GuiScreen {
 
     @Override
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
-        for(FrameComponent c : frames) {
+        for(IFrame c : frames) {
             if(c.buttonClick(mouseButton, new Point(mouseX, mouseY))) break;
         }
     }
@@ -65,7 +65,7 @@ public class ClickGui extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
-            for (FrameComponent c : frames) {
+            for (IFrame c : frames) {
                 c.setDragging(false);
                 c.unload();
             }
@@ -74,14 +74,14 @@ public class ClickGui extends GuiScreen {
             return;
         }
 
-        for (FrameComponent c : frames) {
+        for (IFrame c : frames) {
             c.keyTyped(keyCode);
         }
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        for (FrameComponent c : frames) {
+        for (IFrame c : frames) {
             c.buttonRelease(state, new Point(mouseX, mouseY));
         }
     }
@@ -139,7 +139,7 @@ public class ClickGui extends GuiScreen {
         return totalComponents;
     }
 
-    public static ArrayList<FrameComponent> getFrames() {
+    public static ArrayList<IFrame> getFrames() {
         return frames;
     }
 }

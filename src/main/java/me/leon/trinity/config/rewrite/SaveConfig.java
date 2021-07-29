@@ -4,11 +4,10 @@ package me.leon.trinity.config.rewrite;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.settings.EventSaveConfig;
 import me.leon.trinity.gui.ClickGui;
-import me.leon.trinity.gui.FrameComponent;
+import me.leon.trinity.gui.frame.IFrame;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.ModuleManager;
-import me.leon.trinity.managers.SettingManager;
 import me.leon.trinity.setting.rewrite.*;
 import me.leon.trinity.utils.misc.FileUtils;
 import org.json.simple.JSONObject;
@@ -62,7 +61,7 @@ public class SaveConfig extends Thread {
 
 				JSONObject settings = new JSONObject();
 
-				for (Setting set : SettingManager.getSettings(mod.getClass())) {
+				for (Setting set : mod.getSettings()) {
 					settings.put(set.getName(), set.getJsonString());
 				}
 
@@ -76,7 +75,7 @@ public class SaveConfig extends Thread {
 	}
 
 	public static void saveGUI() {
-		for (FrameComponent c : ClickGui.getFrames()) {
+		for (IFrame c : ClickGui.getFrames()) {
 			try {
 				PrintWriter writer = FileUtils.writer(Trinity.currentPreset.getGuiFile(), c.getCategory().name() + ".json");
 				JSONObject object = new JSONObject();
@@ -102,7 +101,7 @@ public class SaveConfig extends Thread {
 				object.put("anchor", c.anchorPoint == null ? null : c.anchorPoint.name());
 				object.put("visible", c.visible);
 
-				for (Setting set : SettingManager.getSettings(c.getClass())) {
+				for (Setting set : c.getSettings()) {
 					settings.put(set.getName(), set.getJsonString());
 				}
 

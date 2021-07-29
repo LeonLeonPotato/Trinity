@@ -1,12 +1,10 @@
 package me.leon.trinity.gui.button;
 
-import me.leon.trinity.gui.ClickGui;
-import me.leon.trinity.gui.FrameComponent;
+import me.leon.trinity.gui.frame.FrameComponent;
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.GuiUtils;
-import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.*;
 
@@ -21,7 +19,7 @@ public abstract class IButton implements IComponent {
 
     protected void drawBack(Point p, String name, boolean enabled) {
         final float realY = parent.getY() + offset;
-        RenderUtils.drawRect(parent.getX(), realY, parent.getX() + getWidth(), realY + 14, getColor(p, enabled));
+        drawRect(parent.getX(), realY, parent.getX() + getWidth(), realY + 14, getColor(p, enabled));
         FontUtil.drawString(name, parent.getX() + xOffset(), realY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorButton.getValue());
     }
 
@@ -53,5 +51,17 @@ public abstract class IButton implements IComponent {
     @Override
     public float xOffset() {
         return 3;
+    }
+
+    public FrameComponent getParent() {
+        return parent;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 }

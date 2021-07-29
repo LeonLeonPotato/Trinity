@@ -1,26 +1,26 @@
 package me.leon.trinity.gui.setting;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
-import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.setting.rewrite.BooleanSetting;
+import me.leon.trinity.setting.rewrite.ModeSetting;
 import me.leon.trinity.setting.rewrite.Setting;
 
 import java.awt.*;
 
-public class BooleanComponent extends ISetting<BooleanSetting> {
-    public BooleanComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+public class ModeComponent extends ISetting<ModeSetting> {
+    public ModeComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
     }
 
     @Override
     public void render(Point point) {
-        drawBack(point, set.getName(), set.getValue());
+        drawBack(point, set.getName() + ChatFormatting.WHITE + set.getValue(), false);
     }
 
     @Override
     public void update(Point point) {
-        subs.forEach(e -> e.update(point));
+
     }
 
     @Override
@@ -32,13 +32,16 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
                     return true;
                 }
                 case 0: {
-                    set.setValue(!set.getValue());
+                    int v = set.getValues().indexOf(set.getValue());
+                    if(v == set.getValues().size()) v = 0; else v += 1;
+                    set.setValue(set.getValues().get(v));
                     return true;
                 }
             }
         }
-        for (ISetting<?> sub : subs) {
-            if(sub.buttonClick(button, point)) return true;
+        if(subs.isEmpty()) return false;
+        for(IComponent c : subs) {
+            if(c.buttonClick(button, point)) return true;
         }
         return false;
     }
@@ -57,19 +60,7 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
     }
 
     @Override
-    protected Color getColor(Point point, boolean enabled) {
-        if(onButton(point)) {
-            if(enabled) {
-                return ClickGUI.enabledBooleanColor.getValue().brighter();
-            } else {
-                return ClickGUI.disabledBooleanColor.getValue().brighter();
-            }
-        } else {
-            if(enabled) {
-                return ClickGUI.enabledBooleanColor.getValue();
-            } else {
-                return ClickGUI.disabledBooleanColor.getValue();
-            }
-        }
+    public float height() {
+        return 0;
     }
 }

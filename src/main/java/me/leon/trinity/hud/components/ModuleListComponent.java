@@ -1,17 +1,15 @@
 package me.leon.trinity.hud.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.hacks.client.HUDeditor;
 import me.leon.trinity.hud.AnchorPoint;
 import me.leon.trinity.hud.Component;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.rewrite.BooleanSetting;
 import me.leon.trinity.setting.rewrite.ColorSetting;
 import me.leon.trinity.setting.rewrite.ModeSetting;
 import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.FontUtil;
-import me.leon.trinity.utils.rendering.Coloring;
 import me.leon.trinity.utils.rendering.Rainbow;
 import net.minecraft.client.gui.ScaledResolution;
 
@@ -69,7 +67,7 @@ public class ModuleListComponent extends Component {
 			if (mod.isEnabled() && mod.isVisible()) {
 				String name = mod.getName();
 				if(mod.getHudInfo() != null) {
-					name = name.concat(" " + Coloring.getGREY() + "[" + Coloring.getRESET() + mod.getHudInfo() + Coloring.getGREY() + "]" + Coloring.getRESET());
+					name = name.concat(" " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + mod.getHudInfo() + ChatFormatting.GRAY + "]" + ChatFormatting.RESET);
 				}
 				map.put(mod, FontUtil.getStringWidth(name));
 			}
@@ -81,7 +79,7 @@ public class ModuleListComponent extends Component {
 					final Color color = getColor(yL * 3);
 					String name = mod.getName();
 					if(mod.getHudInfo() != null) {
-						name = name.concat(" " + Coloring.getGREY() + "[" + Coloring.getRESET() + mod.getHudInfo() + Coloring.getGREY() + "]" + Coloring.getRESET());
+						name = name.concat(" " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + mod.getHudInfo() + ChatFormatting.GRAY + "]" + ChatFormatting.RESET);
 					}
 					final float a = (this.x + this.width()) - FontUtil.getStringWidth(name);
 					if (line.getValue()) {
@@ -101,7 +99,7 @@ public class ModuleListComponent extends Component {
 					final Color color = getColor(yL * 3);
 					String name = mod.getName();
 					if(mod.getHudInfo() != null) {
-						name = name.concat(" " + Coloring.getGREY() + "[" + Coloring.getRESET() + mod.getHudInfo() + Coloring.getGREY() + "]" + Coloring.getRESET());
+						name = name.concat(" " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + mod.getHudInfo() + ChatFormatting.GRAY + "]" + ChatFormatting.RESET);
 					}
 					final float a = this.x + FontUtil.getStringWidth(name);
 					if (line.getValue()) {
@@ -121,7 +119,7 @@ public class ModuleListComponent extends Component {
 					final Color color = getColor(yL * 3);
 					String name = mod.getName();
 					if(mod.getHudInfo() != null) {
-						name = name.concat(" " + Coloring.getGREY() + "[" + Coloring.getRESET() + mod.getHudInfo() + Coloring.getGREY() + "]" + Coloring.getRESET());
+						name = name.concat(" " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + mod.getHudInfo() + ChatFormatting.GRAY + "]" + ChatFormatting.RESET);
 					}
 					final float a = (this.x + this.width()) - FontUtil.getStringWidth(name);
 					if (line.getValue()) {
@@ -141,7 +139,7 @@ public class ModuleListComponent extends Component {
 					final Color color = getColor(yL * 3);
 					String name = mod.getName();
 					if(mod.getHudInfo() != null) {
-						name = name.concat(" " + Coloring.getGREY() + "[" + Coloring.getRESET() + mod.getHudInfo() + Coloring.getGREY() + "]" + Coloring.getRESET());
+						name = name.concat(" " + ChatFormatting.GRAY + "[" + ChatFormatting.RESET + mod.getHudInfo() + ChatFormatting.GRAY + "]" + ChatFormatting.RESET);
 					}
 					final float a = this.x + FontUtil.getStringWidth(name);
 					if (line.getValue()) {

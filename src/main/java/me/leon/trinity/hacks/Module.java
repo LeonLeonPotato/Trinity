@@ -1,7 +1,6 @@
 package me.leon.trinity.hacks;
 
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.managers.SettingManager;
 import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.utils.misc.MessageBus;
 import me.zero.alpine.fork.listener.Listenable;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 
 public abstract class Module implements Listenable {
 	protected static volatile Minecraft mc = Minecraft.getMinecraft();
+
+	private ArrayList<Setting> settings;
 	private boolean visible;
 	private String name;
 	private String description;
@@ -27,6 +28,8 @@ public abstract class Module implements Listenable {
 		this.cat = cat;
 		this.enabled = false;
 		this.visible = true;
+
+		this.settings = new ArrayList<>();
 	}
 
 	public Module(String name, String description, Category cat, boolean visible) {
@@ -35,6 +38,8 @@ public abstract class Module implements Listenable {
 		this.cat = cat;
 		this.enabled = false;
 		this.visible = visible;
+
+		this.settings = new ArrayList<>();
 	}
 
 	public void onEnable() {
@@ -140,8 +145,16 @@ public abstract class Module implements Listenable {
 		return null;
 	}
 
-	public void addSetting(Setting set) {
-		SettingManager.addSets(set);
+	public void addSetting(Setting set){
+		settings.add(set);
+	}
+
+	public ArrayList<Setting> getSettings() {
+		return settings;
+	}
+
+	public Setting getSetting(String set) {
+		return settings.stream().filter(e -> e.getName().equals(set)).findFirst().get();
 	}
 
 	protected boolean pCheck() {
@@ -159,9 +172,5 @@ public abstract class Module implements Listenable {
 	protected void toggleWithMessage(String message) {
 		this.setEnabled(false);
 		MessageBus.sendClientMessage(message, true);
-	}
-
-	public ArrayList<Setting> getSettings() {
-		return SettingManager.getSettings(this);
 	}
 }

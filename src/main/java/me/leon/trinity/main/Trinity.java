@@ -1,10 +1,13 @@
 package me.leon.trinity.main;
 
-import me.leon.trinity.gui.ClickGui;
+import com.mojang.authlib.Agent;
+import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
+import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import me.leon.trinity.config.rewrite.LoadConfig;
 import me.leon.trinity.config.rewrite.PresetManager;
 import me.leon.trinity.config.rewrite.PresetObj;
 import me.leon.trinity.config.rewrite.SaveConfig;
+import me.leon.trinity.gui.ClickGui;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.managers.*;
@@ -22,6 +25,8 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
+
+import java.net.Proxy;
 
 /**
  * my second mod, please work!
@@ -43,7 +48,6 @@ public class Trinity {
 	public static CapeManager capeManager;
 	public static ModuleManager moduleManager;
 	public static PresetManager presetManager;
-	public static SettingManager settingManager;
 	public static FriendManager friendManager;
 	public static SpoofingManager spoofingManager;
 	public static TickrateManager tickrateManager;
@@ -78,12 +82,13 @@ public class Trinity {
 		LOGGER = LogManager.getLogger("Trinity"); // init logger
 		obfEnv = (boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment"); // are we running in a obfuscated environment?
 
+		LOGGER.info("Trinity Pre Initialization: ----------------------");
+
 		// init dispatchers
 		dispatcher = new EventManager();
 		settingsDispatcher = new EventManager();
 
 		// init managers
-		settingManager = new SettingManager();
 		moduleManager = new ModuleManager();
 		capeManager = new CapeManager();
 		friendManager = new FriendManager();
@@ -110,10 +115,13 @@ public class Trinity {
 		}
 
 		ModuleManager.modules.forEach(m -> Trinity.settingsDispatcher.subscribe(m));
+
+		LOGGER.info("Trinity Post Initialization: ----------------------");
 	}
 
 	@SubscribeEvent
 	public void toggleKeys(InputEvent.KeyInputEvent event) {
+		if(1==1) return;
 		if (Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
 			if (Keyboard.isCreated()) {
 				if (Keyboard.getEventKeyState()) {

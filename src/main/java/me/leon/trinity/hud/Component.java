@@ -1,14 +1,13 @@
 package me.leon.trinity.hud;
 
 import me.leon.trinity.hacks.client.HUDeditor;
-import me.leon.trinity.main.Trinity;
-import me.leon.trinity.managers.SettingManager;
 import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.utils.rendering.RenderUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public abstract class Component {
 	public String name;
@@ -18,9 +17,11 @@ public abstract class Component {
 	public AnchorPoint anchorPoint = null;
 	protected Minecraft mc = Minecraft.getMinecraft();
 	public ScaledResolution res = new ScaledResolution(mc);
+	private ArrayList<Setting> settings;
 
 	public Component(String name) {
 		this.name = name;
+		this.settings = new ArrayList<>();
 	}
 
 	public abstract void render();
@@ -63,6 +64,14 @@ public abstract class Component {
 	}
 
 	public void addSetting(Setting setting) {
-		SettingManager.hudSets.add(setting);
+		settings.add(setting);
+	}
+
+	public ArrayList<Setting> getSettings() {
+		return settings;
+	}
+
+	public Setting getSetting(String name) {
+		return settings.stream().filter(e -> e.getName().equals(name)).findFirst().get();
 	}
 }

@@ -36,7 +36,7 @@ public class ClickGUI extends Module {
 
 	public static BooleanSetting settings = new BooleanSetting("Settings", true, false);
 	public static ColorSetting backgroundColor = new ColorSetting("Background Color", settings, 43, 43, 43, 200, false);
-	public static ColorSetting nameColorSetting = new ColorSetting("Setting Name", settings, 169, 183, 198, 255, false);
+	public static ColorSetting settingNameColor = new ColorSetting("Setting Name", settings, 169, 183, 198, 255, false);
 	public static ColorSetting disabledBooleanColor = new ColorSetting("Disabled Color", settings, 43, 43, 43, 200, false);
 	public static ColorSetting enabledBooleanColor = new ColorSetting("Enabled Color", settings, 97, 97, 97, 200, true);
 	public static ColorSetting sliderColor = new ColorSetting("Slider Color", settings, 97, 97, 97, 200, false);

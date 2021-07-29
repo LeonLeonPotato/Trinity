@@ -1,14 +1,9 @@
 package me.leon.trinity.hud.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.hud.Component;
-import me.leon.trinity.utils.misc.BezierCurve;
 import me.leon.trinity.utils.misc.FontUtil;
-import me.leon.trinity.utils.rendering.Coloring;
-import me.leon.trinity.utils.rendering.skeet.Quad;
-import me.leon.trinity.utils.rendering.skeet.SkeetRenderer;
 import net.minecraft.client.Minecraft;
-
-import java.awt.*;
 
 public class FPSComponent extends Component {
 
@@ -22,12 +17,12 @@ public class FPSComponent extends Component {
 	@Override
 	public void render() {
 		drawBackground();
-		FontUtil.drawString("FPS: " + Coloring.getWHITE() + Minecraft.getDebugFPS(), this.x + 1, this.y, getTextColor());
+		FontUtil.drawString("FPS: " + ChatFormatting.WHITE + Minecraft.getDebugFPS(), this.x + 1, this.y, getTextColor());
 	}
 
 	@Override
 	public float width() {
-		return FontUtil.getStringWidth("FPS: " + Coloring.getWHITE() + Minecraft.getDebugFPS()) + 3;
+		return FontUtil.getStringWidth("FPS: " + ChatFormatting.WHITE + Minecraft.getDebugFPS()) + 3;
 	}
 
 	@Override

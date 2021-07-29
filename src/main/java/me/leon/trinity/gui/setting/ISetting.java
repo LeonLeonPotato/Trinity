@@ -1,23 +1,24 @@
 package me.leon.trinity.gui.setting;
 
-import me.leon.trinity.gui.FrameComponent;
+import me.leon.trinity.gui.frame.FrameComponent;
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
 import me.leon.trinity.hacks.client.ClickGUI;
-import me.leon.trinity.setting.rewrite.Setting;
+import me.leon.trinity.setting.rewrite.*;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.GuiUtils;
-import me.leon.trinity.utils.rendering.RenderUtils;
 
 import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class ISetting<T extends Setting> implements IComponent {
-    protected final ArrayList<IComponent> subs;
+    protected final ArrayList<ISetting<?>> subs;
     protected final IComponent parent;
     protected final ButtonComponent superParent;
     protected final T set;
     protected final int offset;
+
+    protected boolean open = false;
 
     @SuppressWarnings("unchecked")
     protected ISetting(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
@@ -27,14 +28,24 @@ public abstract class ISetting<T extends Setting> implements IComponent {
         this.offset = offset;
 
         this.subs = new ArrayList<>();
+        int off = offset + 14;
+        for(Setting s : set.getSubSettings()) {
+            if(s instanceof BooleanSetting)     subs.add(new BooleanComponent(this, superParent, s, off));
+            if(s instanceof ModeSetting)        subs.add(new ModeComponent(this, superParent, s, off));
+            if(s instanceof SliderSetting)      subs.add(new SliderComponent(this, superParent, s, off));
+            if(s instanceof KeybindSetting)     subs.add(new KeybindComponent(this, superParent, s, off));
+            if(s instanceof ModeSetting)        subs.add(new ModeComponent(this, superParent, s, off));
+            if(s instanceof TextBoxSetting)     subs.add(new TextBoxComponent(this, superParent, s, off));
+            off += 14;
+        }
     }
 
     protected void drawBack(Point p, String name, boolean enabled) {
         final float realY = superParent.parent().getY() + offset;
         final float realX = superParent.parent().getX();
 
-        RenderUtils.drawRect(realX, realY, realX + getWidth(), realY + 14, getColor(p, enabled));
-        FontUtil.drawString(name, realX + xOffset(), realY - ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorButton.getValue());
+        drawRect(realX, realY, realX + getWidth(), realY + 14, getColor(p, enabled));
+        FontUtil.drawString(name, realX + xOffset(), realY - ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
     }
 
     protected Color getColor(Point point, boolean enabled) {
@@ -51,6 +62,10 @@ public abstract class ISetting<T extends Setting> implements IComponent {
                 return ClickGUI.disabledColor.getValue();
             }
         }
+    }
+
+    protected FrameComponent getFrame() {
+        return superParent.parent();
     }
 
     protected boolean onButton(Point point) {
@@ -70,5 +85,21 @@ public abstract class ISetting<T extends Setting> implements IComponent {
     @Override
     public String description() {
         return null;
+    }
+
+    @Override
+    public float height() {
+        int h = 14;
+        if(open && !subs.isEmpty()) {
+            for(IComponent c : subs) {
+                h += c.height();
+            }
+        }
+        return h;
+    }
+
+    @Override
+    public float xOffset() {
+        return parent.xOffset() + 3;
     }
 }

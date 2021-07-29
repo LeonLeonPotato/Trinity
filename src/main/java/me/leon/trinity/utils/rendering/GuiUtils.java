@@ -1,10 +1,10 @@
 package me.leon.trinity.utils.rendering;
 
 import me.leon.trinity.gui.ClickGui;
-import me.leon.trinity.gui.FrameComponent;
+import me.leon.trinity.gui.frame.FrameComponent;
 import me.leon.trinity.gui.IComponent;
+import me.leon.trinity.gui.frame.IFrame;
 import me.leon.trinity.hacks.Category;
-import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
 
 import java.awt.*;
@@ -21,16 +21,16 @@ public class GuiUtils implements Util {
         return toReturn;
     }
 
-    public static FrameComponent findFrame(Category c) {
-        for(FrameComponent a : ClickGui.getFrames()) {
+    public static IFrame findFrame(Category c) {
+        for(IFrame a : ClickGui.getFrames()) {
             if(a.getCategory() == c)
                 return a;
         }
         return null;
     }
 
-    public static FrameComponent findFrame(String name) {
-        for(FrameComponent a : ClickGui.getFrames()) {
+    public static IFrame findFrame(String name) {
+        for(IFrame a : ClickGui.getFrames()) {
             if(a.getCategory().name().equalsIgnoreCase(name))
                 return a;
         }

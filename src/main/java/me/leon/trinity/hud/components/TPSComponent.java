@@ -1,9 +1,9 @@
 package me.leon.trinity.hud.components;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.hud.Component;
 import me.leon.trinity.managers.TickrateManager;
 import me.leon.trinity.utils.misc.FontUtil;
-import me.leon.trinity.utils.rendering.Coloring;
 
 public class TPSComponent extends Component {
 	public TPSComponent() {
@@ -16,12 +16,12 @@ public class TPSComponent extends Component {
 	@Override
 	public void render() {
 		drawBackground();
-		FontUtil.drawString("TPS: " + Coloring.getWHITE() + TickrateManager.getTPS(), this.x + 1, this.y, getTextColor());
+		FontUtil.drawString("TPS: " + ChatFormatting.WHITE + TickrateManager.getTPS(), this.x + 1, this.y, getTextColor());
 	}
 
 	@Override
 	public float width() {
-		return FontUtil.getStringWidth("TPS: " + Coloring.getWHITE() + TickrateManager.getTPS()) + 3;
+		return FontUtil.getStringWidth("TPS: " + ChatFormatting.WHITE + TickrateManager.getTPS()) + 3;
 	}
 
 	@Override

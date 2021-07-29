@@ -1,16 +1,15 @@
-package me.leon.trinity.gui.button;
+package me.leon.trinity.gui.setting;
 
-import me.leon.trinity.config.rewrite.PresetObj;
-import me.leon.trinity.gui.frame.FrameComponent;
+import me.leon.trinity.gui.IComponent;
+import me.leon.trinity.gui.button.ButtonComponent;
+import me.leon.trinity.setting.rewrite.ColorSetting;
+import me.leon.trinity.setting.rewrite.Setting;
 
 import java.awt.*;
 
-public class PresetButton extends IButton {
-    private final PresetObj preset;
-
-    public PresetButton(FrameComponent parent, PresetObj preset, int offset) {
-        super(parent, offset);
-        this.preset = preset;
+public class ColorComponent extends ISetting<ColorSetting> {
+    protected ColorComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+        super(parent, superParent, set, offset);
     }
 
     @Override
@@ -20,11 +19,6 @@ public class PresetButton extends IButton {
 
     @Override
     public void update(Point point) {
-
-    }
-
-    @Override
-    public void unload() {
 
     }
 
@@ -46,10 +40,5 @@ public class PresetButton extends IButton {
     @Override
     public float height() {
         return 0;
-    }
-
-    @Override
-    public String description() {
-        return null;
     }
 }

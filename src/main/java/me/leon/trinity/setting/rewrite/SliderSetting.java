@@ -52,7 +52,7 @@ public class SliderSetting extends Setting{
     @SuppressWarnings("unchecked")
     @Override
     public Object getJsonString() {
-        if(getParent() == getSuperParent()) {
+        if(getSubSettings().isEmpty()) {
             return value;
         } else {
             JSONObject s = new JSONObject();
@@ -84,7 +84,7 @@ public class SliderSetting extends Setting{
                 });
             }
         } else {
-            this.value = ((Long) val).intValue();
+            this.value = ((Double) val).intValue();
         }
     }
 }

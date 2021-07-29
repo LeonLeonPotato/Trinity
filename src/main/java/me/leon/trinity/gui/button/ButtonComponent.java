@@ -1,10 +1,9 @@
 package me.leon.trinity.gui.button;
 
-import me.leon.trinity.gui.FrameComponent;
-import me.leon.trinity.gui.setting.ISetting;
+import me.leon.trinity.gui.frame.FrameComponent;
+import me.leon.trinity.gui.setting.*;
 import me.leon.trinity.hacks.Module;
-import me.leon.trinity.managers.SettingManager;
-import me.leon.trinity.setting.rewrite.Setting;
+import me.leon.trinity.setting.rewrite.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -22,7 +21,13 @@ public class ButtonComponent extends IButton {
         this.settings = new ArrayList<>();
 
         int s_off = offset + 14;
-        for(Setting s : SettingManager.getSettings(mod)) {
+        for(Setting s : mod.getSettings()) {
+            if(s instanceof BooleanSetting)     settings.add(new BooleanComponent(this, this, s, s_off));
+            if(s instanceof ModeSetting)        settings.add(new ModeComponent(this, this, s, s_off));
+            if(s instanceof SliderSetting)      settings.add(new SliderComponent(this, this, s, s_off));
+            if(s instanceof KeybindSetting)     settings.add(new KeybindComponent(this, this, s, s_off));
+            if(s instanceof ModeSetting)        settings.add(new ModeComponent(this, this, s, s_off));
+            if(s instanceof TextBoxSetting)     settings.add(new TextBoxComponent(this, this, s, s_off));
             s_off += 14;
         }
     }
@@ -30,7 +35,7 @@ public class ButtonComponent extends IButton {
     @Override
     public void render(Point point) {
         drawBack(point, mod.getName(), mod.isEnabled());
-        settings.forEach(e -> e.render(point));
+        if(open) settings.forEach(e -> e.render(point));
     }
 
     @Override

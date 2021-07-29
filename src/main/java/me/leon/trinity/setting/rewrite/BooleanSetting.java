@@ -39,7 +39,7 @@ public class BooleanSetting extends Setting {
     @SuppressWarnings("unchecked")
     @Override
     public Object getJsonString() {
-        if(getParent() == getSuperParent()) {
+        if(getSubSettings().isEmpty()) {
             return value;
         } else {
             JSONObject s = new JSONObject();

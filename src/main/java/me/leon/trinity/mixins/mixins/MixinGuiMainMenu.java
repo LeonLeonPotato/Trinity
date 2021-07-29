@@ -1,8 +1,8 @@
 package me.leon.trinity.mixins.mixins;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.FontUtil;
-import me.leon.trinity.utils.rendering.Coloring;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiScreen;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +17,6 @@ public class MixinGuiMainMenu extends GuiScreen {
 
 	@Inject(method = "drawScreen", at = @At("TAIL"), cancellable = true)
 	public void drawText(int mouseX, int mouseY, float partialTicks, CallbackInfo info) {
-		FontUtil.drawString(Trinity.CLIENTNAME + Coloring.getWHITE() + " " + Trinity.VERSION, 2, 2, new Color(139, 48, 171).getRGB());
+		FontUtil.drawString(Trinity.CLIENTNAME + ChatFormatting.WHITE + " " + Trinity.VERSION, 2, 2, new Color(139, 48, 171).getRGB());
 	}
 }
