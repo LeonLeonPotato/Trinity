@@ -16,7 +16,7 @@ public abstract class ISetting<T extends Setting> implements IComponent {
     protected final IComponent parent;
     protected final ButtonComponent superParent;
     protected final T set;
-    protected final int offset;
+    protected int offset;
 
     protected boolean open = false;
 
@@ -101,5 +101,37 @@ public abstract class ISetting<T extends Setting> implements IComponent {
     @Override
     public float xOffset() {
         return parent.xOffset() + 3;
+    }
+
+    public ArrayList<ISetting<?>> getSubs() {
+        return subs;
+    }
+
+    public IComponent getParent() {
+        return parent;
+    }
+
+    public ButtonComponent getSuperParent() {
+        return superParent;
+    }
+
+    public T getSet() {
+        return set;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 }

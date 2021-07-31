@@ -68,6 +68,7 @@ public class FrameComponent extends IFrame {
                 }
             }
         }
+        updateOffset();
         for(IButton c : buttons) {
             if(c.buttonClick(button, point)) return true;
         }

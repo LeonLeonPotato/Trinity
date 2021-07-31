@@ -11,10 +11,12 @@ import java.awt.*;
 public abstract class IButton implements IComponent {
     protected final FrameComponent parent;
     protected int offset;
+    protected boolean open;
 
     protected IButton(FrameComponent parent, int offset) {
         this.parent = parent;
         this.offset = offset;
+        this.open = false;
     }
 
     protected void drawBack(Point p, String name, boolean enabled) {

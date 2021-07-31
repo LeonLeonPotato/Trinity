@@ -58,9 +58,4 @@ public class ModeComponent extends ISetting<ModeSetting> {
     public boolean keyTyped(int code) {
         return false;
     }
-
-    @Override
-    public float height() {
-        return 0;
-    }
 }

@@ -3,6 +3,7 @@ package me.leon.trinity.gui.button;
 import me.leon.trinity.gui.frame.FrameComponent;
 import me.leon.trinity.gui.setting.*;
 import me.leon.trinity.hacks.Module;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.rewrite.*;
 
 import java.awt.*;
@@ -11,13 +12,10 @@ import java.util.ArrayList;
 public class ButtonComponent extends IButton {
     private final ArrayList<ISetting<?>> settings;
     private final Module mod;
-    private boolean open;
 
     public ButtonComponent(FrameComponent parent, Module mod, int offset) {
         super(parent, offset);
         this.mod = mod;
-        this.open = false;
-
         this.settings = new ArrayList<>();
 
         int s_off = offset + 14;
@@ -35,7 +33,10 @@ public class ButtonComponent extends IButton {
     @Override
     public void render(Point point) {
         drawBack(point, mod.getName(), mod.isEnabled());
-        if(open) settings.forEach(e -> e.render(point));
+        if(open) {
+            updateOffset();
+            settings.forEach(e -> e.render(point));
+        }
     }
 
     @Override
@@ -50,10 +51,21 @@ public class ButtonComponent extends IButton {
 
     @Override
     public boolean buttonClick(int button, Point point) {
-        if(button == 0 && onButton(point)) {
-            mod.toggle();
+        if(onButton(point)) {
+            switch (button) {
+                case 0: {
+                    mod.toggle();
+                    break;
+                }
+                case 1: {
+                    Trinity.LOGGER.info("b");
+                    open = !open;
+                    Trinity.LOGGER.info(open);
+                    break;
+                }
+            }
+            return true;
         }
-        if(onButton(point)) return true;
         for(ISetting<?> set : settings) {
             if(set.buttonClick(button, point)) return true;
         }
@@ -89,6 +101,14 @@ public class ButtonComponent extends IButton {
     @Override
     public String description() {
         return mod.getDescription();
+    }
+
+    private void updateOffset() {
+        int offset = getOffset() + 14;
+        for(ISetting<?> s : settings) {
+            s.setOffset(offset);
+            offset += s.height();
+        }
     }
 
     public ArrayList<ISetting<?>> getSettings() {
