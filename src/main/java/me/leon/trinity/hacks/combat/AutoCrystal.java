@@ -58,9 +58,8 @@ public class AutoCrystal extends Module {
 	public static ModeSetting swingArmPlace = new ModeSetting("Swing Arm", Place, "Offhand", "Mainhand", "Offhand", "Both", "None");
 	public static BooleanSetting packetSwingPlace = new BooleanSetting("Packet Swing", Place, false);
 	public static ModeSetting switchPlace = new ModeSetting("Switch", Place, "None", "None", "Packet", "Normal");
-	public static BooleanSetting multiPlace = new BooleanSetting("Multiplace", Place, false);
+	public static ModeSetting multiPlace = new ModeSetting("Multiplace", Place, "None", "None", "Semi", "Full");
 	public static BooleanSetting bounds = new BooleanSetting("Bounds", Place, true);
-	public static BooleanSetting extraCalc = new BooleanSetting("Extra Calc", Place, true);
 	public static BooleanSetting predict = new BooleanSetting("Predict", Place, true);
 	public static SliderSetting predictTicks = new SliderSetting("Predict Ticks", Place, 0, 3, 10, true);
 	public static BooleanSetting selfPredict = new BooleanSetting("Self Predict", Place, true);
@@ -68,7 +67,9 @@ public class AutoCrystal extends Module {
 	public static BooleanSetting limit = new BooleanSetting("Limit", Place, false);
 	public static BooleanSetting doubleCheck = new BooleanSetting("DoubleCheck", Place, true);
 	public static BooleanSetting antiTotem = new BooleanSetting("Anti-Totem", Place, true);
-	public static SliderSetting antiTotemTime = new SliderSetting("TotemTime", Place, 0, 3, 10, true);
+	public static SliderSetting antiTotemTime = new SliderSetting("TotemTime", antiTotem, 0, 3, 20, true);
+	public static SliderSetting antiTotemMin = new SliderSetting("MinDMG", antiTotem, 0, 3, 10, false);
+	public static SliderSetting antiTotemMaxSelf = new SliderSetting("MaxSelfDMG", antiTotem, 0, 3, 10, false);
 
 	public static BooleanSetting Break = new BooleanSetting("Break", true, true);
 	public static ModeSetting breakMode = new ModeSetting("Break Mode", Break, "Smart", "Smart", "All", "Only Own");

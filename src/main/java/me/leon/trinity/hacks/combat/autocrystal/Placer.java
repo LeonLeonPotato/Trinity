@@ -1,5 +1,6 @@
 package me.leon.trinity.hacks.combat.autocrystal;
 
+import baritone.launch.mixins.MixinMinecraft;
 import me.leon.trinity.hacks.combat.AutoCrystal;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
@@ -144,29 +145,15 @@ public class Placer implements Util, Listenable {
                 || mc.world.getBlockState(blockPos).getBlock() == Blocks.OBSIDIAN)
                 && (version.getValue().equalsIgnoreCase("1.13+") || (mc.world.getBlockState(boost).getBlock() == Blocks.AIR && mc.world.getBlockState(boost.up()).getBlock() == Blocks.AIR))) {
             for (final Entity en : mc.world.getEntitiesWithinAABB(Entity.class, bb)) {
-                if (extraCalc.getValue()) {
-                    if (multiPlace.getValue()) {
-                        if (!en.isDead) {
-                            return false;
-                        }
-                    } else {
-                        if (!en.isDead && !(en instanceof EntityEnderCrystal)) {
-                            return false;
-                        } else if (en instanceof EntityEnderCrystal) {
-                            if (!en.getPosition().down().equals(blockPos)) {
-                                return false;
-                            }
-                        }
+                switch (multiPlace.getValue()) {
+                    case "Full": {
+                        return en.isDead;
                     }
-                } else {
-                    if (multiPlace.getValue()) {
-                        if (!en.isDead) {
-                            return false;
-                        }
-                    } else {
-                        if (!en.isDead && !(en instanceof EntityEnderCrystal)) {
-                            return false;
-                        }
+                    case "Semi": {
+                        return en.isDead && new AxisAlignedBB(en.getPositionVector().add(-0.5, -1.0, -0.5), en.getPositionVector().add(0.5, 0, 0.5)).intersects(new AxisAlignedBB(blockPos));
+                    }
+                    default: {
+                        return true;
                     }
                 }
             }

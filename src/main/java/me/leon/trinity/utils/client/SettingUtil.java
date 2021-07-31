@@ -11,27 +11,7 @@ public class SettingUtil {
     public static ArrayList list;
 
     public static <T> void addMod(T mod) {
-        try {
-            for (Field field : mod.getClass().getDeclaredFields()) {
-                if (Setting.class.isAssignableFrom(field.getType())) {
-                    if (!field.isAccessible()) field.setAccessible(true);
-
-                    final Setting val = (Setting) field.get(mod);
-                    val.setSuperParent(mod);
-
-                    if(val.getParent() == null) {
-                        val.setParent(mod);
-
-                    } else {
-                        ((Setting) val.getParent()).addSetting(val);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        list.add(mod);
+        addMod(mod, list);
     }
 
     public static <T> void addMod(T mod, ArrayList<T> arrayList) {
@@ -45,7 +25,6 @@ public class SettingUtil {
 
                     if(val.getParent() == null) {
                         val.setParent(mod);
-
                     } else {
                         ((Setting) val.getParent()).addSetting(val);
                     }

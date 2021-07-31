@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public abstract class Module implements Listenable {
 	protected static volatile Minecraft mc = Minecraft.getMinecraft();
 
-	private ArrayList<Setting> settings;
+	private final ArrayList<Setting> settings;
 	private boolean visible;
 	private String name;
 	private String description;

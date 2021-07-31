@@ -121,13 +121,14 @@ public class Trinity {
 
 	@SubscribeEvent
 	public void toggleKeys(InputEvent.KeyInputEvent event) {
-		if(1==1) return;
 		if (Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().player != null) {
 			if (Keyboard.isCreated()) {
 				if (Keyboard.getEventKeyState()) {
-					for (final Module mod : ModuleManager.modules) {
-						if (mod.getKey() == Keyboard.getEventKey()) {
-							mod.toggle();
+					if(Keyboard.getEventKey() != 0) {
+						for (final Module mod : ModuleManager.modules) {
+							if (mod.getKey() == Keyboard.getEventKey()) {
+								mod.toggle();
+							}
 						}
 					}
 				}

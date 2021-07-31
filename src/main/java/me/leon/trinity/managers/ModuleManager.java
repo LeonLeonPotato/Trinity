@@ -85,6 +85,8 @@ public class ModuleManager {
 		addMod(new FastUse());
 		addMod(new NoPush());
 		addMod(new SpeedMine());
+
+		list = null;
 	}
 
 	public static Module getMod(String name) {
@@ -101,15 +103,5 @@ public class ModuleManager {
 
 	public static List<Module> getMods(Category c) {
 		return modules.stream().filter(mod -> mod.getCategory() == c).collect(Collectors.toList());
-	}
-
-	public ArrayList<Module> getModulesByCategory(Category cat) {
-		ArrayList<Module> mods = new ArrayList<>();
-		for (Module mod : modules) {
-			if (mod.getCategory() == cat) {
-				mods.add(mod);
-			}
-		}
-		return mods;
 	}
 }

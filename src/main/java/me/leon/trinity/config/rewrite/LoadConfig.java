@@ -68,7 +68,6 @@ public class LoadConfig {
 				for(String key : (Set<String>) settings.keySet()) {
 					Setting s = mod.getSetting(key);
 					Object val = settings.get(key);
-					Trinity.LOGGER.info(s.getName() + " " + key + " " + val);
 
 					s.parseJson(main, key, val);
 				}
