@@ -11,6 +11,8 @@ import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.GuiUtils;
 import me.leon.trinity.utils.rendering.RenderUtils;
 import me.leon.trinity.utils.rendering.skeet.Quad;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Keyboard;
@@ -21,6 +23,10 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
     private boolean typing = false;
 
     private long aniEnd;
+    private float strOffset;
+    private boolean hasmoved;
+    private int movetype; //0 = normal, 1 = delete
+    private char deletedChar;
 
     public TextBoxComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
@@ -28,7 +34,6 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
 
     @Override
     public void render(Point point) {
-        RenderUtils.scissor(new Quad(getFrame().getX(), getFrame().getY() + offset, getFrame().getX() + getWidth(), getFrame().getY() + offset + 28));
 
         final float realY = superParent.parent().getY() + offset;
         final float realX = superParent.parent().getX();
@@ -36,14 +41,16 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
         drawRect(realX, realY, realX + getWidth(), realY + 28, getColor(point, false));
 
         FontUtil.drawString(set.getName(), realX + xOffset() + (((getWidth() - xOffset()) - FontUtil.getStringWidth(set.getName())) / 2f), realY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
+
+        RenderUtils.scissor(new Quad(realX + xOffset(), realY, realX + getWidth(), realY + 28));
         String one = set.getValue().substring(0, (int) MathUtils.clamp(0, set.getValue().length(), set.typeSpace));
         String two = set.getValue().substring((int) MathUtils.clamp(0, set.getValue().length(), set.typeSpace));
-        FontUtil.drawString(one, realX + xOffset(), realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
-        final float one_ = FontUtil.getStringWidth(one);
-        if(typing && (System.currentTimeMillis() % 1000) / 1000f > 0.5)
-            drawRect(realX + xOffset() + one_, realY + 14, realX + xOffset() + one_ + 1, realY + 28, new Color(255, 255, 255, 255));
-
-        FontUtil.drawString(two, realX + xOffset() + one_ + 1, realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
+        updateStrOff();
+        strOffset = (float) MathUtils.clamp(0, Integer.MAX_VALUE, strOffset);
+        FontUtil.drawString(one, realX + xOffset() - strOffset, realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
+        float one_ = FontUtil.getStringWidth(one);
+        RenderUtils.drawLine(realX + xOffset() + one_ - strOffset, realY + 14, realX + xOffset() + one_ - strOffset, realY + 28, 1f, Color.WHITE);
+        FontUtil.drawString(two, realX + xOffset() - strOffset + one_ + 1, realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
 
         float progress = (float) (MathUtils.clamp(0, 1, (System.currentTimeMillis() - aniEnd) / 500f));
         final float half = ((getWidth() - xOffset()) / 2f);
@@ -77,8 +84,10 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
         if(onButton(point)) {
             switch (button) {
                 case 0: {
-                    typing = true;
-                    aniEnd = System.currentTimeMillis();
+                    if(!typing) {
+                        typing = true;
+                        aniEnd = System.currentTimeMillis();
+                    }
                     return true;
                 }
                 case 1: {
@@ -87,6 +96,7 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
                 }
             }
         } else { typing = false; aniEnd = System.currentTimeMillis(); }
+
         for (ISetting<?> sub : subs) {
             if(sub.buttonClick(button, point)) return true;
         }
@@ -110,20 +120,27 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
                     if(typeSpace >= 1) { // backspace
                         String one = set.getValue().substring(0, typeSpace - 1);
                         String two = set.getValue().substring(typeSpace);
-                        set.setValue(one + two);
                         set.typeSpace--;
+                        hasmoved = true;
+                        movetype = 1;
+                        deletedChar = set.getValue().charAt(typeSpace - 1);
+                        set.setValue(one + two);
                     }
                     break;
                 }
                 case Keyboard.KEY_RIGHT: {
                     if(typeSpace < set.getValue().length()) {
                         set.typeSpace++;
+                        hasmoved = true;
+                        movetype = 0;
                     }
                     break;
                 }
                 case Keyboard.KEY_LEFT: {
                     if(typeSpace != 0) {
                         set.typeSpace--;
+                        hasmoved = true;
+                        movetype = 0;
                     }
                     break;
                 }
@@ -133,6 +150,8 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
                         String two = set.getValue().substring(typeSpace);
                         set.setValue(one + chr + two);
                         set.typeSpace++;
+                        hasmoved = true;
+                        movetype = 0;
                     }
                     break;
                 }
@@ -154,5 +173,41 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
     @Override
     protected boolean onButton(Point point) {
         return GuiUtils.onButton(superParent.parent().getX(), superParent.parent().getY() + offset, superParent.parent().getX() + getWidth(), superParent.parent().getY() + offset + 28, point);
+    }
+
+    private void updateStrOff() {
+        final String before = split(set.typeSpace)[0];
+        final float widthBefore = FontUtil.getStringWidth(before);
+        final float width = getWidth() - xOffset() - 2;
+
+        if(set.typeSpace == 0) {
+            strOffset = 0;
+            return;
+        }
+
+        if(hasmoved) {
+            if(movetype == 0) {
+                if(widthBefore > strOffset + width) {
+                    strOffset = widthBefore - width;
+                } else if(widthBefore < strOffset) {
+                    StringBuilder b = new StringBuilder();
+                    for(int a = before.length() - 1; a > 0; a--) {
+                        if(strOffset - FontUtil.getStringWidth(b.toString()) <= widthBefore) break;
+                        b.append(before.charAt(a));
+                    }
+                    strOffset -= FontUtil.getStringWidth(StringUtils.reverse(b.toString()));
+                }
+            } else if (movetype == 1) {
+                strOffset -= FontUtil.getStringWidth(Character.toString(deletedChar));
+            }
+            hasmoved = false;
+            movetype = -1;
+        }
+    }
+
+    private String[] split(int c) {
+        return new String[] {
+                set.getValue().substring(0, (int) MathUtils.clamp(0, set.getValue().length(), c)), set.getValue().substring((int) MathUtils.clamp(0, set.getValue().length(), c))
+        };
     }
 }

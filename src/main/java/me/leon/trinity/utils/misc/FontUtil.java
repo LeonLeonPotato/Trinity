@@ -55,6 +55,7 @@ public class FontUtil implements Util {
     }
 
     public static float getStringWidth(String string) {
+        if(string.isEmpty()) return 0;
         final CFontRenderer renderer = getFontRenderer();
         if(renderer != null) {
             return renderer.getStringWidth(string);

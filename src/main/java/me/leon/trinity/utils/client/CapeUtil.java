@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class CapeUtil {
 
-	public static HashMap<UUID, ResourceLocation> getCapes(String pastebinURL) throws IOException {
+	public static HashMap<UUID, ResourceLocation> getCapes(String pastebinURL) throws Exception {
 
 		HashMap<UUID, ResourceLocation> outMap = new HashMap<>();
 
@@ -37,10 +37,10 @@ public class CapeUtil {
 
 			switch (splitLine[1]) {
 				case "LIGHT":
-					outMap.put(UUID.fromString(splitLine[0]), new ResourceLocation(CapeManager.LIGHT_CAPE));
+					outMap.put(UUID.fromString(splitLine[0]), new ResourceLocation("trinity", CapeManager.LIGHT_CAPE));
 					break;
 				case "DARK":
-					outMap.put(UUID.fromString(splitLine[0]), new ResourceLocation(CapeManager.DARK_CAPE));
+					outMap.put(UUID.fromString(splitLine[0]), new ResourceLocation("trinity", CapeManager.DARK_CAPE));
 					break;
 				default:
 					URL capeURL = new URL(splitLine[1]);
@@ -49,11 +49,13 @@ public class CapeUtil {
 			}
 		}
 
-		return null;
+		return outMap;
 	}
 
-	public static ResourceLocation downloadFromURL(URL url) throws IOException {
-		return Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("trinity/capes", new DynamicTexture(ImageIO.read(url)));
+	public static ResourceLocation downloadFromURL(URL url) throws Exception {
+		ResourceLocation r = Minecraft.getMinecraft().getTextureManager().getDynamicTextureLocation("capes", new DynamicTexture(ImageIO.read(url)));
+		r.getClass().getDeclaredField("namespace").set(r, "trinity");
+		return r;
 	}
 
 }

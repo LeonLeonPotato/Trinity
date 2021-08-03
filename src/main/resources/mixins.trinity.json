@@ -23,6 +23,7 @@
     "MixinVisGraph",
     "MixinRenderEntityCrystal",
     "MixinNetHandlerPlayClient",
-    "MixinFontRenderer"
+    "MixinFontRenderer",
+    "MixinAbstractClientPlayer"
   ]
 }
