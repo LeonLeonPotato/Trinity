@@ -3,6 +3,8 @@ package me.leon.trinity.utils.client;
 import me.leon.trinity.managers.CapeManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.network.play.client.CPacketClickWindow;
 import net.minecraft.util.ResourceLocation;
 
 import javax.imageio.ImageIO;

@@ -3,6 +3,7 @@ package me.leon.trinity.gui.setting;
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.rewrite.BooleanSetting;
 import me.leon.trinity.setting.rewrite.Setting;
 
@@ -16,6 +17,9 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
     @Override
     public void render(Point point) {
         drawBack(point, set.getName(), set.getValue());
+        if(!subs.isEmpty()) drawArrow();
+        updateOffset();
+        if(open) subs.forEach(e -> e.render(point));
     }
 
     @Override
@@ -29,6 +33,7 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
             switch (button) {
                 case 1: {
                     open = !open;
+                    aniEnd = System.currentTimeMillis() + 500;
                     return true;
                 }
                 case 0: {
@@ -37,22 +42,31 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
                 }
             }
         }
-        for (ISetting<?> sub : subs) {
-            if(sub.buttonClick(button, point)) return true;
+        if(open) {
+            for (ISetting<?> sub : subs) {
+                if (sub.buttonClick(button, point)) return true;
+            }
         }
         return false;
     }
 
     @Override
     public boolean buttonRelease(int button, Point point) {
-        for (ISetting<?> sub : subs) {
-            if(sub.buttonRelease(button, point)) return true;
+        if(open) {
+            for (ISetting<?> sub : subs) {
+                if (sub.buttonRelease(button, point)) return true;
+            }
         }
         return false;
     }
 
     @Override
-    public boolean keyTyped(int code) {
+    public boolean keyTyped(char chr, int code) {
+        if(open) {
+            for (ISetting<?> sub : subs) {
+                if (sub.keyTyped(chr, code)) return true;
+            }
+        }
         return false;
     }
 

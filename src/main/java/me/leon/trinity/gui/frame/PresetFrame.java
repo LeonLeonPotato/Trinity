@@ -33,4 +33,9 @@ public class PresetFrame extends IFrame {
     public boolean buttonRelease(int button, Point point) {
         return false;
     }
+
+    @Override
+    public boolean keyTyped(char chr, int code) {
+        return false;
+    }
 }

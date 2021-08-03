@@ -25,6 +25,7 @@ public class SettingUtil {
 
                     if(val.getParent() == null) {
                         val.setParent(mod);
+                        mod.getClass().getMethod("addSetting", Setting.class).invoke(mod, val);
                     } else {
                         ((Setting) val.getParent()).addSetting(val);
                     }

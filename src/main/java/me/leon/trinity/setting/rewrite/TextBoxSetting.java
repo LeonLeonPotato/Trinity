@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class TextBoxSetting extends Setting {
     private String value;
+    public int typeSpace;
 
     public TextBoxSetting(String name, String value) {
         this(name, null, value);
@@ -15,6 +16,7 @@ public class TextBoxSetting extends Setting {
     public TextBoxSetting(String name, Object parent, String value) {
         super(name, parent);
         this.value = value;
+        this.typeSpace = value.length();
     }
 
     public String getValue() {
@@ -49,6 +51,8 @@ public class TextBoxSetting extends Setting {
             final JSONObject j = (JSONObject) val;
 
             this.value = (String) j.get("value");
+            this.typeSpace = value.length();
+
             JSONObject sets = (JSONObject) j.get("settings");
 
             for(String k : (Set<String>) sets.keySet()) {
@@ -61,6 +65,7 @@ public class TextBoxSetting extends Setting {
             }
         } else {
             this.value = (String) val;
+            this.typeSpace = value.length();
         }
     }
 }

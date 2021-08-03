@@ -15,12 +15,14 @@ public class ModeComponent extends ISetting<ModeSetting> {
 
     @Override
     public void render(Point point) {
-        drawBack(point, set.getName() + ChatFormatting.WHITE + set.getValue(), false);
+        drawBack(point, set.getName() + " " + ChatFormatting.WHITE + set.getValue(), false);
+        updateOffset();
+        if(open) subs.forEach(e -> e.render(point));
     }
 
     @Override
     public void update(Point point) {
-
+        if(open) subs.forEach(e -> e.update(point));
     }
 
     @Override
@@ -33,29 +35,37 @@ public class ModeComponent extends ISetting<ModeSetting> {
                 }
                 case 0: {
                     int v = set.getValues().indexOf(set.getValue());
-                    if(v == set.getValues().size()) v = 0; else v += 1;
+                    if(v == set.getValues().size() - 1) v = 0; else v += 1;
                     set.setValue(set.getValues().get(v));
                     return true;
                 }
             }
         }
-        if(subs.isEmpty()) return false;
-        for(IComponent c : subs) {
-            if(c.buttonClick(button, point)) return true;
+        if(open) {
+            for(IComponent c : subs) {
+                if(c.buttonClick(button, point)) return true;
+            }
         }
         return false;
     }
 
     @Override
     public boolean buttonRelease(int button, Point point) {
-        for (ISetting<?> sub : subs) {
-            if(sub.buttonRelease(button, point)) return true;
+        if(open) {
+            for (ISetting<?> sub : subs) {
+                if (sub.buttonRelease(button, point)) return true;
+            }
         }
         return false;
     }
 
     @Override
-    public boolean keyTyped(int code) {
+    public boolean keyTyped(char chr, int code) {
+        if(open) {
+            for (ISetting<?> sub : subs) {
+                if (sub.keyTyped(chr, code)) return true;
+            }
+        }
         return false;
     }
 }

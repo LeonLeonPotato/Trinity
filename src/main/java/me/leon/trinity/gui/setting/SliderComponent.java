@@ -6,6 +6,7 @@ import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.setting.rewrite.SliderSetting;
 import me.leon.trinity.utils.math.MathUtils;
+import me.leon.trinity.utils.misc.FontUtil;
 
 import java.awt.*;
 
@@ -18,24 +19,28 @@ public class SliderComponent extends ISetting<SliderSetting> {
 
     @Override
     public void render(Point point) {
-        drawBack(point, set.getName(), false);
-        float width = (float) (xOffset() + ((set.getValue() + set.getMin()) / set.getMax()) * (getWidth() - xOffset()));
-        drawRect(getFrame().getX() + xOffset(), getFrame().getY() + offset, getFrame().getX(), width, ClickGUI.sliderColor.getValue());
+        final float realY = superParent.parent().getY() + offset;
+        final float realX = superParent.parent().getX();
+
+        drawRect(realX, realY, realX + getWidth(), realY + 14, getColor(point, false));
+        float width = (float) (xOffset() + ((set.getValue() - set.getMin()) / (set.getMax() - set.getMin())) * (getWidth() - xOffset()));
+        drawRect(getFrame().getX() + xOffset(), getFrame().getY() + offset, getFrame().getX() + width, getFrame().getY() + offset + 14, ClickGUI.sliderColor.getValue());
+        FontUtil.drawString(set.getName() + " " + set.getValue(), realX + xOffset(), realY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
     }
 
     @Override
     public void update(Point point) {
         if(dragging) {
-            float absMouseX = point.x - (getFrame().getX() + xOffset()); // absolute mouse X from xOffset()
-            float absWidth = getWidth() - xOffset();
-            int relativeMouseX = (int) MathUtils.clamp(xOffset(), absWidth, absMouseX);
-
-            if(relativeMouseX == absWidth) {
+            if(point.x == getFrame().getX() + getWidth()) {
                 set.setValue(set.getMax());
-            } else if (relativeMouseX == xOffset()) {
+            } else if (point.x == getFrame().getX() + xOffset()) {
                 set.setValue(set.getMin());
             } else {
-                set.setValue(set.getMin() + (((relativeMouseX - xOffset()) / absWidth) * (set.getMax() - set.getMin())));
+                double diff = Math.min(getWidth() - xOffset(), Math.max(0, (point.x - xOffset()) - getFrame().getX()));
+                double min = set.getMin();
+                double max = set.getMax();
+                double newValue = MathUtils.roundToPlace(((diff / (getWidth() - xOffset())) * (max - min) + min), set.isOnlyInt() ? 0 : 2);
+                set.setValue(newValue);
             }
         }
         subs.forEach(e -> e.update(point));
@@ -63,9 +68,9 @@ public class SliderComponent extends ISetting<SliderSetting> {
     }
 
     @Override
-    public boolean keyTyped(int code) {
+    public boolean keyTyped(char chr, int code) {
         for (ISetting<?> sub : subs) {
-            if(sub.keyTyped(code)) return true;
+            if(sub.keyTyped(chr, code)) return true;
         }
         return false;
     }

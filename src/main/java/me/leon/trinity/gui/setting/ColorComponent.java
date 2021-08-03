@@ -7,9 +7,16 @@ import me.leon.trinity.setting.rewrite.Setting;
 
 import java.awt.*;
 
+/**
+ * @author Leon
+ *
+ * fyi: color shouldn't have any sub settings
+ */
 public class ColorComponent extends ISetting<ColorSetting> {
-    protected ColorComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+    public ColorComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
+        set.getSubSettings().clear(); // prevent color sub settings
+        subs.clear();
     }
 
     @Override
@@ -33,12 +40,12 @@ public class ColorComponent extends ISetting<ColorSetting> {
     }
 
     @Override
-    public boolean keyTyped(int code) {
+    public boolean keyTyped(char chr, int code) {
         return false;
     }
 
     @Override
     public float height() {
-        return 0;
+        return 14;
     }
 }

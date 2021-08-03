@@ -49,8 +49,7 @@ public class Rainbow {
 	// very spaghetti
 
 	private static float transform(float max, float val) {
-		final float f0 = val / max;
-		return f0 * 1.0f;
+		return val / max;
 	}
 
 	public static Color getColorStatic(int alpha) {

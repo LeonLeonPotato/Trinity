@@ -4,18 +4,26 @@ import me.leon.trinity.gui.frame.FrameComponent;
 import me.leon.trinity.gui.frame.IFrame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.misc.BezierCurve;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.Rainbow;
+import me.leon.trinity.utils.rendering.RenderUtils;
 import me.leon.trinity.utils.world.Timer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class ClickGui extends GuiScreen {
-    private static ArrayList<IComponent> totalComponents; // not implimented yet
+    private static ArrayList<IComponent> totalComponents; // not implemented yet
     private static ArrayList<IFrame> frames;
     private static IComponent hovered; // setting descriptions later?
     private static long startTime = System.currentTimeMillis();
@@ -66,7 +74,6 @@ public class ClickGui extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) {
         if (keyCode == 1) {
             for (IFrame c : frames) {
-                c.setDragging(false);
                 c.unload();
             }
             mc.displayGuiScreen(null);
@@ -75,7 +82,7 @@ public class ClickGui extends GuiScreen {
         }
 
         for (IFrame c : frames) {
-            c.keyTyped(keyCode);
+            c.keyTyped(typedChar, keyCode);
         }
     }
 

@@ -113,19 +113,24 @@ public class RenderUtils implements Util {
 		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 
-	public static void drawColorPickerSquare(float x, float y, float w, float h, int hue, int alpha) {
-		prepare(1, Mode.GRADIENT);
+	public static void drawColorPickerSquare(float x, float y, float w, float h, float hue, int alpha) {
+		RenderUtils.prepare(1, RenderUtils.Mode.GRADIENT);
 		builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
 
-		final Color color = new Color(Color.HSBtoRGB(hue, 1, 1));
+		final Color starting = new Color(Color.HSBtoRGB(hue, 1, 1));
 
-		builder.pos(x + w, x + h, 0.0D).color(0, 0, 0, alpha).endVertex();
-		builder.pos(x, y + h, 0.0D).color(0, 0, 0, alpha).endVertex();
-		builder.pos(x, y, 0.0D).color(color.getRed(), color.getGreen(), color.getBlue(), alpha).endVertex();
-		builder.pos(x + w, y, 0.0D).color(255, 255, 255, alpha).endVertex();
+		builder.pos(x + w, y, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
+		builder.pos(x, y, 0).color(255, 255, 255, alpha).endVertex();
+		builder.pos(x, y + h, 0).color(255, 255, 255, alpha).endVertex();
+		builder.pos(x + w, y + h, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
+
+		builder.pos(x + w, y, 0).color(0, 0, 0, 0).endVertex();
+		builder.pos(x, y, 0).color(0, 0, 0, 0).endVertex();
+		builder.pos(x, y + h, 0).color(0, 0, 0, alpha).endVertex();
+		builder.pos(x + w, y + h, 0).color(0, 0, 0, alpha).endVertex();
 
 		tessellator.draw();
-		release(Mode.GRADIENT);
+		RenderUtils.release( RenderUtils.Mode.GRADIENT);
 	}
 
 	public static void drawAlphaRect(float x, float y, float w, float h, Color color) {
@@ -175,6 +180,37 @@ public class RenderUtils implements Util {
 		release(Mode.NORMAL);
 	}
 
+	public static void drawLine(float x, float y, float x1, float y1, float width, Color color) {
+		final float alpha = color.getAlpha() / 255f;
+		final float red   = color.getRed() / 255f;
+		final float green = color.getGreen() / 255f;
+		final float blue  = color.getBlue() / 255f;
+		prepare(width, Mode.NORMAL);
+		builder.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+		builder.pos(x, y, 0.0D).color(red, green, blue, alpha).endVertex();
+		builder.pos(x1, y1, 0.0D).color(red, green, blue, alpha).endVertex();
+		tessellator.draw();
+		release(Mode.NORMAL);
+	}
+
+	public static void drawGradientLine(float x, float y, float x1, float y1, float width, Color start, Color end) {
+		final float alpha = start.getAlpha() / 255f;
+		final float red   = start.getRed() / 255f;
+		final float green = start.getGreen() / 255f;
+		final float blue  = start.getBlue() / 255f;
+		final float alpha1 = end.getAlpha() / 255f;
+		final float red1   = end.getRed() / 255f;
+		final float green1 = end.getGreen() / 255f;
+		final float blue1  = end.getBlue() / 255f;
+
+		prepare(width, Mode.GRADIENT);
+		builder.begin(GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+		builder.pos(x, y, 0.0D).color(red, green, blue, alpha).endVertex();
+		builder.pos(x1, y1, 0.0D).color(red1, green1, blue1, alpha1).endVertex();
+		tessellator.draw();
+		release(Mode.GRADIENT);
+	}
+
 	public static void drawCircle(float x, float y, float r, float w, Color color) {
 		prepare(w, Mode.NORMAL);
 		glEnable(GL_LINE_SMOOTH);
@@ -218,7 +254,7 @@ public class RenderUtils implements Util {
 		GlStateManager.color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 	}
 
-	private static void prepare(float width, Mode mode) {
+	public static void prepare(float width, Mode mode) {
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -229,7 +265,7 @@ public class RenderUtils implements Util {
 		}
 	}
 
-	private static void release(Mode mode) {
+	public static void release(Mode mode) {
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
 		if(mode == Mode.GRADIENT) {
@@ -238,7 +274,7 @@ public class RenderUtils implements Util {
 		}
 	}
 
-	private enum Mode {
+	public enum Mode {
 		GRADIENT, NORMAL
 	}
 }

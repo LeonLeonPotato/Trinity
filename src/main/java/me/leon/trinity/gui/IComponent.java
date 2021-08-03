@@ -15,7 +15,7 @@ public interface IComponent {
 
     boolean buttonClick(int button, Point point);
     boolean buttonRelease(int button, Point point);
-    boolean keyTyped(int code);
+    boolean keyTyped(char chr, int code);
 
     float height();
     float xOffset();

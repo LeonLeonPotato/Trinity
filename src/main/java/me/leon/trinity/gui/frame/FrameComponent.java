@@ -41,7 +41,7 @@ public class FrameComponent extends IFrame {
             x = point.x - dragX;
             y = point.y - dragY;
         }
-        buttons.forEach(e -> e.update(point));
+        if(open) buttons.forEach(e -> e.update(point));
     }
 
     @Override
@@ -69,8 +69,10 @@ public class FrameComponent extends IFrame {
             }
         }
         updateOffset();
-        for(IButton c : buttons) {
-            if(c.buttonClick(button, point)) return true;
+        if(open) {
+            for(IButton c : buttons) {
+                if(c.buttonClick(button, point)) return true;
+            }
         }
         return false;
     }
@@ -79,26 +81,22 @@ public class FrameComponent extends IFrame {
     public boolean buttonRelease(int button, Point point) {
         dragging = false;
 
-        for(IButton c :  buttons) {
-            if(c.buttonRelease(button, point))
-                return true;
+        if(open) {
+            for (IButton c : buttons) {
+                if (c.buttonRelease(button, point))
+                    return true;
+            }
         }
         return false;
     }
 
     @Override
-    public boolean keyTyped(int code) {
-        for(IButton c : buttons) {
-            if(c.keyTyped(code)) return true;
+    public boolean keyTyped(char chr, int code) {
+        if(open) {
+            for (IButton c : buttons) {
+                if (c.keyTyped(chr, code)) return true;
+            }
         }
         return false;
-    }
-
-    private void updateOffset() {
-        int offset = 15;
-        for (IButton button : buttons) {
-            button.setOffset(offset);
-            offset += button.height();
-        }
     }
 }

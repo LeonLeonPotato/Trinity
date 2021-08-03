@@ -28,11 +28,6 @@ public abstract class IFrame implements IComponent {
     }
 
     @Override
-    public boolean keyTyped(int code) {
-        return false;
-    }
-
-    @Override
     public float height() {
         float h = 15;
         if(open) {
@@ -80,6 +75,14 @@ public abstract class IFrame implements IComponent {
         }
 
         FontUtil.drawString(category.name(), x + 5, y + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.nameColorButton.getValue());
+    }
+
+    protected void updateOffset() {
+        int offset = 15;
+        for (IButton button : buttons) {
+            button.setOffset(offset);
+            offset += button.height();
+        }
     }
 
     public float getX() {

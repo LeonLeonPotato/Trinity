@@ -30,6 +30,7 @@ public class ModuleManager {
 		addMod(new HUDeditor());
 		addMod(new ClickGUI());
 		addMod(new ClientColor());
+		addMod(new TestModule());
 
 		// Combat
 		addMod(new KillAura());

@@ -74,10 +74,10 @@ public class FontUtil implements Util {
 
     private static CFontRenderer getFontRenderer() {
         if(Font.enabled()) {
-            if(fontRenderer == null || !Font.families.getValue().equals(fontRenderer.fontName) || Font.scale.getValue() != fontRenderer.fontSize || getStyle(Font.style.getValue()) != fontRenderer.font.getStyle()) {
+            if(fontRenderer == null || !Font.families.getValue().equals(fontRenderer.fontName) || getStyle(Font.style.getValue()) != fontRenderer.font.getStyle()) {
                 CFontRenderer renderer = fontRenderer = new CFontRenderer(getFont(), true, true);
                 return renderer;
-            } else if(Font.families.getValue().equals(fontRenderer.fontName) && Font.scale.getValue() == fontRenderer.fontSize) {
+            } else if(Font.families.getValue().equals(fontRenderer.fontName)) {
                 return fontRenderer;
             }
         }
@@ -101,13 +101,13 @@ public class FontUtil implements Util {
     private static java.awt.Font getFont() {
         switch (Font.families.getValue()) {
             case "Comfortaa": {
-                return comfortaa.deriveFont(getStyle(Font.style.getValue()), (float) Font.scale.getValue());
+                return comfortaa.deriveFont(getStyle(Font.style.getValue()), 18);
             }
             case "Ubuntu": {
-                return ubuntu.deriveFont(getStyle(Font.style.getValue()), (float) Font.scale.getValue());
+                return ubuntu.deriveFont(getStyle(Font.style.getValue()), 18);
             }
             default: {
-                return new java.awt.Font(Font.families.getValue(), getStyle(Font.style.getValue()), (int) Font.scale.getValue());
+                return new java.awt.Font(Font.families.getValue(), getStyle(Font.style.getValue()), 18);
             }
         }
     }

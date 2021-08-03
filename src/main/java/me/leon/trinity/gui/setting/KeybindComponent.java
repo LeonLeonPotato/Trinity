@@ -33,7 +33,7 @@ public class KeybindComponent extends ISetting<KeybindSetting> {
     }
 
     @Override
-    public boolean keyTyped(int code) {
+    public boolean keyTyped(char chr, int code) {
         return false;
     }
 }

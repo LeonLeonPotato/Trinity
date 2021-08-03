@@ -40,7 +40,7 @@ import java.net.Proxy;
 public class Trinity {
 	public final static String MODID = "trinity";
 	public final static String CLIENTNAME = "Trinity";
-	public final static String VERSION = "0.2";
+	public final static String VERSION = "0.3";
 	public static Logger LOGGER;
 	public static EventBus dispatcher;
 	public static EventBus settingsDispatcher;

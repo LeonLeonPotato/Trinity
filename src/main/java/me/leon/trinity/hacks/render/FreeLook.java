@@ -8,6 +8,7 @@ import me.leon.trinity.setting.rewrite.SliderSetting;
 import me.zero.alpine.fork.listener.EventHandler;
 import me.zero.alpine.fork.listener.Listener;
 import net.minecraft.client.entity.EntityOtherPlayerMP;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -63,7 +64,7 @@ public class FreeLook extends Module {
 		double x1 = (mc.player.posX + (dist * Math.cos(Math.toRadians(cameraYaw - 90))));
 		double z1 = (mc.player.posZ + (dist * Math.sin(Math.toRadians(cameraYaw - 90))));
 
-		camera.setPosition(x1, z, z1);
+		setPosition(camera, x1, z, z1);
 
 		camera.inventory.copyInventory(mc.player.inventory);
 	}
@@ -92,7 +93,7 @@ public class FreeLook extends Module {
 		if (nullCheck()) return;
 		cameraPitch = mc.player.rotationPitch;
 		cameraYaw = mc.player.rotationYaw;
-		camera = new EntityPlayerCamera(mc.world, mc.player.gameProfile);
+		camera = new EntityPlayerCamera(mc.player.gameProfile);
 		if(mc.gameSettings.thirdPersonView != 0) flag = mc.gameSettings.thirdPersonView;
 		EntityPlayer player = mc.player;
 
@@ -124,9 +125,21 @@ public class FreeLook extends Module {
 		}
 	}
 
+	private void setPosition(Entity en, double x, double y, double z) {
+		setPosition(en, x, y, z, en.rotationYaw, en.rotationPitch);
+	}
+
+	private void setPosition(Entity en, double x, double y, double z, float yaw, float cameraPitch) {
+		en.prevPosX = en.posX = x;
+		en.prevPosY = en.posY = y;
+		en.prevPosZ = en.posZ = z;
+		en.rotationYaw = yaw;
+		en.rotationPitch = cameraPitch;
+	}
+
 	private static class EntityPlayerCamera extends EntityOtherPlayerMP {
-		public EntityPlayerCamera(World worldIn, GameProfile gameProfileIn) {
-			super(worldIn, gameProfileIn);
+		public EntityPlayerCamera(GameProfile gameProfileIn) {
+			super(mc.world, gameProfileIn);
 		}
 
 		@Override

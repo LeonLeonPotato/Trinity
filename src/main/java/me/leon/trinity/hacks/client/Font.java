@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Font extends Module {
-	public static SliderSetting scale = new SliderSetting("Scale", 5, 18, 30, true);
 	public static BooleanSetting vanilla = new BooleanSetting("Vanilla", true);
 	public static BooleanSetting shadow = new BooleanSetting("Shadow", true);
 	public static ModeSetting style = new ModeSetting("Style", "Plain", "Plain", "Bold", "Italic", "Bold-Italic");
@@ -37,6 +36,14 @@ public class Font extends Module {
 		}
 		families.setValues(fontNames);
 	}
+
+	@Override
+	public void onUpdate() {
+		if(Font.vanilla.getValue()) {
+			mc.fontRenderer.FONT_HEIGHT = FontUtil.getFontHeight();
+		}
+	}
+
 
 	public static boolean enabled() {
 		return ModuleManager.getMod(Font.class).isEnabled();

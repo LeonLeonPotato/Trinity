@@ -39,7 +39,7 @@ public class PresetButton extends IButton {
     }
 
     @Override
-    public boolean keyTyped(int code) {
+    public boolean keyTyped(char chr, int code) {
         return false;
     }
 
