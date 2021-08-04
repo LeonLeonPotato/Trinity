@@ -1,5 +1,6 @@
 package me.leon.trinity.utils.misc;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import me.leon.trinity.hacks.client.Font;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
@@ -31,7 +32,6 @@ public class FontUtil implements Util {
             else
                 return mc.fontRenderer.drawString(text, (int) x, (int) y, color.getRGB());
         } else {
-            //y -= 1;
             if(shadow)
                 return getFontRenderer().drawStringWithShadow(text, x, y, color);
             else

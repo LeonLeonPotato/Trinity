@@ -337,7 +337,7 @@ public class Tessellator implements Util {
 		disableDepth();
 		GlStateManager.translate(-(mc.fontRenderer.getStringWidth(text) / 2.0), 0.0, 0.0);
 		if (border)
-			RenderUtils.drawBorder(-1, -1, FontUtil.getStringWidth(text) + 1, FontUtil.getFontHeight() - 2, width, bColor);
+			RenderUtils.drawOutlineRect(-1, -1, FontUtil.getStringWidth(text) + 1, FontUtil.getFontHeight() - 2, width, bColor);
 		RenderUtils.drawRect(-1, -1, FontUtil.getStringWidth(text) + 1, FontUtil.getFontHeight() - 2, bColor);
 		FontUtil.drawString(text, 0, 0, color);
 		enableDepth();

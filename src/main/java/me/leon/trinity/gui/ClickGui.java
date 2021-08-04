@@ -102,7 +102,7 @@ public class ClickGui extends GuiScreen {
         if(ClickGUI.scroll.getValue()) {
             switch (ClickGUI.scrollAnimations.getValue()){
                 case "Bezier": {
-                    final int dWheel = Mouse.getDWheel();
+                    final int dWheel = Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue();
                     todo += dWheel * 0.1;
                     if(dWheel == 0 && timer.hasPassed(100)) { // find your own value dummy
                         todo = 0;
@@ -128,15 +128,18 @@ public class ClickGui extends GuiScreen {
                     }
                 }
                 case "Half": {
-                    todo += Mouse.getDWheel();
+                    /*
+                    todo += Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue();
                     final float cur = todo * 0.6f;
                     if(Math.abs(todo) <= 0.5) {
                         todo = 0;
                     }
                     frames.forEach(e -> e.setY(e.getY() + cur));
+
+                     */
                 }
                 case "None": {
-                    frames.forEach(e -> e.setY(e.getY() + Mouse.getDWheel()));
+                    frames.forEach(e -> e.setY(e.getY() + (Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue())));
                 }
             }
         }

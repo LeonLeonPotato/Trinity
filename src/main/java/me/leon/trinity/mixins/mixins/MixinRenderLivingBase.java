@@ -5,7 +5,9 @@ import me.leon.trinity.events.main.EventRenderEntityModel;
 import me.leon.trinity.hacks.render.NoRender;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.managers.ModuleManager;
+import me.leon.trinity.managers.SpoofingManager;
 import me.leon.trinity.mixins.IMixin;
+import me.leon.trinity.utils.world.Rotation.RotationUtils;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -32,7 +34,11 @@ public abstract class MixinRenderLivingBase<T extends EntityLivingBase> extends 
 		Trinity.dispatcher.post(event);
 
 		if (!event.isCancelled()) {
-			modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+			if(entityIn == mc.player && SpoofingManager.currentRotation != null) {
+				modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, SpoofingManager.currentRotation.pitch, scale);
+			} else {
+				modelBase.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+			}
 		}
 	}
 

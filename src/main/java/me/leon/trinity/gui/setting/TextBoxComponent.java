@@ -34,7 +34,6 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
 
     @Override
     public void render(Point point) {
-
         final float realY = superParent.parent().getY() + offset;
         final float realX = superParent.parent().getX();
 
@@ -46,7 +45,7 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
         String one = set.getValue().substring(0, (int) MathUtils.clamp(0, set.getValue().length(), set.typeSpace));
         String two = set.getValue().substring((int) MathUtils.clamp(0, set.getValue().length(), set.typeSpace));
         updateStrOff();
-        strOffset = (float) MathUtils.clamp(0, Integer.MAX_VALUE, strOffset);
+        strOffset = (float) MathUtils.clamp(-1, Integer.MAX_VALUE, strOffset);
         FontUtil.drawString(one, realX + xOffset() - strOffset, realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
         float one_ = FontUtil.getStringWidth(one);
         RenderUtils.drawLine(realX + xOffset() + one_ - strOffset, realY + 14, realX + xOffset() + one_ - strOffset, realY + 28, 1f, Color.WHITE);
@@ -58,21 +57,8 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
         if(progress != 0)
         RenderUtils.drawLine((realX + xOffset() + half) - (progress * half), realY + 27, (realX + xOffset() + half) + (progress * half), realY + 27, 1f, new Color(255, 255, 255, 255));
 
-        //RenderUtils.drawGradientLine(realX + xOffset(), realY, realX + getWidth() - 3, realY, 1f, RenderUtils.lower(Color.WHITE, 50), new Color(0, 0, 0, 0));
-        //RenderUtils.drawGradientLine(realX + xOffset(), realY + 27, realX + getWidth() - 3, realY + 27, 1f, RenderUtils.lower(Color.WHITE, 50), new Color(0, 0, 0, 0));
-
-        /*
-        RenderUtils.drawGradientLine(
-                realX + xOffset(),
-                realY + ((28 - FontUtil.getFontHeight()) / 2f) + FontUtil.getFontHeight(),
-                realX + getWidth() - 3,
-                realY + ((28 - FontUtil.getFontHeight()) / 2f) + FontUtil.getFontHeight(),
-                1f,
-                RenderUtils.lower(Color.WHITE, 50), new Color(0, 0, 0, 0)
-        );
-
-         */
         RenderUtils.restoreScissor();
+        if(open) subs.forEach(e -> e.render(point));
     }
 
     @Override

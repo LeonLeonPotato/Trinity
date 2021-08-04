@@ -44,6 +44,11 @@ public class Font extends Module {
 		}
 	}
 
+	@Override
+	public void onDisable() {
+		mc.fontRenderer.FONT_HEIGHT = 9;
+	}
+
 
 	public static boolean enabled() {
 		return ModuleManager.getMod(Font.class).isEnabled();

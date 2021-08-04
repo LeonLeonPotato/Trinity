@@ -33,7 +33,7 @@ public class RenderUtils implements Util {
 		release(Mode.NORMAL);
 	}
 
-	public static void drawBorder(float x, float y, float w, float h, float width, Color color) {
+	public static void drawOutlineRect(float x, float y, float w, float h, float width, Color color) {
 		final float alpha = (float) color.getAlpha() / 255;
 		final float red = (float) color.getRed() / 255;
 		final float green = (float) color.getGreen() / 255;
@@ -119,15 +119,15 @@ public class RenderUtils implements Util {
 
 		final Color starting = new Color(Color.HSBtoRGB(hue, 1, 1));
 
-		builder.pos(x + w, y, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
+		builder.pos(w, y, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
 		builder.pos(x, y, 0).color(255, 255, 255, alpha).endVertex();
-		builder.pos(x, y + h, 0).color(255, 255, 255, alpha).endVertex();
-		builder.pos(x + w, y + h, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
+		builder.pos(x, h, 0).color(255, 255, 255, alpha).endVertex();
+		builder.pos(w, h, 0).color(starting.getRed(), starting.getGreen(), starting.getBlue(), alpha).endVertex();
 
-		builder.pos(x + w, y, 0).color(0, 0, 0, 0).endVertex();
+		builder.pos(w, y, 0).color(0, 0, 0, 0).endVertex();
 		builder.pos(x, y, 0).color(0, 0, 0, 0).endVertex();
-		builder.pos(x, y + h, 0).color(0, 0, 0, alpha).endVertex();
-		builder.pos(x + w, y + h, 0).color(0, 0, 0, alpha).endVertex();
+		builder.pos(x, h, 0).color(0, 0, 0, alpha).endVertex();
+		builder.pos(w, h, 0).color(0, 0, 0, alpha).endVertex();
 
 		tessellator.draw();
 		RenderUtils.release( RenderUtils.Mode.GRADIENT);
@@ -211,6 +211,44 @@ public class RenderUtils implements Util {
 		release(Mode.GRADIENT);
 	}
 
+	/**
+	 *
+	 * @param xy top left
+	 * @param x1y top right
+	 * @param xy1 bottom left
+	 * @param x1y1 bottom right
+	 */
+	public static void drawGradientRect(float x, float y, float x1, float y1, Color xy, Color x1y, Color xy1, Color x1y1) {
+		final float xyr = xy.getAlpha() / 255f;
+		final float xyg   = xy.getRed() / 255f;
+		final float xyb = xy.getGreen() / 255f;
+		final float xya  = xy.getBlue() / 255f;
+
+		final float x1yr = x1y.getAlpha() / 255f;
+		final float x1yg   = x1y.getRed() / 255f;
+		final float x1yb = x1y.getGreen() / 255f;
+		final float x1ya  = x1y.getBlue() / 255f;
+
+		final float xy1r = xy1.getAlpha() / 255f;
+		final float xy1g  = xy1.getRed() / 255f;
+		final float xy1b = xy1.getGreen() / 255f;
+		final float xy1a  = xy1.getBlue() / 255f;
+
+		final float x1y1r = x1y1.getAlpha() / 255f;
+		final float x1y1g   = x1y1.getRed() / 255f;
+		final float x1y1b = x1y1.getGreen() / 255f;
+		final float x1y1a  = x1y1.getBlue() / 255f;
+
+		prepare(1f, Mode.GRADIENT);
+		builder.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+		builder.pos(x1, y, 0.0D).color(x1yr, x1yg, x1yb, x1ya).endVertex();
+		builder.pos(x, y, 0.0D).color(xyr, xyg, xyb, xya).endVertex();
+		builder.pos(x, y1, 0.0D).color(xy1r, xy1g, xy1b, xy1a).endVertex();
+		builder.pos(x1, y1, 0.0D).color(x1y1r, x1y1g, x1y1b, x1y1a).endVertex();
+		tessellator.draw();
+		release(Mode.GRADIENT);
+	}
+
 	public static void drawCircle(float x, float y, float r, float w, Color color) {
 		prepare(w, Mode.NORMAL);
 		glEnable(GL_LINE_SMOOTH);
@@ -239,6 +277,13 @@ public class RenderUtils implements Util {
 		GL11.glEnable(GL_SCISSOR_TEST);
 		final ScaledResolution res = new ScaledResolution(mc);
 		GL11.glScissor((int) quad.getX() * res.getScaleFactor(), (res.getScaledHeight() - (int) quad.getY1()) * res.getScaleFactor(), (int) quad.width() * res.getScaleFactor(), (int) quad.height() * res.getScaleFactor());
+	}
+
+	public static void scissor(int x, int y, int x1, int y1) {
+		GL11.glPushAttrib(GL_SCISSOR_BIT);
+		GL11.glEnable(GL_SCISSOR_TEST);
+		final ScaledResolution res = new ScaledResolution(mc);
+		GL11.glScissor(x * res.getScaleFactor(), (res.getScaledHeight() - y1) * res.getScaleFactor(), (x1 - x) * res.getScaleFactor(), (y1 - y) * res.getScaleFactor());
 	}
 
 	public static void restoreScissor() {

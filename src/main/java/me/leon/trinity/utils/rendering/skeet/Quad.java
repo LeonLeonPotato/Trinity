@@ -47,6 +47,7 @@ public class Quad implements Util {
         setY1(getY1() - amount);
     }
 
+    @Override
     public Quad clone() {
         return new Quad(x, y, x1, y1);
     }

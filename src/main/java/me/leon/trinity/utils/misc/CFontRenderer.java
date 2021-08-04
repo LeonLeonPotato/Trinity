@@ -62,8 +62,7 @@ public class CFontRenderer extends CFont {
     }
 
     public float drawString(String text, double x, double y, Color color, boolean shadow) {
-        x -= 1;
-        y -= 2;
+        y -= 3;
         if (text == null) return 0.0F;
         if (color.getRed() == 255 && color.getGreen() == 255 && color.getBlue() == 255 && color.getAlpha() == 32)
             color = new Color(255, 255, 255);
