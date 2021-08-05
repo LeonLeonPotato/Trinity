@@ -66,7 +66,7 @@ public abstract class IFrame implements IComponent {
                 break;
             }
             case "Rolling": {
-                RenderUtils.drawRainbowRectHorizontal(x, y + 14, x + getWidth(), y + 15, (float) ClickGUI.separatorColor.speed, ClickGUI.separatorColor.getA(), ClickGUI.separatorColor.getValue());
+                RenderUtils.drawRainbowRectHorizontal(x, y + 14, x + getWidth(), y + 15, (int) (ClickGUI.separatorColor.speed / 5f), ClickGUI.separatorColor.getA(), ClickGUI.separatorColor.getValue(), true);
                 break;
             }
             default: {

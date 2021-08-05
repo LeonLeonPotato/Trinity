@@ -18,7 +18,13 @@ public class Rainbow {
 	}
 
 	public void update(float val) {
+		hue += (val % 1f);
+		hue %= 1f;
+	}
+
+	public void update(int val) {
 		hue += (val % 360f) / 360f;
+		hue %= 1f;
 	}
 
 	public Color getColor() {
@@ -26,11 +32,11 @@ public class Rainbow {
 	}
 
 	public Color getColor(float off) {
-		return new Color(Color.HSBtoRGB(((hue + off) % 360), 1.0f, 1.0f));
+		return new Color(Color.HSBtoRGB((hue + off) % 1f, 1.0f, 1.0f));
 	}
 
 	public Color getColor(float off, float sat, float bright) {
-		return new Color(Color.HSBtoRGB(((hue + off) % 360), sat, bright));
+		return new Color(Color.HSBtoRGB((hue + off) % 1f, sat, bright));
 	}
 
 	public float getHue() {
@@ -58,7 +64,7 @@ public class Rainbow {
 	}
 
 	public static Color getColorStatic(float off, float speed, int alpha) {
-		return new Color(Color.HSBtoRGB(transform(((long) (6500L / speed)), (System.currentTimeMillis() + ((long) off)) % ((long) (6500L / speed))), 1.0f, 1.0f));
+		return RenderUtils.lowerAlpha(new Color(Color.HSBtoRGB(transform(((long) (6500L / speed)), (System.currentTimeMillis() + ((long) off)) % ((long) (6500L / speed))), 1.0f, 1.0f)), 255 - alpha);
 	}
 
 	public static Color getColorStatic(float off, float speed, float sat, float bright, int alpha) {

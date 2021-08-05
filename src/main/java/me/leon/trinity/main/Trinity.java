@@ -99,16 +99,16 @@ public class Trinity {
 		notificationManager = new NotificationManager();
 		totempopManager = new TotempopManager();
 
+		LoadConfig.loadPreset();
+		LoadConfig.loadModules();
+		LoadConfig.loadHUD();
+
 		// init gui(s)
 		clickGui = new ClickGui();
+		LoadConfig.loadGUI();
 
 		Runtime.getRuntime().addShutdownHook(new SaveConfig());
 		Runtime.getRuntime().addShutdownHook(new Thread(RPCHandler::shutdown));
-
-		LoadConfig.loadPreset();
-		LoadConfig.load();
-
-		FontUtil.load();
 
 		if (ModuleManager.getMod(ClickGUI.class).getKey() == 0) {
 			ModuleManager.getMod(ClickGUI.class).setKey(Keyboard.KEY_RSHIFT);

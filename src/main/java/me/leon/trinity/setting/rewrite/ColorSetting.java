@@ -15,7 +15,7 @@ public class ColorSetting extends Setting {
     public double speed;
     public boolean sync;
     public boolean rainbow;
-    public float br, s;
+    public float hue, br, s;
 
     public ColorSetting(String name, int r, int g, int b, int a, boolean rainbow) {
         this(name, null, r, g, b, a, rainbow);
@@ -29,6 +29,7 @@ public class ColorSetting extends Setting {
         this.a = a;
         this.br = Color.RGBtoHSB(r, g, b, new float[3])[2];
         this.s = Color.RGBtoHSB(r, g, b, new float[3])[1];
+        this.hue = Color.RGBtoHSB(r, g, b, new float[3])[0];
         this.speed = 3;
         this.sync = false;
         this.rainbow = rainbow;
@@ -132,16 +133,17 @@ public class ColorSetting extends Setting {
     }
 
     @SuppressWarnings("unchecked")
-    private void putValues(JSONObject s) {
-        s.put("r", r);
-        s.put("g", g);
-        s.put("b", b);
-        s.put("a", a);
-        s.put("s", speed);
-        s.put("sy", sync);
-        s.put("ra", rainbow);
-        s.put("br", br);
-        s.put("sa", this.s);
+    private void putValues(JSONObject j) {
+        j.put("r", r);
+        j.put("g", g);
+        j.put("b", b);
+        j.put("a", a);
+        j.put("s", speed);
+        j.put("sy", sync);
+        j.put("ra", rainbow);
+        j.put("br", br);
+        j.put("sa", s);
+        j.put("hue", hue);
     }
 
     private void readValues(JSONObject s) {
@@ -154,5 +156,6 @@ public class ColorSetting extends Setting {
         this.rainbow = (Boolean) s.get("ra");
         this.br = ((Double) s.get("br")).floatValue();
         this.s = ((Double) s.get("sa")).floatValue();
+        this.hue = ((Double) s.get("hue")).floatValue();
     }
 }

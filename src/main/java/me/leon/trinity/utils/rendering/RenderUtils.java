@@ -1,5 +1,6 @@
 package me.leon.trinity.utils.rendering;
 
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.utils.Util;
 import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.rendering.skeet.Quad;
@@ -48,22 +49,43 @@ public class RenderUtils implements Util {
 		release(Mode.NORMAL);
 	}
 
-	public static void drawRainbowRectHorizontal(float x, float y, float w, float h, float speed, int alpha, Color starting) {
+	public static void drawRainbowRectHorizontal(float x, float y, float w, float h, float speed, int alpha, Color starting, boolean it) {
 		Rainbow rainbow = new Rainbow(starting);
 
 		prepare(1, Mode.NORMAL);
 		builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		for (float i = x; i < w; i += 0.5) {
+		for (float i = x; i < w; i += it ? 1 : 0.5) {
 			rainbow.update(speed);
 
-			final float red = (float) rainbow.getColor().getRed() / 255;
-			final float green = (float) rainbow.getColor().getGreen() / 255;
-			final float blue = (float) rainbow.getColor().getBlue() / 255;
+			final float red = (float) rainbow.getColor().getRed() / 255f;
+			final float green = (float) rainbow.getColor().getGreen() / 255f;
+			final float blue = (float) rainbow.getColor().getBlue() / 255f;
 			
-			builder.pos(i + 0.5f, h, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(i + (it ? 1 : 0.5f), h, 0.0D).color(red, green, blue, alpha).endVertex();
 			builder.pos(i, h, 0.0D).color(red, green, blue, alpha).endVertex();
 			builder.pos(i, y, 0.0D).color(red, green, blue, alpha).endVertex();
-			builder.pos(i + 0.5f, y, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(i + (it ? 1 : 0.5f), y, 0.0D).color(red, green, blue, alpha).endVertex();
+		}
+		tessellator.draw();
+		release(Mode.NORMAL);
+	}
+
+	public static void drawRainbowRectHorizontal(float x, float y, float w, float h, int speed, int alpha, Color starting, boolean it) {
+		Rainbow rainbow = new Rainbow(starting);
+
+		prepare(1, Mode.NORMAL);
+		builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		for (float i = x; i < w; i += it ? 1 : 0.5) {
+			rainbow.update(speed);
+
+			final float red = (float) rainbow.getColor().getRed() / 255f;
+			final float green = (float) rainbow.getColor().getGreen() / 255f;
+			final float blue = (float) rainbow.getColor().getBlue() / 255f;
+
+			builder.pos(i + (it ? 1 : 0.5f), h, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(i, h, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(i, y, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(i + (it ? 1 : 0.5f), y, 0.0D).color(red, green, blue, alpha).endVertex();
 		}
 		tessellator.draw();
 		release(Mode.NORMAL);
@@ -158,9 +180,9 @@ public class RenderUtils implements Util {
 	public static void drawHueRect(float x, float y, float w, float h) {
 		prepare(1, Mode.NORMAL);
 		builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		final float oneY = h / 360f;
+		final float oneW = w / 360f;
 
-		for (int a = 0; a <= 360; a++) {
+		for (int a = 0; a < 360; a++) {
 			Color color = new Color(Color.HSBtoRGB(a / 360f, 1f, 1f));
 
 			int red = color.getRed();
@@ -168,12 +190,12 @@ public class RenderUtils implements Util {
 			int green = color.getGreen();
 			int alpha = color.getAlpha();
 
-			final float cur = (a / 360f) * h;
+			final float cur = (a / 360f) * w;
 
-			builder.pos(x + w, y + (cur - oneY), 0.0D).color(red, green, blue, alpha).endVertex();
-			builder.pos(x, y + (cur - oneY), 0.0D).color(red, green, blue, alpha).endVertex();
-			builder.pos(x, y + cur, 0.0D).color(red, green, blue, alpha).endVertex();
-			builder.pos(x + w, y + cur, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(x + cur - oneW, y + h, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(x + cur, y + h, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(x + cur, y, 0.0D).color(red, green, blue, alpha).endVertex();
+			builder.pos(x + cur - oneW, y, 0.0D).color(red, green, blue, alpha).endVertex();
 		}
 
 		tessellator.draw();
@@ -219,25 +241,25 @@ public class RenderUtils implements Util {
 	 * @param x1y1 bottom right
 	 */
 	public static void drawGradientRect(float x, float y, float x1, float y1, Color xy, Color x1y, Color xy1, Color x1y1) {
-		final float xyr = xy.getAlpha() / 255f;
-		final float xyg   = xy.getRed() / 255f;
-		final float xyb = xy.getGreen() / 255f;
-		final float xya  = xy.getBlue() / 255f;
+		final float xyr = xy.getRed() / 255f;
+		final float xyg   = xy.getGreen() / 255f;
+		final float xyb = xy.getBlue() / 255f;
+		final float xya  = xy.getAlpha() / 255f;
 
-		final float x1yr = x1y.getAlpha() / 255f;
-		final float x1yg   = x1y.getRed() / 255f;
-		final float x1yb = x1y.getGreen() / 255f;
-		final float x1ya  = x1y.getBlue() / 255f;
+		final float x1yr = x1y.getRed() / 255f;
+		final float x1yg   = x1y.getGreen() / 255f;
+		final float x1yb = x1y.getBlue() / 255f;
+		final float x1ya  = x1y.getAlpha() / 255f;
 
-		final float xy1r = xy1.getAlpha() / 255f;
-		final float xy1g  = xy1.getRed() / 255f;
-		final float xy1b = xy1.getGreen() / 255f;
-		final float xy1a  = xy1.getBlue() / 255f;
+		final float xy1r = xy1.getRed() / 255f;
+		final float xy1g  = xy1.getGreen() / 255f;
+		final float xy1b = xy1.getBlue() / 255f;
+		final float xy1a  = xy1.getAlpha() / 255f;
 
-		final float x1y1r = x1y1.getAlpha() / 255f;
-		final float x1y1g   = x1y1.getRed() / 255f;
-		final float x1y1b = x1y1.getGreen() / 255f;
-		final float x1y1a  = x1y1.getBlue() / 255f;
+		final float x1y1r = x1y1.getRed() / 255f;
+		final float x1y1g  = x1y1.getGreen() / 255f;
+		final float x1y1b = x1y1.getBlue() / 255f;
+		final float x1y1a  = x1y1.getAlpha() / 255f;
 
 		prepare(1f, Mode.GRADIENT);
 		builder.begin(GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
@@ -291,8 +313,12 @@ public class RenderUtils implements Util {
 		GL11.glDisable(GL_SCISSOR_TEST);
 	}
 
-	public static Color lower(Color color, int alpha) {
+	public static Color lowerAlpha(Color color, int alpha) {
 		return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) MathUtils.clamp(0, 255, color.getAlpha() - alpha));
+	}
+
+	public static Color alpha(Color color, int alpha) {
+		return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) MathUtils.clamp(0, 255, alpha));
 	}
 
 	public static void glColor(Color color) {

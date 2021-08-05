@@ -89,9 +89,9 @@ public class NotificationComponent extends Component {
                             drawWarningIcon(quad.getX() + 6, quad.getY() + 6, deathPercent);
 
                         RenderUtils.scissor(quad);
-                        FontUtil.drawString(not.getName(), quad.getX() + 40, quad.getY() + 6, RenderUtils.lower(not.getType() == NotifType.INFO ? infoColor.getValue() : warningColor.getValue(), (int) ((not.getDeathTime() / dieTime.getValue()) * 255)).getRGB());
-                        FontUtil.drawString(des, quad.getX() + 40, quad.getY() + 10 + FontUtil.getFontHeight(), RenderUtils.lower(textColor.getValue(), (int) ((not.getDeathTime() / dieTime.getValue()) * 255)).getRGB());
-                        FontUtil.drawString(des2, quad.getX() + 40, quad.getY() + 10 + (FontUtil.getFontHeight() * 2), RenderUtils.lower(textColor.getValue(), (int) ((not.getDeathTime() / dieTime.getValue()) * 255)).getRGB());
+                        FontUtil.drawString(not.getName(), quad.getX() + 40, quad.getY() + 6, RenderUtils.lowerAlpha(not.getType() == NotifType.INFO ? infoColor.getValue() : warningColor.getValue(), (int) ((not.getDeathTime() / dieTime.getValue()) * 255)).getRGB());
+                        FontUtil.drawString(des, quad.getX() + 40, quad.getY() + 10 + FontUtil.getFontHeight(), RenderUtils.lowerAlpha(textColor.getValue(), (int) ((not.getDeathTime() / dieTime.getValue()) * 255)).getRGB());
+                        FontUtil.drawString(des2, quad.getX() + 40, quad.getY() + 10 + (FontUtil.getFontHeight() * 2), RenderUtils.lowerAlpha(textColor.getValue(), (int) ((not.getDeathTime() / dieTime.getValue()) * 255)).getRGB());
                     } else if(not.getMode() == 0) {
                         final double fadeTime = -(not.getFadeTime() / fadeInTime.getValue());
                         final Quad quad = drawNotificationBase((float) curve.get(fadeTime), off, 255);

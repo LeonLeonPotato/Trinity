@@ -41,14 +41,14 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
 
         FontUtil.drawString(set.getName(), realX + xOffset() + (((getWidth() - xOffset()) - FontUtil.getStringWidth(set.getName())) / 2f), realY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
 
-        RenderUtils.scissor(new Quad(realX + xOffset(), realY, realX + getWidth(), realY + 28));
+        RenderUtils.scissor(new Quad(realX + xOffset() - 1, realY, realX + getWidth(), realY + 29));
         String one = set.getValue().substring(0, (int) MathUtils.clamp(0, set.getValue().length(), set.typeSpace));
         String two = set.getValue().substring((int) MathUtils.clamp(0, set.getValue().length(), set.typeSpace));
         updateStrOff();
         strOffset = (float) MathUtils.clamp(-1, Integer.MAX_VALUE, strOffset);
         FontUtil.drawString(one, realX + xOffset() - strOffset, realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
         float one_ = FontUtil.getStringWidth(one);
-        RenderUtils.drawLine(realX + xOffset() + one_ - strOffset, realY + 14, realX + xOffset() + one_ - strOffset, realY + 28, 1f, Color.WHITE);
+        if(typing && System.currentTimeMillis() % 800 > 400) RenderUtils.drawLine(realX + xOffset() + one_ - strOffset, realY + 14, realX + xOffset() + one_ - strOffset, realY + 28, 1f, Color.WHITE);
         FontUtil.drawString(two, realX + xOffset() - strOffset + one_ + 1, realY + 14 + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
 
         float progress = (float) (MathUtils.clamp(0, 1, (System.currentTimeMillis() - aniEnd) / 500f));

@@ -7,6 +7,7 @@ import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.setting.rewrite.SliderSetting;
 import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.FontUtil;
+import me.leon.trinity.utils.rendering.GuiUtils;
 
 import java.awt.*;
 
@@ -36,11 +37,7 @@ public class SliderComponent extends ISetting<SliderSetting> {
             } else if (point.x == getFrame().getX() + xOffset()) {
                 set.setValue(set.getMin());
             } else {
-                double diff = Math.min(getWidth() - xOffset(), Math.max(0, (point.x - xOffset()) - getFrame().getX()));
-                double min = set.getMin();
-                double max = set.getMax();
-                double newValue = MathUtils.roundToPlace(((diff / (getWidth() - xOffset())) * (max - min) + min), set.isOnlyInt() ? 0 : 2);
-                set.setValue(newValue);
+                GuiUtils.slider(set, point.x, getFrame().getX() + xOffset(), getWidth() - xOffset());
             }
         }
         subs.forEach(e -> e.update(point));
