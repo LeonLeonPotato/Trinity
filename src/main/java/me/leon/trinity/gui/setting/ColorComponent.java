@@ -3,6 +3,7 @@ package me.leon.trinity.gui.setting;
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
 import me.leon.trinity.hacks.client.ClickGUI;
+import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.rewrite.ColorSetting;
 import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.utils.math.MathUtils;
@@ -10,6 +11,7 @@ import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.GuiUtils;
 import me.leon.trinity.utils.rendering.RenderUtils;
 import me.leon.trinity.utils.rendering.skeet.Quad;
+import net.minecraft.launchwrapper.LaunchClassLoader;
 
 import java.awt.*;
 
@@ -54,8 +56,8 @@ public class ColorComponent extends ISetting<ColorSetting> {
             pickerPosMin = realY + 14;
             pickerPosMax = realY + 14 + (getWidth() - xOffset());
 
-            RenderUtils.scissor(new Quad(realX + xOffset() - 1, realY + 14, realX + getWidth(), realY + 14 + (getWidth() - xOffset())));
-            RenderUtils.drawCircle(realX + (set.s * (width - xOffset())) + xOffset(), realY + (1 - set.br) * (width - xOffset()) + 14, 3, 1, Color.WHITE);
+            RenderUtils.scissor(new Quad(realX + xOffset(), realY + 15, realX + getWidth(), realY + 14 + (getWidth() - xOffset())));
+            RenderUtils.drawCircle(realX + xOffset() + (set.s * (width - xOffset())), realY + 14 + ((1 - set.br) * (width - xOffset())), 3, 1, Color.WHITE);
             RenderUtils.restoreScissor();
 
             realY += 17 + (width - xOffset());
@@ -78,6 +80,7 @@ public class ColorComponent extends ISetting<ColorSetting> {
             RenderUtils.restoreScissor();
 
             RenderUtils.drawGradientRect(realX + xOffset(), realY, realX + getWidth(), realY + 10, new Color(0, 0, 0, 0), RenderUtils.alpha(set.getValue(), 255), new Color(0, 0, 0, 0), RenderUtils.alpha(set.getValue(), 255));
+            RenderUtils.drawRect(realX + xOffset() + GuiUtils.sliderWidth(0, set.getA(), 255, getWidth() - xOffset() - 1), realY, realX + xOffset() + 1 + GuiUtils.sliderWidth(0, set.getA(), 255, getWidth() - xOffset() - 1), realY + 10, Color.BLACK);
             RenderUtils.drawOutlineRect(realX + xOffset(), realY, realX + getWidth(), realY + 10, 1f, Color.WHITE);
             alphaPosMin = realY;
             alphaPosMax = realY + 10;
@@ -114,11 +117,12 @@ public class ColorComponent extends ISetting<ColorSetting> {
         if(draggingHue) {
             set.hue = ((float) GuiUtils.slider(0, 360, point.x, realX + xOffset(), getWidth() - xOffset(), 2)) / 360f;
         }
+        if(draggingAlpha) {
+            set.setA((int) GuiUtils.slider(0, 255, point.x, realX + xOffset(), getWidth() - xOffset(), 0));
+        }
 
         final Color color = new Color(Color.HSBtoRGB(set.hue, set.s, set.br));
-        set.setR(color.getRed());
-        set.setG(color.getGreen());
-        set.setB(color.getBlue());
+        set.setR(color.getRed()).setG(color.getGreen()).setB(color.getBlue());
     }
 
     @Override
@@ -145,6 +149,10 @@ public class ColorComponent extends ISetting<ColorSetting> {
             }
             if(onHue(point) && button == 0) {
                 draggingHue = true;
+                return true;
+            }
+            if(onAlpha(point) && button == 0) {
+                draggingAlpha = true;
                 return true;
             }
         }
@@ -192,5 +200,9 @@ public class ColorComponent extends ISetting<ColorSetting> {
 
     private boolean onHue(Point p) {
         return GuiUtils.onButton(getFrame().getX() + xOffset(), huePosMin, getFrame().getX() + getWidth(), huePosMax, p);
+    }
+
+    private boolean onAlpha(Point p) {
+        return GuiUtils.onButton(getFrame().getX() + xOffset(), alphaPosMin, getFrame().getX() + getWidth(), alphaPosMax, p);
     }
 }

@@ -41,7 +41,6 @@ public class ColorSetting extends Setting {
 
     public ColorSetting setR(int r) {
         this.r = r;
-        refreshHSB();
         return this;
     }
 
@@ -51,7 +50,6 @@ public class ColorSetting extends Setting {
 
     public ColorSetting setG(int g) {
         this.g = g;
-        refreshHSB();
         return this;
     }
 
@@ -61,7 +59,6 @@ public class ColorSetting extends Setting {
 
     public ColorSetting setB(int b) {
         this.b = b;
-        refreshHSB();
         return this;
     }
 
@@ -72,11 +69,6 @@ public class ColorSetting extends Setting {
     public ColorSetting setA(int a) {
         this.a = a;
         return this;
-    }
-
-    private void refreshHSB() {
-        this.br = Color.RGBtoHSB(r, g, b, new float[3])[2];
-        this.s = Color.RGBtoHSB(r, g, b, new float[3])[1];
     }
 
     public Color getValue() {
