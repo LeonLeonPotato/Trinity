@@ -42,6 +42,9 @@ public class CapeUtil {
 				case "DARK":
 					outMap.put(UUID.fromString(splitLine[0]), new ResourceLocation("trinity", CapeManager.DARK_CAPE));
 					break;
+				case "RAINBOW":
+					outMap.put(UUID.fromString(splitLine[0]), new ResourceLocation("trinity", CapeManager.RAINBOW_CAPE));
+					break;
 				default:
 					URL capeURL = new URL(splitLine[1]);
 					outMap.put(UUID.fromString(splitLine[0]), downloadFromURL(capeURL));

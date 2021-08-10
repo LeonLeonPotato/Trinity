@@ -113,21 +113,25 @@ public class Placer implements Util, Listenable {
 
     private boolean filterDamage(CrystalPosition possible) {
         if(eyePos().squareDistanceTo(new Vec3d(possible.getBase())) > placeRange.getValue() * placeRange.getValue()) return false;
+        final float maxSelf = (totemTimer.getDelta() < 0) ? maxSelfDamagePlace.floatValue() : antiTotemMaxSelf.floatValue();
+        final float minTarget = (totemTimer.getDelta() < 0) ? minTargetDamagePlace.floatValue() : antiTotemMin.floatValue();
+        final float minTargetHole = (totemTimer.getDelta() < 0 && overrideFacePlaceTotem.getValue()) ? facePlaceMinDamage.floatValue() : antiTotemMin.floatValue();
+
         if (!EntityUtils.isInHole(target)) {
-            if (possible.getSelfDamage() <= maxSelfDamagePlace.getValue()) {
-                if (possible.getTargetDamage() > minTargetDamagePlace.getValue()) {
+            if (possible.getSelfDamage() <= maxSelf) {
+                if (possible.getTargetDamage() > minTarget) {
                     return true;
                 }
             }
-        } else if (facePlace.getValue()){
+        } else if (facePlace.getValue()) {
             if (!forceBind.down()) {
                 if (target instanceof EntityPlayer) {
                     if ((EntityUtils.getArmor((EntityPlayer) target, armorBreakerScale.getValue()) && armorBreaker.getValue())
                             || getTargetHealth() < facePlaceMinHealth.getValue()
-                            || (possible.getTargetDamage() > facePlaceMinDamage.getValue() && possible.getSelfDamage() <= facePlaceMinHealth.getValue()))
+                            || (possible.getTargetDamage() > minTargetHole))
                     {
-                        if (possible.getSelfDamage() <= facePlaceMinHealth.getValue()) {
-                            return possible.getTargetDamage() > facePlaceMinDamage.getValue();
+                        if (possible.getSelfDamage() <= maxSelf) {
+                            return possible.getTargetDamage() > minTargetHole;
                         }
                     }
                 }
@@ -138,7 +142,7 @@ public class Placer implements Util, Listenable {
         return false;
     }
 
-    private boolean filterPlaceable(BlockPos blockPos) { // webhook test, ignore this comment
+    private boolean filterPlaceable(BlockPos blockPos) {
         final BlockPos boost = blockPos.add(0, 1, 0);
         final AxisAlignedBB bb = new AxisAlignedBB(boost).expand(0, 1, 0);
         if ((mc.world.getBlockState(blockPos).getBlock() == Blocks.BEDROCK

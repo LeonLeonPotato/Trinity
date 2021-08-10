@@ -5,6 +5,7 @@ import me.leon.trinity.gui.frame.IFrame;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
+import me.leon.trinity.utils.math.MathUtils;
 import me.leon.trinity.utils.misc.BezierCurve;
 import me.leon.trinity.utils.misc.FontUtil;
 import me.leon.trinity.utils.rendering.Rainbow;
@@ -15,6 +16,8 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.awt.*;
@@ -26,10 +29,19 @@ public class ClickGui extends GuiScreen {
     private static ArrayList<IComponent> totalComponents; // not implemented yet
     private static ArrayList<IFrame> frames;
     private static IComponent hovered; // setting descriptions later?
-    private static long startTime = System.currentTimeMillis();
+    private static long endTime = 0, rawTime = 0;
     private static float todo = 0;
-    private static final Timer timer = new Timer();
     private static final BezierCurve curve = new BezierCurve(0, 120, 120, 0);
+
+    /*
+    private Timer scrollTimer = new Timer();
+    private float scrollSpeed = 0.0f;;
+
+    private float scrollProgress = 0.0f;
+    private float prevScrollProgress = 0.0f;
+    private float renderScrollProgress = prevScrollProgress + (scrollProgress - prevScrollProgress) * mc.getRenderPartialTicks();
+
+     */
 
     public ClickGui() {
         totalComponents = new ArrayList<>();
@@ -72,6 +84,7 @@ public class ClickGui extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) {
+        if(keyCode == Keyboard.KEY_E) frames.forEach(e -> e.setY(10));
         if (keyCode == 1) {
             for (IFrame c : frames) {
                 c.unload();
@@ -100,48 +113,52 @@ public class ClickGui extends GuiScreen {
 
     private void scroll() {
         if(ClickGUI.scroll.getValue()) {
+            /*
             switch (ClickGUI.scrollAnimations.getValue()){
                 case "Bezier": {
-                    final int dWheel = Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue();
-                    todo += dWheel * 0.1;
-                    if(dWheel == 0 && timer.hasPassed(100)) { // find your own value dummy
-                        todo = 0;
-                    } else timer.reset();
-
-                    if (todo != 0) {
-                        float plus = Math.abs(todo) * 100f;
-
-                        final double t = (System.currentTimeMillis() - startTime) / plus;
-
-                        final float cur_c = (float) ((curve.get(t)) / 120f);
-                        final float cur = cur_c * todo;
-
-                        frames.forEach(e -> e.setY(e.getY() + cur));
-                        todo -= cur;
-
-                        if (t >= 1) {
-                            todo = 0;
-                            startTime = System.currentTimeMillis();
+                    frames.forEach(e -> e.setLastY(e.getY()));
+                    final int dWheel = Mouse.getDWheel();
+                    todo += dWheel;
+                    if(dWheel != 0) {
+                        if(endTime == 0) {
+                            endTime = System.currentTimeMillis() + 1500;
+                            rawTime = 1500;
+                        } else {
+                            endTime += 1500;
+                            rawTime += 1500;
                         }
-                    } else {
-                        startTime = System.currentTimeMillis();
                     }
+                    if (endTime != 0) {
+                        final float progress = (float) MathUtils.clamp(0, 1, ((float) (endTime - System.currentTimeMillis())) / ((float) rawTime));
+                        if(progress != 0) {
+                            frames.forEach(e -> e.setY((float) (e.getLastY() + (curve.get(progress) / 90f) * todo * 0.01)));
+                        } else {
+                            endTime = 0;
+                            rawTime = 0;
+                            todo = 0;
+                        }
+                    }
+                    break;
                 }
                 case "Half": {
-                    /*
-                    todo += Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue();
-                    final float cur = todo * 0.6f;
-                    if(Math.abs(todo) <= 0.5) {
-                        todo = 0;
+                    scrollProgress = (scrollProgress + scrollSpeed);
+                    scrollSpeed *= 0.5f;
+                    if (scrollTimer.hasPassAndReset(100)) {
+                        if (scrollProgress < 0.0) {
+                            scrollSpeed = scrollProgress * -0.25f;
+                        } else if (scrollProgress > maxScrollProgress) {
+                            scrollSpeed = (scrollProgress - maxScrollProgress) * -0.25f;
+                        }
                     }
-                    frames.forEach(e -> e.setY(e.getY() + cur));
+                    break;
+                }
 
-                     */
-                }
                 case "None": {
-                    frames.forEach(e -> e.setY(e.getY() + (Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue())));
+                    break;
                 }
-            }
+                */
+            final float x = (float) (Mouse.getDWheel() * ClickGUI.scrollSpeed.intValue() * 0.1);
+            frames.forEach(e -> e.setY(e.getY() + x));
         }
     }
 

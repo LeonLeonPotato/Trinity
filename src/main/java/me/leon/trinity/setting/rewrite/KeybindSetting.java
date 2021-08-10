@@ -5,16 +5,25 @@ import org.json.simple.JSONObject;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class KeybindSetting extends Setting {
     private int keycode;
 
     public KeybindSetting(String name, int keycode) {
-        this(name, null, keycode);
+        this(name, null, keycode, s -> true);
     }
 
     public KeybindSetting(String name, Object parent, int keycode) {
-        super(name, parent);
+        this(name, parent, keycode, s -> true);
+    }
+
+    public KeybindSetting(String name, int keycode, Predicate<Setting> pre) {
+        this(name, null, keycode, pre);
+    }
+
+    public KeybindSetting(String name, Object parent, int keycode, Predicate<Setting> pre) {
+        super(name, parent, pre);
         this.keycode = keycode;
     }
 

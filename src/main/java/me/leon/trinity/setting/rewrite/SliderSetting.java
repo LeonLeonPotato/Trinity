@@ -3,18 +3,27 @@ package me.leon.trinity.setting.rewrite;
 import org.json.simple.JSONObject;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
-public class SliderSetting extends Setting{
+public class SliderSetting extends Setting {
     private double value;
     private final double min, max;
     private final boolean onlyInt;
 
     public SliderSetting(String name, double min, double value, double max, boolean onlyInt) {
-        this(name, null, min, value, max, onlyInt);
+        this(name, null, min, value, max, onlyInt, s -> true);
     }
 
     public SliderSetting(String name, Object parent, double min, double value, double max, boolean onlyInt) {
-        super(name, parent);
+        this(name, parent, min, value, max, onlyInt, s -> true);
+    }
+
+    public SliderSetting(String name, double min, double value, double max, boolean onlyInt, Predicate<Setting> pre) {
+        this(name, null, min, value, max, onlyInt, pre);
+    }
+
+    public SliderSetting(String name, Object parent, double min, double value, double max, boolean onlyInt, Predicate<Setting> pre) {
+        super(name, parent, pre);
         this.value = value;
         this.min = min;
         this.max = max;

@@ -2,6 +2,7 @@ package me.leon.trinity.gui.setting;
 
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
+import me.leon.trinity.gui.button.IButton;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.setting.rewrite.Setting;
 import me.leon.trinity.setting.rewrite.SliderSetting;
@@ -14,7 +15,7 @@ import java.awt.*;
 public class SliderComponent extends ISetting<SliderSetting> {
     private boolean dragging = false;
 
-    public SliderComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+    public SliderComponent(IComponent parent, IButton superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
     }
 
@@ -27,6 +28,7 @@ public class SliderComponent extends ISetting<SliderSetting> {
         float width = (float) (xOffset() + ((set.getValue() - set.getMin()) / (set.getMax() - set.getMin())) * (getWidth() - xOffset()));
         drawRect(getFrame().getX() + xOffset(), getFrame().getY() + offset, getFrame().getX() + width, getFrame().getY() + offset + 14, ClickGUI.sliderColor.getValue());
         FontUtil.drawString(set.getName() + " " + set.getValue(), realX + xOffset(), realY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
+        if(open) getSets().forEach(e -> e.render(point));
     }
 
     @Override
@@ -40,7 +42,7 @@ public class SliderComponent extends ISetting<SliderSetting> {
                 GuiUtils.slider(set, point.x, getFrame().getX() + xOffset(), getWidth() - xOffset());
             }
         }
-        subs.forEach(e -> e.update(point));
+        getSets().forEach(e -> e.update(point));
     }
 
     @Override
@@ -49,7 +51,7 @@ public class SliderComponent extends ISetting<SliderSetting> {
             dragging = true;
             return true;
         }
-        for (ISetting<?> sub : subs) {
+        for (ISetting<?> sub : getSets()) {
             if(sub.buttonClick(button, point)) return true;
         }
         return false;
@@ -58,7 +60,7 @@ public class SliderComponent extends ISetting<SliderSetting> {
     @Override
     public boolean buttonRelease(int button, Point point) {
         dragging = false;
-        for (ISetting<?> sub : subs) {
+        for (ISetting<?> sub : getSets()) {
             if(sub.buttonRelease(button, point)) return true;
         }
         return false;
@@ -66,7 +68,7 @@ public class SliderComponent extends ISetting<SliderSetting> {
 
     @Override
     public boolean keyTyped(char chr, int code) {
-        for (ISetting<?> sub : subs) {
+        for (ISetting<?> sub : getSets()) {
             if(sub.keyTyped(chr, code)) return true;
         }
         return false;

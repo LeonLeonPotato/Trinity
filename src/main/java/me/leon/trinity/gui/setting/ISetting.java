@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public abstract class ISetting<T extends Setting> implements IComponent {
     protected final ArrayList<ISetting<?>> subs;
     protected final IComponent parent;
-    protected final ButtonComponent superParent;
+    protected final IButton superParent;
     protected final T set;
     protected int offset;
 
@@ -26,7 +26,7 @@ public abstract class ISetting<T extends Setting> implements IComponent {
     protected float p1, p2;
 
     @SuppressWarnings("unchecked")
-    protected ISetting(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+    protected ISetting(IComponent parent, IButton superParent, Setting set, int offset) {
         this.parent = parent;
         this.superParent = superParent;
         this.set = (T) set;
@@ -34,14 +34,16 @@ public abstract class ISetting<T extends Setting> implements IComponent {
 
         this.subs = new ArrayList<>();
         int off = offset + 14;
-        for(Setting s : set.getSubSettings()) {
-            if(s instanceof ColorSetting)       subs.add(new ColorComponent(this, superParent, s, off));
-            if(s instanceof BooleanSetting)     subs.add(new BooleanComponent(this, superParent, s, off));
-            if(s instanceof ModeSetting)        subs.add(new ModeComponent(this, superParent, s, off));
-            if(s instanceof SliderSetting)      subs.add(new SliderComponent(this, superParent, s, off));
-            if(s instanceof KeybindSetting)     subs.add(new KeybindComponent(this, superParent, s, off));
-            if(s instanceof TextBoxSetting)     subs.add(new TextBoxComponent(this, superParent, s, off));
-            off += 14;
+        if(set != null) {
+            for(Setting s : set.getSubSettings()) {
+                if(s instanceof ColorSetting)       subs.add(new ColorComponent(this, superParent, s, off));
+                if(s instanceof BooleanSetting)     subs.add(new BooleanComponent(this, superParent, s, off));
+                if(s instanceof ModeSetting)        subs.add(new ModeComponent(this, superParent, s, off));
+                if(s instanceof SliderSetting)      subs.add(new SliderComponent(this, superParent, s, off));
+                if(s instanceof KeybindSetting)     subs.add(new KeybindComponent(this, superParent, s, off));
+                if(s instanceof TextBoxSetting)     subs.add(new TextBoxComponent(this, superParent, s, off));
+                off += 14;
+            }
         }
     }
 
@@ -150,7 +152,7 @@ public abstract class ISetting<T extends Setting> implements IComponent {
         return parent;
     }
 
-    public ButtonComponent getSuperParent() {
+    public IButton getSuperParent() {
         return superParent;
     }
 
@@ -172,5 +174,15 @@ public abstract class ISetting<T extends Setting> implements IComponent {
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    protected ArrayList<ISetting<?>> getSets() {
+        final ArrayList<ISetting<?>> toReturn = new ArrayList<>();
+        for(ISetting<?> s : subs) {
+            if(s.getSet().test()) {
+                toReturn.add(s);
+            }
+        }
+        return toReturn;
     }
 }

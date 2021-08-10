@@ -5,17 +5,26 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class ModeSetting extends Setting {
     private ArrayList<String> values;
     private String value;
 
     public ModeSetting(String name, String value, String... values) {
-        this(name, null, value, values);
+        this(name, null, value, s -> true, values);
     }
 
     public ModeSetting(String name, Object parent, String value, String... values) {
-        super(name, parent);
+        this(name, parent, value, s -> true, values);
+    }
+
+    public ModeSetting(String name, String value, Predicate<Setting> pre, String... values) {
+        this(name, null, value, pre, values);
+    }
+
+    public ModeSetting(String name, Object parent, String value, Predicate<Setting> pre, String... values) {
+        super(name, parent, pre);
         this.value = value;
         Collections.addAll((this.values = new ArrayList<>()), values);
     }

@@ -2,6 +2,7 @@ package me.leon.trinity.gui.setting;
 
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
+import me.leon.trinity.gui.button.IButton;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.rewrite.BooleanSetting;
@@ -10,7 +11,7 @@ import me.leon.trinity.setting.rewrite.Setting;
 import java.awt.*;
 
 public class BooleanComponent extends ISetting<BooleanSetting> {
-    public BooleanComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+    public BooleanComponent(IComponent parent, IButton superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
     }
 
@@ -19,12 +20,12 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
         drawBack(point, set.getName(), set.getValue());
         if(!subs.isEmpty()) drawArrow();
         updateOffset();
-        if(open) subs.forEach(e -> e.render(point));
+        if(open) getSets().forEach(e -> e.render(point));
     }
 
     @Override
     public void update(Point point) {
-        subs.forEach(e -> e.update(point));
+        if(open) getSets().forEach(e -> e.update(point));
     }
 
     @Override
@@ -43,7 +44,7 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
             }
         }
         if(open) {
-            for (ISetting<?> sub : subs) {
+            for (ISetting<?> sub : getSets()) {
                 if (sub.buttonClick(button, point)) return true;
             }
         }
@@ -53,7 +54,7 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
     @Override
     public boolean buttonRelease(int button, Point point) {
         if(open) {
-            for (ISetting<?> sub : subs) {
+            for (ISetting<?> sub : getSets()) {
                 if (sub.buttonRelease(button, point)) return true;
             }
         }
@@ -63,7 +64,7 @@ public class BooleanComponent extends ISetting<BooleanSetting> {
     @Override
     public boolean keyTyped(char chr, int code) {
         if(open) {
-            for (ISetting<?> sub : subs) {
+            for (ISetting<?> sub : getSets()) {
                 if (sub.keyTyped(chr, code)) return true;
             }
         }

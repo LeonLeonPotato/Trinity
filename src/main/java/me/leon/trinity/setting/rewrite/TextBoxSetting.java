@@ -1,20 +1,28 @@
 package me.leon.trinity.setting.rewrite;
 
-import com.google.gson.JsonObject;
 import org.json.simple.JSONObject;
 
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class TextBoxSetting extends Setting {
     private String value;
     public int typeSpace;
 
     public TextBoxSetting(String name, String value) {
-        this(name, null, value);
+        this(name, null, value, s -> true);
     }
 
     public TextBoxSetting(String name, Object parent, String value) {
-        super(name, parent);
+        this(name, parent, value, s -> true);
+    }
+
+    public TextBoxSetting(String name, String value, Predicate<Setting> pre) {
+        this(name, null, value, pre);
+    }
+
+    public TextBoxSetting(String name, Object parent, String value, Predicate<Setting> pre) {
+        super(name, parent, pre);
         this.value = value;
         this.typeSpace = value.length();
     }

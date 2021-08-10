@@ -1,9 +1,16 @@
 package me.leon.trinity.gui.frame;
 
+import me.leon.trinity.gui.button.ButtonComponent;
 import me.leon.trinity.hacks.Category;
+import me.leon.trinity.managers.ModuleManager;
 
 import java.awt.*;
 
+/**
+ * @author Leon
+ *
+ * hardcoded again
+ */
 public class PresetFrame extends IFrame {
     public PresetFrame(Category c, float x, float y) {
         super(c, x, y);
@@ -11,7 +18,9 @@ public class PresetFrame extends IFrame {
 
     @Override
     public void render(Point point) {
+        if(open) {
 
+        }
     }
 
     @Override

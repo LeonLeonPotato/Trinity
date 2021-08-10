@@ -1,17 +1,13 @@
 package me.leon.trinity.main;
 
-import com.mojang.authlib.Agent;
-import com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService;
-import com.mojang.authlib.yggdrasil.YggdrasilUserAuthentication;
 import me.leon.trinity.config.rewrite.LoadConfig;
 import me.leon.trinity.config.rewrite.PresetManager;
-import me.leon.trinity.config.rewrite.PresetObj;
+import me.leon.trinity.config.rewrite.Preset;
 import me.leon.trinity.config.rewrite.SaveConfig;
 import me.leon.trinity.gui.ClickGui;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.managers.*;
-import me.leon.trinity.utils.misc.FontUtil;
 import me.zero.alpine.fork.bus.EventBus;
 import me.zero.alpine.fork.bus.EventManager;
 import net.minecraft.client.Minecraft;
@@ -25,8 +21,6 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
-
-import java.net.Proxy;
 
 /**
  * my second mod, please work!
@@ -52,7 +46,7 @@ public class Trinity {
 	public static SpoofingManager spoofingManager;
 	public static TickrateManager tickrateManager;
 	public static HudManager hudManager;
-	public static PresetObj currentPreset;
+	public static Preset currentPreset;
 	public static NotificationManager notificationManager;
 	public static TotempopManager totempopManager;
 

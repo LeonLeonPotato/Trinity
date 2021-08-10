@@ -13,7 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class IFrame implements IComponent {
-    protected float x, y, dragX, dragY;
+    protected float x, y, lastY, dragX, dragY;
     protected boolean open, dragging;
     protected Category category;
     protected ArrayList<IButton> buttons;
@@ -91,6 +91,14 @@ public abstract class IFrame implements IComponent {
 
     public void setX(float x) {
         this.x = x;
+    }
+
+    public float getLastY() {
+        return lastY;
+    }
+
+    public void setLastY(float y) {
+        this.lastY = y;
     }
 
     public float getY() {

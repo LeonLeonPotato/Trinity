@@ -1,15 +1,18 @@
 package me.leon.trinity.setting.rewrite;
 
-import me.leon.trinity.hacks.Module;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 public abstract class Setting {
     private Object parent;
     private Object superParent;
     private final String name;
     private final ArrayList<Setting> settings;
+
+    protected final Predicate<Setting> DEFAULT_PREDICATE = s -> true;
+    protected final Predicate<Setting> predicate;
 
     public abstract Object getJsonString();
     public abstract void parseJson(JSONObject main, String key, Object val);
@@ -18,12 +21,21 @@ public abstract class Setting {
         this.name = name;
         this.parent = null;
         this.settings = new ArrayList<>();
+        this.predicate = DEFAULT_PREDICATE;
     }
 
     public Setting(String name, Object parent) {
         this.name = name;
         this.parent = parent;
         this.settings = new ArrayList<>();
+        this.predicate = DEFAULT_PREDICATE;
+    }
+
+    public Setting(String name, Object parent, Predicate<Setting> predicate) {
+        this.name = name;
+        this.parent = parent;
+        this.settings = new ArrayList<>();
+        this.predicate = predicate;
     }
 
     public Object getParent() {
@@ -52,5 +64,13 @@ public abstract class Setting {
 
     public void addSetting(Setting setting) {
         settings.add(setting);
+    }
+
+    public Predicate<Setting> getPredicate() {
+        return predicate;
+    }
+
+    public boolean test() {
+        return predicate.test(this);
     }
 }

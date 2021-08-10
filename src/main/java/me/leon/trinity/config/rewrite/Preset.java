@@ -1,12 +1,14 @@
 package me.leon.trinity.config.rewrite;
 
+import me.leon.trinity.main.Trinity;
+
 import java.io.File;
 
-public class PresetObj {
+public class Preset {
 	public File dir;
 	public String name;
 
-	public PresetObj(String name) {
+	public Preset(String name) {
 		this.dir = new File("Trinity/" + name);
 		this.name = name;
 	}
@@ -25,5 +27,11 @@ public class PresetObj {
 
 	public File getHudFile() {
 		return new File(dir.getAbsolutePath() + "/hud/");
+	}
+
+	public void load() {
+		SaveConfig.runStatic();
+		Trinity.currentPreset = this;
+		LoadConfig.load();
 	}
 }

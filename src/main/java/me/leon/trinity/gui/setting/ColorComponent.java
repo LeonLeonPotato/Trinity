@@ -2,6 +2,7 @@ package me.leon.trinity.gui.setting;
 
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
+import me.leon.trinity.gui.button.IButton;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.rewrite.ColorSetting;
@@ -28,7 +29,7 @@ public class ColorComponent extends ISetting<ColorSetting> {
 
     private float pickerPosMin, pickerPosMax, huePosMin, huePosMax, alphaPosMin, alphaPosMax, speedPosMin, speedPosMax, rainbowMin, rainbowMax;
 
-    public ColorComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+    public ColorComponent(IComponent parent, IButton superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
 
         set.getSubSettings().clear(); // prevent color sub settings
@@ -47,7 +48,7 @@ public class ColorComponent extends ISetting<ColorSetting> {
             final float width = getFrame().getWidth();
 
             drawRect(realX, realY, realX + getWidth(), realY + 14, getColor(point, false)); // background for name
-            drawRect(realX, realY + 14, realX + getWidth(), realY + 14 + width + 13 + 13 + 10, ClickGUI.backgroundColor.getValue()); // background for the picker
+            drawRect(realX, realY + 14, realX + getWidth(), realY + 14 + width + 13 + 13 + 14, ClickGUI.backgroundColor.getValue()); // background for the picker
             drawRect(realX + getWidth() - 13, realY + 2, realX + getWidth() - 3, realY + 12, set.getValue());
             FontUtil.drawString(set.getName(), realX + parent.xOffset() + 3, realY + ((14 - FontUtil.getFontHeight()) / 2f), ClickGUI.settingNameColor.getValue());
 
@@ -87,14 +88,14 @@ public class ColorComponent extends ISetting<ColorSetting> {
 
             realY += 13;
 
-            RenderUtils.drawRect(realX + xOffset(), realY, realX + xOffset() + GuiUtils.sliderWidth(0, (float) set.speed, 5, getWidth() - xOffset() - 13), realY + 10, ClickGUI.sliderColor.getValue());
-            FontUtil.drawString("Speed " + set.speed, realX + xOffset() + 3, realY + (10 - FontUtil.getFontHeight()) / 2f, Color.WHITE);
-            RenderUtils.drawOutlineRect(realX + xOffset(), realY, realX + getWidth() - 13, realY + 10, 1f, Color.WHITE);
+            RenderUtils.drawRect(realX + xOffset() + 13, realY, realX + xOffset() + 13 + GuiUtils.sliderWidth(0, (float) set.speed, 5, getWidth() - xOffset()), realY + 10, ClickGUI.sliderColor.getValue());
+            FontUtil.drawString("Speed " + set.speed, realX + xOffset() + 16, realY + (10 - FontUtil.getFontHeight()) / 2f, Color.WHITE);
+            RenderUtils.drawOutlineRect(realX + xOffset() + 13, realY, realX + getWidth(), realY + 10, 1f, Color.WHITE);
             speedPosMin = realY;
             speedPosMax = realY + 10;
 
-            if(set.rainbow) RenderUtils.drawRect(realX + getWidth() - 10, realY, realX + getWidth(), realY + 10, new Color(0xff98ff98)); // ZWare.cc green lol
-            RenderUtils.drawOutlineRect(realX + getWidth() - 10, realY, realX + getWidth(), realY + 10, 1f, Color.WHITE);
+            if(set.rainbow) RenderUtils.drawRect(realX + xOffset(), realY, realX + xOffset() + 10, realY + 10, new Color(0xff98ff98)); // ZWare.cc green lol
+            RenderUtils.drawOutlineRect(realX + xOffset(), realY, realX + xOffset() + 10, realY + 10, 1f, Color.WHITE);
             rainbowMin = speedPosMin; // useless?
             rainbowMax = speedPosMax;
 
@@ -107,7 +108,7 @@ public class ColorComponent extends ISetting<ColorSetting> {
         final float realY = getFrame().getY() + offset;
 
         if(draggingSpeed) {
-            final float f1 = (float) GuiUtils.slider(0, 20, point.x, realX + xOffset(), getWidth() - xOffset() - 13, 0);
+            final float f1 = (float) GuiUtils.slider(0, 20, point.x, realX + xOffset() + 13, getWidth() - xOffset(), 0);
             set.speed = MathUtils.roundToPlace(f1 / 4f, 2);
         }
         if(draggingPicker) {
@@ -177,21 +178,21 @@ public class ColorComponent extends ISetting<ColorSetting> {
     @Override
     public float height() {
         if(open) {
-            return (getWidth() + 14) + (13) + (13) + (10);
+            return (getWidth() + 14) + (13) + (13) + (14);
         } else return 14;
     }
 
     @Override
     public float xOffset() {
-        if(open) return parent.xOffset() + 6; else return parent.xOffset() + 3;
+        return parent.xOffset() + 3;
     }
 
     private boolean onSpeed(Point p) {
-        return GuiUtils.onButton(getFrame().getX() + xOffset(), speedPosMin, getFrame().getX() + getWidth() - 16, speedPosMax, p);
+        return GuiUtils.onButton(getFrame().getX() + xOffset() + 13, speedPosMin, getFrame().getX() + getWidth(), speedPosMax, p);
     }
 
     private boolean onRainbow(Point p) {
-        return GuiUtils.onButton(getFrame().getX() + getWidth() - 10, rainbowMin, getFrame().getX() + getWidth(), rainbowMax, p);
+        return GuiUtils.onButton(getFrame().getX() + xOffset(), rainbowMin, getFrame().getX() + xOffset() + 10, rainbowMax, p);
     }
 
     private boolean onPicker(Point p) {

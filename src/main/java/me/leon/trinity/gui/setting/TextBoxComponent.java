@@ -2,6 +2,7 @@ package me.leon.trinity.gui.setting;
 
 import me.leon.trinity.gui.IComponent;
 import me.leon.trinity.gui.button.ButtonComponent;
+import me.leon.trinity.gui.button.IButton;
 import me.leon.trinity.hacks.client.ClickGUI;
 import me.leon.trinity.main.Trinity;
 import me.leon.trinity.setting.rewrite.Setting;
@@ -28,7 +29,7 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
     private int movetype; //0 = normal, 1 = delete
     private char deletedChar;
 
-    public TextBoxComponent(IComponent parent, ButtonComponent superParent, Setting set, int offset) {
+    public TextBoxComponent(IComponent parent, IButton superParent, Setting set, int offset) {
         super(parent, superParent, set, offset);
     }
 
@@ -58,7 +59,7 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
         RenderUtils.drawLine((realX + xOffset() + half) - (progress * half), realY + 27, (realX + xOffset() + half) + (progress * half), realY + 27, 1f, new Color(255, 255, 255, 255));
 
         RenderUtils.restoreScissor();
-        if(open) subs.forEach(e -> e.render(point));
+        if(open) getSets().forEach(e -> e.render(point));
     }
 
     @Override
@@ -81,9 +82,9 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
                     return true;
                 }
             }
-        } else { typing = false; aniEnd = System.currentTimeMillis(); }
+        } else if (typing) { typing = false; aniEnd = System.currentTimeMillis(); }
 
-        for (ISetting<?> sub : subs) {
+        for (ISetting<?> sub : getSets()) {
             if(sub.buttonClick(button, point)) return true;
         }
         return false;
@@ -91,7 +92,7 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
 
     @Override
     public boolean buttonRelease(int button, Point point) {
-        for (ISetting<?> sub : subs) {
+        for (ISetting<?> sub : getSets()) {
             if(sub.buttonRelease(button, point)) return true;
         }
         return false;
@@ -151,7 +152,7 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
     public float height() {
         if(open) {
             int h = 28;
-            for(ISetting<?> s : subs) h += s.height();
+            for(ISetting<?> s : getSets()) h += s.height();
             return h;
         } else return 28;
     }
@@ -195,5 +196,13 @@ public class TextBoxComponent extends ISetting<TextBoxSetting> {
         return new String[] {
                 set.getValue().substring(0, (int) MathUtils.clamp(0, set.getValue().length(), c)), set.getValue().substring((int) MathUtils.clamp(0, set.getValue().length(), c))
         };
+    }
+
+    public boolean isTyping() {
+        return typing;
+    }
+
+    public void setTyping(boolean typing) {
+        this.typing = typing;
     }
 }

@@ -2,8 +2,8 @@ package me.leon.trinity.setting.rewrite;
 
 import org.json.simple.JSONObject;
 
-import java.sql.Types;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class BooleanSetting extends Setting {
     private final boolean canEnable;
@@ -23,6 +23,24 @@ public class BooleanSetting extends Setting {
 
     public BooleanSetting(String name, Object parent, boolean value, boolean canEnable) {
         super(name, parent);
+        this.value = value;
+        this.canEnable = canEnable;
+    }
+
+    public BooleanSetting(String name, boolean value, Predicate<Setting> pre) {
+        this(name, null, value, pre);
+    }
+
+    public BooleanSetting(String name, boolean value, boolean canEnable, Predicate<Setting> pre) {
+        this(name, null, value, canEnable, pre);
+    }
+
+    public BooleanSetting(String name, Object parent, boolean value, Predicate<Setting> pre) {
+        this(name, parent, value, true, pre);
+    }
+
+    public BooleanSetting(String name, Object parent, boolean value, boolean canEnable, Predicate<Setting> pre) {
+        super(name, parent, pre);
         this.value = value;
         this.canEnable = canEnable;
     }

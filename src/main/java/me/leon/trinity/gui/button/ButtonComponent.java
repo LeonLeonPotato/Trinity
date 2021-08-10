@@ -4,7 +4,6 @@ import me.leon.trinity.gui.frame.FrameComponent;
 import me.leon.trinity.gui.setting.*;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.main.Trinity;
-import me.leon.trinity.managers.ModuleManager;
 import me.leon.trinity.setting.rewrite.*;
 import me.leon.trinity.utils.rendering.RenderUtils;
 
@@ -33,6 +32,9 @@ public class ButtonComponent extends IButton {
             if(s instanceof TextBoxSetting)     settings.add(new TextBoxComponent(this, this, s, s_off));
             s_off += 14;
         }
+        settings.add(new KeybindComponent(this, this, s_off));
+        s_off += 14;
+        settings.add(new ModeComponent(this, this, s_off));
     }
 
     @Override
@@ -65,7 +67,7 @@ public class ButtonComponent extends IButton {
 
         updateOffset();
         if(open) {
-            settings.forEach(e -> { e.render(point);});
+            getSets().forEach(e -> { e.render(point);});
         }
     }
 
@@ -96,7 +98,7 @@ public class ButtonComponent extends IButton {
             return true;
         }
         if(open) {
-            for (ISetting<?> set : settings) {
+            for (ISetting<?> set : getSets()) {
                 if (set.buttonClick(button, point)) return true;
             }
         }
@@ -106,7 +108,7 @@ public class ButtonComponent extends IButton {
     @Override
     public boolean buttonRelease(int button, Point point) {
         if(open) {
-            for(ISetting<?> set : settings) {
+            for(ISetting<?> set : getSets()) {
                 if(set.buttonRelease(button, point)) return true;
             }
         }
@@ -116,7 +118,7 @@ public class ButtonComponent extends IButton {
     @Override
     public boolean keyTyped(char chr, int code) {
         if(open) {
-            for(ISetting<?> set : settings) {
+            for(ISetting<?> set : getSets()) {
                 if(set.keyTyped(chr, code)) return true;
             }
         }
@@ -127,7 +129,7 @@ public class ButtonComponent extends IButton {
     public float height() {
         if(open) {
             int h = 14;
-            for(ISetting<?> s : settings) { h += s.height(); }
+            for(ISetting<?> s : getSets()) { h += s.height(); }
             return h;
         } else return 14;
     }
@@ -139,7 +141,7 @@ public class ButtonComponent extends IButton {
 
     private void updateOffset() {
         int offset = getOffset() + 14;
-        for(ISetting<?> s : settings) {
+        for(ISetting<?> s : getSets()) {
             s.setOffset(offset);
             offset += s.height();
         }
@@ -159,5 +161,20 @@ public class ButtonComponent extends IButton {
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    private ArrayList<ISetting<?>> getSets() {
+        final ArrayList<ISetting<?>> toReturn = new ArrayList<>();
+        for(ISetting<?> s : settings) {
+            if(s.getSet() == null) {
+                toReturn.add(s);
+                continue;
+            }
+
+            if(s.getSet().test()) {
+                toReturn.add(s);
+            }
+        }
+        return toReturn;
     }
 }

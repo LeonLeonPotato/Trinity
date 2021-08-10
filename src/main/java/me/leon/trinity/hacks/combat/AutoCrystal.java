@@ -3,6 +3,7 @@ package me.leon.trinity.hacks.combat;
 import me.leon.trinity.events.main.EventPacketRecieve;
 import me.leon.trinity.events.main.EventPacketSend;
 import me.leon.trinity.events.main.EventSpawnObject;
+import me.leon.trinity.events.main.EventTotemPop;
 import me.leon.trinity.hacks.Category;
 import me.leon.trinity.hacks.Module;
 import me.leon.trinity.hacks.combat.autocrystal.Breaker;
@@ -39,6 +40,7 @@ public class AutoCrystal extends Module {
 
 	public static final Timer breakTimer = new Timer();
 	public static final Timer placeTimer = new Timer();
+	public static final Timer totemTimer = new Timer();
 	public static BooleanSetting main = new BooleanSetting("Main", true, false);
 	public static SliderSetting iterations = new SliderSetting("Iterations", main, 1, 1, 3, true);
 	public static ModeSetting noSuicide = new ModeSetting("NoSuicide", main, "Both", "Place", "Destroy", "None", "Both");
@@ -55,8 +57,9 @@ public class AutoCrystal extends Module {
 	public static ModeSetting rayTracePlaceMode = new ModeSetting("RayTrace Mode", Place, "Simple", "Leon", "Simple", "Offset");
 	public static SliderSetting offsetPlace = new SliderSetting("Offset", Place, 0, 1, 3, false);
 	public static BooleanSetting packetPlace = new BooleanSetting("Packet Place", Place, true);
-	public static ModeSetting swingArmPlace = new ModeSetting("Swing Arm", Place, "Offhand", "Mainhand", "Offhand", "Both", "None");
-	public static BooleanSetting packetSwingPlace = new BooleanSetting("Packet Swing", Place, false);
+	public static BooleanSetting placeSwing = new BooleanSetting("Swing", Place, false, false);
+	public static ModeSetting swingArmPlace = new ModeSetting("Swing Arm", placeSwing, "Offhand", "Mainhand", "Offhand", "Both", "None");
+	public static BooleanSetting packetSwingPlace = new BooleanSetting("Packet Swing", placeSwing, false);
 	public static ModeSetting switchPlace = new ModeSetting("Switch", Place, "None", "None", "Packet", "Normal");
 	public static ModeSetting multiPlace = new ModeSetting("Multiplace", Place, "None", "None", "Semi", "Full");
 	public static BooleanSetting bounds = new BooleanSetting("Bounds", Place, true);
@@ -70,6 +73,7 @@ public class AutoCrystal extends Module {
 	public static SliderSetting antiTotemTime = new SliderSetting("TotemTime", antiTotem, 0, 3, 20, true);
 	public static SliderSetting antiTotemMin = new SliderSetting("MinDMG", antiTotem, 0, 3, 10, false);
 	public static SliderSetting antiTotemMaxSelf = new SliderSetting("MaxSelfDMG", antiTotem, 0, 3, 10, false);
+	public static BooleanSetting overrideFacePlaceTotem = new BooleanSetting("Override", antiTotem, true);
 
 	public static BooleanSetting Break = new BooleanSetting("Break", true, true);
 	public static ModeSetting breakMode = new ModeSetting("Break Mode", Break, "Smart", "Smart", "All", "Only Own");
@@ -80,8 +84,9 @@ public class AutoCrystal extends Module {
 	public static SliderSetting maxSelfDamageBreak = new SliderSetting("Max Self Damage", Break, 0, 8, 20, false);
 	public static BooleanSetting packetBreak = new BooleanSetting("Packet Break", Break, true);
 	public static ModeSetting rayTraceBreakMode = new ModeSetting("RayTrace Mode", Break, "Simple", "Leon", "Simple", "Offset");
-	public static ModeSetting swingArmBreak = new ModeSetting("Swing Arm", Break, "Mainhand", "Mainhand", "Offhand", "Both", "None");
-	public static BooleanSetting packetSwingBreak = new BooleanSetting("Packet Swing", Break, false);
+	public static BooleanSetting breakSwing = new BooleanSetting("Swing", Place, false, false);
+	public static ModeSetting swingArmBreak = new ModeSetting("Swing Arm", breakSwing, "Mainhand", "Mainhand", "Offhand", "Both", "None");
+	public static BooleanSetting packetSwingBreak = new BooleanSetting("Packet Swing", breakSwing, false);
 	public static SliderSetting offsetBreak = new SliderSetting("Offset", Break, 0, 1, 3, false);
 	public static SliderSetting breakAttempts = new SliderSetting("Break Attempts", Break, 1, 3, 10, true);
 	public static ModeSetting syncMode = new ModeSetting("Sync", Break, "None", "Sound", "Instant", "None");
@@ -97,6 +102,7 @@ public class AutoCrystal extends Module {
 
 	public static BooleanSetting timing = new BooleanSetting("Timing", true, false);
 	public static ModeSetting timingMode = new ModeSetting("Mode", timing, "Tick", "Tick", "Fast", "Sequential");
+	public static BooleanSetting safe = new BooleanSetting("Safe", timing, true, false);
 
 	public static BooleanSetting facePlace = new BooleanSetting("FacePlace", true, true);
 	public static KeybindSetting forceBind = new KeybindSetting("Force Faceplace", facePlace, Keyboard.KEY_O);
@@ -251,6 +257,11 @@ public class AutoCrystal extends Module {
 	@EventHandler
 	private final Listener<EventSpawnObject> onSpawnObject = new Listener<>(event -> {
 		breaker.sequential(event.getPacket());
+	});
+
+	@EventHandler
+	private final Listener<EventTotemPop> totemPopListener = new Listener<>(event -> {
+		totemTimer.setTime(System.currentTimeMillis() + (antiTotemTime.intValue() * 50L));
 	});
 
 	private static class Targeting extends Thread {

@@ -132,9 +132,9 @@ public class LoadConfig {
 			Scanner scanner = new Scanner(new File("Trinity/Main.txt"));
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
-				final PresetObj obj = PresetManager.find(line);
+				final Preset obj = PresetManager.find(line);
 				if (obj == null) {
-					PresetObj obj1 = new PresetObj("Default");
+					Preset obj1 = new Preset("Default");
 					Trinity.currentPreset = obj1;
 					PresetManager.presets.add(obj1);
 					SaveConfig.runStatic();

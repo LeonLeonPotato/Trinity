@@ -1,14 +1,12 @@
 package me.leon.trinity.setting.rewrite;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import me.leon.trinity.hacks.client.ClientColor;
 import me.leon.trinity.utils.rendering.Rainbow;
-import net.minecraft.client.Minecraft;
 import org.json.simple.JSONObject;
 
 import java.awt.*;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class ColorSetting extends Setting {
     private int r, g, b, a;
@@ -22,7 +20,15 @@ public class ColorSetting extends Setting {
     }
 
     public ColorSetting(String name, Object parent, int r, int g, int b, int a, boolean rainbow) {
-        super(name, parent);
+        this(name, parent, r, g, b, a, rainbow, s -> true);
+    }
+
+    public ColorSetting(String name, int r, int g, int b, int a, boolean rainbow, Predicate<Setting> pre) {
+        this(name, null, r, g, b, a, rainbow, pre);
+    }
+
+    public ColorSetting(String name, Object parent, int r, int g, int b, int a, boolean rainbow, Predicate<Setting> pre) {
+        super(name, parent, pre);
         this.r = r;
         this.g = g;
         this.b = b;

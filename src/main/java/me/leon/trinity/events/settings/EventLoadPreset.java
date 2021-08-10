@@ -1,18 +1,18 @@
 package me.leon.trinity.events.settings;
 
-import me.leon.trinity.config.rewrite.PresetObj;
+import me.leon.trinity.config.rewrite.Preset;
 import me.leon.trinity.events.EventStage;
 import me.leon.trinity.events.TrinityEvent;
 
 public class EventLoadPreset extends TrinityEvent {
-	private final PresetObj obj;
+	private final Preset obj;
 
-	public EventLoadPreset(EventStage stage, PresetObj obj) {
+	public EventLoadPreset(EventStage stage, Preset obj) {
 		super(stage);
 		this.obj = obj;
 	}
 
-	public PresetObj getObj() {
+	public Preset getObj() {
 		return obj;
 	}
 }
