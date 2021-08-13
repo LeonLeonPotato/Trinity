@@ -64,9 +64,9 @@ public class AutoCrystal extends Module {
 	public static ModeSetting multiPlace = new ModeSetting("Multiplace", Place, "None", "None", "Semi", "Full");
 	public static BooleanSetting bounds = new BooleanSetting("Bounds", Place, true);
 	public static BooleanSetting predict = new BooleanSetting("Predict", Place, true);
-	public static SliderSetting predictTicks = new SliderSetting("Predict Ticks", Place, 0, 3, 10, true);
-	public static BooleanSetting selfPredict = new BooleanSetting("Self Predict", Place, true);
-	public static SliderSetting selfPredictTicks = new SliderSetting("Self Ticks", Place, 0, 3, 10, true);
+	public static SliderSetting predictTicks = new SliderSetting("Predict Ticks", predict, 0, 3, 10, true);
+	public static BooleanSetting selfPredict = new BooleanSetting("Self Predict", predict, true);
+	public static SliderSetting selfPredictTicks = new SliderSetting("Self Ticks", predict, 0, 3, 10, true, s -> selfPredict.getValue());
 	public static BooleanSetting limit = new BooleanSetting("Limit", Place, false);
 	public static BooleanSetting doubleCheck = new BooleanSetting("DoubleCheck", Place, true);
 	public static BooleanSetting antiTotem = new BooleanSetting("Anti-Totem", Place, true);
@@ -102,7 +102,7 @@ public class AutoCrystal extends Module {
 
 	public static BooleanSetting timing = new BooleanSetting("Timing", true, false);
 	public static ModeSetting timingMode = new ModeSetting("Mode", timing, "Tick", "Tick", "Fast", "Sequential");
-	public static BooleanSetting safe = new BooleanSetting("Safe", timing, true, false);
+	public static BooleanSetting safe = new BooleanSetting("Safe", timing, true, false, s -> timingMode.is("Sequential"));
 
 	public static BooleanSetting facePlace = new BooleanSetting("FacePlace", true, true);
 	public static KeybindSetting forceBind = new KeybindSetting("Force Faceplace", facePlace, Keyboard.KEY_O);
@@ -251,13 +251,12 @@ public class AutoCrystal extends Module {
 		if(rawPacket instanceof SPacketSoundEffect) {
 			breaker.soundSync((SPacketSoundEffect) event.getPacket());
 		}
+		if(rawPacket instanceof SPacketSpawnObject) {
+			breaker.sequential((SPacketSpawnObject) event.getPacket());
+		}
 	});
 
 	// after object spawn... this gives me way more options as the crystal is added to the entity list
-	@EventHandler
-	private final Listener<EventSpawnObject> onSpawnObject = new Listener<>(event -> {
-		breaker.sequential(event.getPacket());
-	});
 
 	@EventHandler
 	private final Listener<EventTotemPop> totemPopListener = new Listener<>(event -> {

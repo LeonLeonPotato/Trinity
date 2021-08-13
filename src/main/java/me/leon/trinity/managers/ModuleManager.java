@@ -43,6 +43,7 @@ public class ModuleManager {
 		addMod(new AutoMend());
 		addMod(new AutoArmor());
 		addMod(new Quiver());
+		addMod(new PacketPredict());
 
 		// Misc
 		addMod(new NoRotate());

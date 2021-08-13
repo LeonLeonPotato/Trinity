@@ -24,16 +24,18 @@ public class Breaker implements Util, Listenable {
     private List<Crystal> filtered;
     private Mapper mapper;
 
+    private boolean safe = false;
+
     public Breaker() {
         mapper = new Mapper(this);
         filtered = new ArrayList<>();
     }
 
-    public void breakCrystals() {
-        if(nullCheck()) return;
-        if(!Break.getValue()) return;
-        if(!breakTimer.hasPassAndReset((int) breakDelay.getValue() * 50)) return;
-        if(getSelfHealth() <= pauseHealth.getValue()) return;
+    public boolean breakCrystals() {
+        if(nullCheck()) return false;
+        if(!Break.getValue()) return false;
+        if(!breakTimer.hasPassAndReset((int) breakDelay.getValue() * 50)) return false;
+        if(getSelfHealth() <= pauseHealth.getValue()) return false;
 
         curBreakCrystal = null;
 
@@ -47,7 +49,7 @@ public class Breaker implements Util, Listenable {
                 case "Smart": {
                     if (target == null) {
                         reset();
-                        return;
+                        return false;
                     }
 
                     if(breakMode.getValue().equalsIgnoreCase("Only Own")) {
@@ -70,7 +72,6 @@ public class Breaker implements Util, Listenable {
                         if (syncMode.getValue().equalsIgnoreCase("Instant")) {
                             curBreakCrystal.getCrystal().setDead();
                         }
-                        break;
                     }
                 }
                 case "All": {
@@ -78,12 +79,15 @@ public class Breaker implements Util, Listenable {
                     for (int a = 0; a < breakAttempts.getValue(); a++) {
                         attackCrystal(curBreakCrystal);
                     }
-                    break;
                 }
             }
         }
 
-        if(curBreakCrystal != null) swingHand(true);
+        if(curBreakCrystal != null) {
+            swingHand(true);
+            return true;
+        }
+        return false;
     }
 
     private boolean filterReachable(EntityEnderCrystal crystal) {
@@ -129,7 +133,10 @@ public class Breaker implements Util, Listenable {
         if (mc.world == null) return;
         if (pause) return;
         if (packet.getType() == 51 && timingMode.getValue().equalsIgnoreCase("Sequential") && Break.getValue()) {
-            breakCrystals();
+            final EntityEnderCrystal crystal = new EntityEnderCrystal(mc.world, packet.getX(), packet.getY(), packet.getZ());
+            if(filterReachable(crystal) && filterDamage(new Crystal(crystal))) {
+                attackByID(packet.getEntityID());
+            }
         }
     }
 
