@@ -24,7 +24,9 @@ import org.lwjgl.input.Keyboard;
 
 /**
  * my second mod, please work!
+ * -Dfml.coreMods.load=me.leon.trinity.mixins.MixinLoaderForge
  */
+
 @Mod(
 		modid = Trinity.MODID,
 		name = Trinity.CLIENTNAME,

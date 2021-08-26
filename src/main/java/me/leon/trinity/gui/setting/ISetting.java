@@ -107,7 +107,7 @@ public abstract class ISetting<T extends Setting> implements IComponent {
 
     protected void updateOffset() {
         int offset = 14 + this.offset;
-        for (ISetting<?> button : subs) {
+        for (ISetting<?> button : getSets()) {
             button.setOffset(offset);
             offset += button.height();
         }
@@ -131,8 +131,8 @@ public abstract class ISetting<T extends Setting> implements IComponent {
     @Override
     public float height() {
         int h = 14;
-        if(open && !subs.isEmpty()) {
-            for(IComponent c : subs) {
+        if(open && !getSets().isEmpty()) {
+            for(IComponent c : getSets()) {
                 h += c.height();
             }
         }

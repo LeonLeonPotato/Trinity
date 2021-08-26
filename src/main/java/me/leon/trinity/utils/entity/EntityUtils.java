@@ -66,26 +66,11 @@ public class EntityUtils implements Util {
 		return entity;
 	}
 
-	public static ArrayList<EntityLivingBase> getTargets(boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range, int mode) {
-		ArrayList<EntityLivingBase> toReturn = new ArrayList<>();
-
-		if (mode == 0) {
-			toReturn = (ArrayList<EntityLivingBase>) mc.world.loadedEntityList.stream()
+	public static ArrayList<EntityLivingBase> getTargets(boolean players, boolean neutral, boolean friends, boolean hostile, boolean passive, double range) {
+		return (ArrayList<EntityLivingBase>) mc.world.loadedEntityList.stream()
 					.filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
 					.map(entity1 -> (EntityLivingBase) entity1)
 					.collect(Collectors.toList());
-		} else if (mode == 1) {
-			toReturn = ((ArrayList<EntityLivingBase>) mc.world.loadedEntityList.stream()
-					.filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
-					.map(entity1 -> (EntityLivingBase) entity1)
-					.collect(Collectors.toList()));
-		} else if (mode == 2) {
-			toReturn = (ArrayList<EntityLivingBase>) mc.world.loadedEntityList.stream()
-					.filter(entity1 -> isValid(entity1, players, neutral, friends, hostile, passive, range))
-					.map(entity1 -> (EntityLivingBase) entity1)
-					.collect(Collectors.toList());
-		}
-		return toReturn;
 	}
 
 	public static ArrayList<Entity> getESPTargets(boolean players, boolean neutral, boolean hostile, boolean vehicles, boolean passive, boolean items, boolean crystals, double range) {

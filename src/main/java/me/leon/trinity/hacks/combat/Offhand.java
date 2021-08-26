@@ -23,7 +23,7 @@ public class Offhand extends Module {
 	public static ModeSetting calcMode = new ModeSetting("CalcMode", calcCrystalDamage, "PlayerHealth", "PlayerHealth", "SwitchHealth");
 	public static BooleanSetting forceGapple = new BooleanSetting("Force Gapple", true);
 	public static BooleanSetting forceStr = new BooleanSetting("Force Str", false);
-	public static BooleanSetting onlySword = new BooleanSetting("onlySword", false);
+	public static BooleanSetting onlySword = new BooleanSetting("OnlySword", false);
 	public static BooleanSetting reverse = new BooleanSetting("Reverse", false);
 	public static BooleanSetting autoTotem = new BooleanSetting("AutoTotem", true);
 	private static int lastSlot = -1;

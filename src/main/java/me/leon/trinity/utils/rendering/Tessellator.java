@@ -451,6 +451,6 @@ public class Tessellator implements Util {
 	}
 
 	public static void color(Color color) {
-		GL11.glColor4d(color.getRed() / 255d, color.getGreen() / 255d, color.getBlue() / 255d, color.getAlpha() / 255d);
+		GlStateManager.color(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f, color.getAlpha() / 255f);
 	}
 }
