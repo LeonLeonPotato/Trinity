@@ -31,26 +31,12 @@ public class ModuleManager {
 		addMod(new ClickGUI());
 		addMod(new ClientColor());
 		addMod(new TestModule());
-
-		// Combat
-		addMod(new KillAura());
-		addMod(new AutoCrystal());
-		addMod(new Surround());
-		addMod(new AutoTrap());
-		addMod(new Burrow());
-		addMod(new Offhand());
-		addMod(new HoleFill());
-		addMod(new AutoMend());
-		addMod(new AutoArmor());
-		addMod(new Quiver());
-		addMod(new PacketPredict());
-
+		
 		// Misc
 		addMod(new NoRotate());
 		addMod(new DiscordRPC());
 		addMod(new FreeCam());
 		addMod(new ChatSuffix());
-		addMod(new FakePlayer());
 		addMod(new Timer());
 		addMod(new TotempopCounter());
 
@@ -70,10 +56,7 @@ public class ModuleManager {
 		// Render
 		addMod(new FullBright());
 		addMod(new FreeLook());
-		addMod(new NoRender());
 		addMod(new HoleESP());
-		addMod(new Chams());
-		addMod(new ESP());
 		addMod(new Tracers());
 
 		// Exploits
